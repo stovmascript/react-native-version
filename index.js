@@ -1,35 +1,70 @@
+const chalk = require('chalk');
 const child = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const pkg = require('./package');
 const plist = require('simple-plist');
+const program = require('commander');
 
 const cwd = process.cwd();
 
-const pkg = require(path.join(cwd, 'package'));
-
-const iosFilePath = path.join(cwd, 'ios', pkg.name, 'Info.plist');
-const iosFile = plist.readFileSync(iosFilePath);
-
-iosFile.CFBundleShortVersionString = pkg.version;
-plist.writeFileSync(iosFilePath, iosFile);
-
-if (process.platform === 'darwin') {
-	child.execSync('plutil -convert xml1 ' + iosFilePath);
-}
+const appPkg = require(path.join(cwd, 'package.json'));
 
 const androidFilePath = path.join(cwd, 'android/app/build.gradle');
-const androidFile = fs.readFileSync(androidFilePath, 'utf8');
+const iosFilePath = path.join(cwd, 'ios', appPkg.name, 'Info.plist');
 
-const newAndroidFile = androidFile
-.replace(/versionName "(.*)"/, 'versionName "' + pkg.version + '"')
-.replace(/versionCode (\d+)/, function(match, cg1) {
-	const newVersionCodeNumber = parseInt(cg1, 10) + 1;
-	return 'versionCode ' + newVersionCodeNumber;
+program
+.option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--no-amend" if you never want to amend.') // eslint-disable-line max-len
+.option('-A, --no-amend', 'Never amend the previous commit')
+.option('-d, --android [path]', 'Path to your "app/build.gradle" file', androidFilePath)
+.option('-i, --ios [path]', 'Path to your "Info.plist" file', iosFilePath)
+.parse(process.argv);
+
+/**
+ * Amends previous commit with changed gradle and plist files
+ */
+function amend() {
+	if (program.amend || process.env.npm_lifecycle_event === 'postversion' && program.noAmend) {
+		child.spawnSync('git', ['add', androidFilePath, iosFilePath]);
+		child.execSync('git commit --amend --no-edit');
+	}
+}
+
+fs.stat(program.android, function(err, stats) {
+	if (err) {
+		console.log(chalk.red('No file found at ' + program.android));
+		console.log(chalk.yellow('Use the "--android" option to specify the path manually'));
+		program.outputHelp();
+	} else {
+		const androidFile = fs.readFileSync(androidFilePath, 'utf8');
+
+		const newAndroidFile = androidFile
+		.replace(/versionName "(.*)"/, 'versionName "' + appPkg.version + '"')
+		.replace(/versionCode (\d+)/, function(match, cg1) {
+			const newVersionCodeNumber = parseInt(cg1, 10) + 1;
+			return 'versionCode ' + newVersionCodeNumber;
+		});
+
+		fs.writeFileSync(androidFilePath, newAndroidFile);
+		amend();
+	}
 });
 
-fs.writeFileSync(androidFilePath, newAndroidFile);
+fs.stat(program.ios, function(err, stats) {
+	if (err) {
+		console.log(chalk.red('No file found at ' + program.ios));
+		console.log(chalk.yellow('Use the "--ios" option to specify the path manually'));
+		program.outputHelp();
+	} else {
+		const iosFile = plist.readFileSync(iosFilePath);
 
-if (process.env.npm_lifecycle_event === 'postversion') {
-	child.spawnSync('git', ['add', androidFilePath, iosFilePath]);
-	child.execSync('git commit --amend --no-edit');
-}
+		iosFile.CFBundleShortVersionString = appPkg.version;
+		plist.writeFileSync(iosFilePath, iosFile);
+
+		if (process.platform === 'darwin') {
+			child.execSync('plutil -convert xml1 ' + iosFilePath);
+		}
+
+		amend();
+	}
+});
