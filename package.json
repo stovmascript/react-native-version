@@ -8,6 +8,10 @@
   "dependencies": {
     "simple-plist": "^0.1.4"
   },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-google": "^0.6.0"
+  },
   "homepage": "https://github.com/stovmascript/react-native-version#readme",
   "repository": {
     "type": "git",
