@@ -1,0 +1,33 @@
+{
+  "name": "react-native-version",
+  "version": "1.0.0",
+  "description": "Version your React Native app in a `npm version` fashion.",
+  "author": "Martin Stovicek",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "simple-plist": "^0.1.4"
+  },
+  "homepage": "https://github.com/stovmascript/react-native-version#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stovmascript/react-native-version.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stovmascript/react-native-version/issues"
+  },
+  "keywords": [
+    "build",
+    "bump",
+    "CFBundleShortVersionString",
+    "gradle",
+    "info",
+    "npm-version",
+    "plist",
+    "react-native",
+    "semver",
+    "version",
+    "versionCode",
+    "versionName"
+  ]
+}
