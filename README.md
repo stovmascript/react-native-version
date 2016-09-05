@@ -1,6 +1,6 @@
 # react-native-version
 
-Seamlessly shadows the behaviour of [`npm version`]((https://docs.npmjs.com/cli/version).
+Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
 ## npm-scripts hook (automatic method)
 
@@ -12,7 +12,7 @@ npm install react-native-version --save
 
 Hook into the "postversion" npm script in your app's package.json:
 
-```json
+```js
 {
 	"name": "AwesomeProject",
 	"version": "0.0.1",
@@ -21,7 +21,7 @@ Hook into the "postversion" npm script in your app's package.json:
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"postversion": "react-native-version"
 	},
-	...
+	// ...
 }
 ```
 
@@ -59,13 +59,13 @@ react-native-version
 
 You can apply these options to the "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--no-amend" option:
 
-```json
+```js
 {
-	...
+	// ...
 	"scripts": {
 		"postversion": "react-native-version --no-amend"
 	},
-	...
+	// ...
 }
 ```
 
