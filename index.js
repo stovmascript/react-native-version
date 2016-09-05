@@ -16,8 +16,8 @@ const androidFilePath = path.join(cwd, 'android/app/build.gradle');
 const iosFilePath = path.join(cwd, 'ios', appPkg.name, 'Info.plist');
 
 program
-.option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--no-amend" if you never want to amend.') // eslint-disable-line max-len
-.option('-A, --no-amend', 'Never amend the previous commit')
+.option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.') // eslint-disable-line max-len
+.option('-A, --never-amend', 'Never amend the previous commit')
 .option('-d, --android [path]', 'Path to your "app/build.gradle" file', androidFilePath)
 .option('-i, --ios [path]', 'Path to your "Info.plist" file', iosFilePath)
 .parse(process.argv);

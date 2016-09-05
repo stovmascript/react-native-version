@@ -51,19 +51,19 @@ react-native-version
 
 ```
 -h, --help            output usage information
--a, --amend           Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--no-amend" if you never want to amend.
--A, --no-amend        Never amend the previous commit
+-a, --amend           Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
+-A, --never-amend        Never amend the previous commit
 -d, --android [path]  Path to your "app/build.gradle" file
 -i, --ios [path]      Path to your "Info.plist" file
 ```
 
-You can apply these options to the "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--no-amend" option:
+You can apply these options to the "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
 
 ```js
 {
 	// ...
 	"scripts": {
-		"postversion": "react-native-version --no-amend"
+		"postversion": "react-native-version --never-amend"
 	},
 	// ...
 }
