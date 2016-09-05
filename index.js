@@ -26,7 +26,7 @@ program
  * Amends previous commit with changed gradle and plist files
  */
 function amend() {
-	if (program.amend || process.env.npm_lifecycle_event === 'postversion' && program.noAmend) {
+	if (program.amend || process.env.npm_lifecycle_event === 'postversion' && !program.neverAmend) {
 		child.spawnSync('git', ['add', androidFilePath, iosFilePath]);
 		child.execSync('git commit --amend --no-edit');
 	}
