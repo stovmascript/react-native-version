@@ -50,11 +50,12 @@ react-native-version
 ## Options
 
 ```
--h, --help            output usage information
--a, --amend           Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
--A, --never-amend     Never amend the previous commit
--d, --android [path]  Path to your "app/build.gradle" file
--i, --ios [path]      Path to your "Info.plist" file
+-h, --help                output usage information
+-a, --amend               Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
+-A, --never-amend         Never amend the previous commit
+-d, --android [path]      Path to your "app/build.gradle" file
+-i, --ios [path]          Path to your "Info.plist" file
+-t, --target <platforms>  Only version specified platforms, eg. "--target android,ios"
 ```
 
 You can apply these options to the "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
@@ -68,6 +69,23 @@ You can apply these options to the "postversion" script too. If for example you 
 	// ...
 }
 ```
+
+## Targeting platforms
+
+The default behaviour is to version all React Native platforms. You can target specific platforms by passing a comma-separated list to the "--target" option, or by using the `RNV` environment variable:
+
+```shell
+RNV=android,ios npm version patch
+# or
+RNV=android,ios react-native-version
+```
+
+When using the CLI, you can even combine both methods and make your teammates rage :smiling_imp: :suspect::
+
+```shell
+RNV=android react-native-version --target ios
+```
+:rage1: :speak_no_evil:
 
 ## See also
 

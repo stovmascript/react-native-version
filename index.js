@@ -15,11 +15,23 @@ const appPkg = require(path.join(cwd, 'package.json'));
 const androidFilePath = path.join(cwd, 'android/app/build.gradle');
 const iosFilePath = path.join(cwd, 'ios', appPkg.name, 'Info.plist');
 
+/**
+ * Splits list items in comma-separated lists
+ * @param  {string} val comma-separated list
+ * @return {array}      list items
+ */
+function list(val) {
+	return val.split(',');
+}
+
 program
-.option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.') // eslint-disable-line max-len
+/* eslint-disable max-len */
+.option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.')
 .option('-A, --never-amend', 'Never amend the previous commit')
 .option('-d, --android [path]', 'Path to your "app/build.gradle" file', androidFilePath)
 .option('-i, --ios [path]', 'Path to your "Info.plist" file', iosFilePath)
+.option('-t, --target <platforms>', 'Only version specified platforms, eg. "--target android,ios"', list)
+/* eslint-enable max-len */
 .parse(process.argv);
 
 /**
@@ -32,41 +44,55 @@ function amend() {
 	}
 }
 
-fs.stat(program.android, function(err, stats) {
-	if (err) {
-		console.log(chalk.red('No file found at ' + program.android));
-		console.log(chalk.yellow('Use the "--android" option to specify the path manually'));
-		program.outputHelp();
-	} else {
-		const androidFile = fs.readFileSync(androidFilePath, 'utf8');
+const env = {
+	target: process.env.RNV && list(process.env.RNV)
+};
 
-		const newAndroidFile = androidFile
-		.replace(/versionName "(.*)"/, 'versionName "' + appPkg.version + '"')
-		.replace(/versionCode (\d+)/, function(match, cg1) {
-			const newVersionCodeNumber = parseInt(cg1, 10) + 1;
-			return 'versionCode ' + newVersionCodeNumber;
-		});
-
-		fs.writeFileSync(androidFilePath, newAndroidFile);
-		amend();
-	}
+const targets = []
+.concat(program.target, env.target)
+.filter(function(target) {
+	return typeof target !== 'undefined';
 });
 
-fs.stat(program.ios, function(err, stats) {
-	if (err) {
-		console.log(chalk.red('No file found at ' + program.ios));
-		console.log(chalk.yellow('Use the "--ios" option to specify the path manually'));
-		program.outputHelp();
-	} else {
-		const iosFile = plist.readFileSync(iosFilePath);
+if (!targets.length || targets.indexOf('android') > -1) {
+	fs.stat(program.android, function(err, stats) {
+		if (err) {
+			console.log(chalk.red('No file found at ' + program.android));
+			console.log(chalk.yellow('Use the "--android" option to specify the path manually'));
+			program.outputHelp();
+		} else {
+			const androidFile = fs.readFileSync(androidFilePath, 'utf8');
 
-		iosFile.CFBundleShortVersionString = appPkg.version;
-		plist.writeFileSync(iosFilePath, iosFile);
+			const newAndroidFile = androidFile
+			.replace(/versionName "(.*)"/, 'versionName "' + appPkg.version + '"')
+			.replace(/versionCode (\d+)/, function(match, cg1) {
+				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
+				return 'versionCode ' + newVersionCodeNumber;
+			});
 
-		if (process.platform === 'darwin') {
-			child.execSync('plutil -convert xml1 ' + iosFilePath);
+			fs.writeFileSync(androidFilePath, newAndroidFile);
+			amend();
 		}
+	});
+}
 
-		amend();
-	}
-});
+if (!targets.length || targets.indexOf('ios') > -1) {
+	fs.stat(program.ios, function(err, stats) {
+		if (err) {
+			console.log(chalk.red('No file found at ' + program.ios));
+			console.log(chalk.yellow('Use the "--ios" option to specify the path manually'));
+			program.outputHelp();
+		} else {
+			const iosFile = plist.readFileSync(iosFilePath);
+
+			iosFile.CFBundleShortVersionString = appPkg.version;
+			plist.writeFileSync(iosFilePath, iosFile);
+
+			if (process.platform === 'darwin') {
+				child.execSync('plutil -convert xml1 ' + iosFilePath);
+			}
+
+			amend();
+		}
+	});
+}
