@@ -53,6 +53,7 @@ react-native-version
 -h, --help                output usage information
 -a, --amend               Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
 -A, --never-amend         Never amend the previous commit
+-b, --increment-build     Only increment build number
 -d, --android [path]      Path to your "app/build.gradle" file
 -i, --ios [path]          Path to your "Info.plist" file
 -t, --target <platforms>  Only version specified platforms, eg. "--target android,ios"

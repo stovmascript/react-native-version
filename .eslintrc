@@ -12,6 +12,7 @@
     "max-len": [
       "error",
       100
-    ]
+    ],
+    "operator-linebreak": "off"
   }
 }

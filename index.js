@@ -25,6 +25,7 @@ program
 /* eslint-disable max-len */
 .option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.')
 .option('-A, --never-amend', 'Never amend the previous commit')
+.option('-b, --increment-build', 'Only increment build number')
 .option('-d, --android [path]', 'Path to your "app/build.gradle" file', path.join(cwd, 'android/app/build.gradle'))
 .option('-i, --ios [path]', 'Path to your "Info.plist" file', path.join(cwd, 'ios', appPkg.name, 'Info.plist'))
 .option('-t, --target <platforms>', 'Only version specified platforms, eg. "--target android,ios"', list)
@@ -35,7 +36,11 @@ program
  * Amends previous commit with changed gradle and plist files
  */
 function amend() {
-	if (program.amend || process.env.npm_lifecycle_event === 'postversion' && !program.neverAmend) {
+	if (
+		program.amend
+		|| process.env.npm_lifecycle_event === 'postversion' && !program.neverAmend
+		|| !program.incrementBuild
+	) {
 		child.spawnSync('git', ['add', program.android, program.ios]);
 		child.execSync('git commit --amend --no-edit');
 	}
@@ -59,10 +64,15 @@ if (!targets.length || targets.indexOf('android') > -1) {
 			program.outputHelp();
 		} else {
 			const androidFile = fs.readFileSync(program.android, 'utf8');
+			var newAndroidFile = androidFile;
 
-			const newAndroidFile = androidFile
-			.replace(/versionName "(.*)"/, 'versionName "' + appPkg.version + '"')
-			.replace(/versionCode (\d+)/, function(match, cg1) {
+			if (!program.incrementBuild) {
+				newAndroidFile = newAndroidFile.replace(
+					/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
+				);
+			}
+
+			newAndroidFile = newAndroidFile.replace(/versionCode (\d+)/, function(match, cg1) {
 				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
 				return 'versionCode ' + newVersionCodeNumber;
 			});
@@ -82,7 +92,13 @@ if (!targets.length || targets.indexOf('ios') > -1) {
 		} else {
 			const iosFile = plist.readFileSync(program.ios);
 
-			iosFile.CFBundleShortVersionString = appPkg.version;
+			if (program.incrementBuild) {
+				iosFile.CFBundleVersion = parseInt(iosFile.CFBundleVersion, 10) + 1;
+			} else {
+				iosFile.CFBundleShortVersionString = appPkg.version;
+				iosFile.CFBundleVersion = 1;
+			}
+
 			plist.writeFileSync(program.ios, iosFile);
 
 			if (process.platform === 'darwin') {
