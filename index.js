@@ -93,10 +93,10 @@ if (!targets.length || targets.indexOf('ios') > -1) {
 			const iosFile = plist.readFileSync(program.ios);
 
 			if (program.incrementBuild) {
-				iosFile.CFBundleVersion = parseInt(iosFile.CFBundleVersion, 10) + 1;
+				iosFile.CFBundleVersion = String(parseInt(iosFile.CFBundleVersion, 10) + 1);
 			} else {
 				iosFile.CFBundleShortVersionString = appPkg.version;
-				iosFile.CFBundleVersion = 1;
+				iosFile.CFBundleVersion = String(1);
 			}
 
 			plist.writeFileSync(program.ios, iosFile);
