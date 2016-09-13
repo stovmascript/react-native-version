@@ -25,7 +25,7 @@ program
 /* eslint-disable max-len */
 .option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.')
 .option('-A, --never-amend', 'Never amend the previous commit')
-.option('-b, --increment-build', 'Only increment build number')
+.option('-b, --increment-build', 'Also increment build number')
 .option('-d, --android [path]', 'Path to your "app/build.gradle" file', path.join(cwd, 'android/app/build.gradle'))
 .option('-i, --ios [path]', 'Path to your "Info.plist" file', path.join(cwd, 'ios', appPkg.name, 'Info.plist'))
 .option('-t, --target <platforms>', 'Only version specified platforms, eg. "--target android,ios"', list)
@@ -66,16 +66,16 @@ if (!targets.length || targets.indexOf('android') > -1) {
 			const androidFile = fs.readFileSync(program.android, 'utf8');
 			var newAndroidFile = androidFile;
 
-			if (!program.incrementBuild) {
-				newAndroidFile = newAndroidFile.replace(
-					/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
-				);
-			}
+			newAndroidFile = newAndroidFile.replace(
+				/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
+			);
 
-			newAndroidFile = newAndroidFile.replace(/versionCode (\d+)/, function(match, cg1) {
-				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
-				return 'versionCode ' + newVersionCodeNumber;
-			});
+			if (program.incrementBuild) {
+				newAndroidFile = newAndroidFile.replace(/versionCode (\d+)/, function(match, cg1) {
+					const newVersionCodeNumber = parseInt(cg1, 10) + 1;
+					return 'versionCode ' + newVersionCodeNumber;
+				});
+			}
 
 			fs.writeFileSync(program.android, newAndroidFile);
 			amend();
@@ -92,11 +92,10 @@ if (!targets.length || targets.indexOf('ios') > -1) {
 		} else {
 			const iosFile = plist.readFileSync(program.ios);
 
+			iosFile.CFBundleShortVersionString = appPkg.version;
+
 			if (program.incrementBuild) {
 				iosFile.CFBundleVersion = String(parseInt(iosFile.CFBundleVersion, 10) + 1);
-			} else {
-				iosFile.CFBundleShortVersionString = appPkg.version;
-				iosFile.CFBundleVersion = String(1);
 			}
 
 			plist.writeFileSync(program.ios, iosFile);
