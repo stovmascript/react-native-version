@@ -2,6 +2,16 @@
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
+## Prerequisites (iOS only)
+
+- Xcode Command Line Tools (`xcode-select --install`)
+
+## Project setup (iOS only)
+
+Open your Xcode project and under "Build Settings -> Versioning -> Current Project Version", set the value to your current `CFBundleVersion` ("General -> Identity -> Build").
+
+---
+
 ## npm-scripts hook (automatic method)
 
 ### Setup
@@ -39,7 +49,7 @@ react-native-version will then update your `android/` and `ios/` code and automa
 npm install -g react-native-version
 ```
 
-### Example
+### Example usage
 
 ```shell
 cd AwesomeProject/
@@ -54,8 +64,9 @@ react-native-version
 -a, --amend               Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
 -A, --never-amend         Never amend the previous commit
 -b, --increment-build     Only increment build number
--d, --android [path]      Path to your "app/build.gradle" file
--i, --ios [path]          Path to your "Info.plist" file
+-d, --android [path]      Path to your "android/app/build.gradle" file
+-i, --ios [path]          Path to your "ios/" folder
+-r, --reset-build         Reset build number back to "1" (iOS only)
 -t, --target <platforms>  Only version specified platforms, eg. "--target android,ios"
 ```
 
@@ -90,5 +101,6 @@ RNV=android react-native-version --target ios
 
 ## See also
 
+- [agvtool](https://developer.apple.com/library/content/qa/qa1827/_index.html)
 - [npm-version](https://docs.npmjs.com/cli/version)
 - [Semantic Versioning (semver)](http://semver.org/)
