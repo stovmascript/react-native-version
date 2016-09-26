@@ -14,7 +14,8 @@
   },
   "devDependencies": {
     "eslint": "^3.4.0",
-    "eslint-config-google": "^0.6.0"
+    "eslint-config-google": "^0.6.0",
+    "jsdoc-to-markdown": "^1.3.7"
   },
   "homepage": "https://github.com/stovmascript/react-native-version#readme",
   "repository": {
@@ -37,5 +38,8 @@
     "version",
     "versionCode",
     "versionName"
-  ]
+  ],
+  "scripts": {
+    "docs": "jsdoc2md -d 4 index.js"
+  }
 }
