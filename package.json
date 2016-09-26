@@ -6,16 +6,16 @@
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "react-native-version": "index.js"
+    "react-native-version": "cli.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "commander": "^2.9.0",
-    "simple-plist": "^0.1.4"
+    "commander": "^2.9.0"
   },
   "devDependencies": {
     "eslint": "^3.4.0",
-    "eslint-config-google": "^0.6.0"
+    "eslint-config-google": "^0.6.0",
+    "jsdoc-to-markdown": "^1.3.7"
   },
   "homepage": "https://github.com/stovmascript/react-native-version#readme",
   "repository": {
@@ -38,5 +38,8 @@
     "version",
     "versionCode",
     "versionName"
-  ]
+  ],
+  "scripts": {
+    "docs": "jsdoc2md -d 4 index.js"
+  }
 }

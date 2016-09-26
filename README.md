@@ -2,6 +2,16 @@
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
+## Prerequisites (iOS only)
+
+- Xcode Command Line Tools (`xcode-select --install`)
+
+## Project setup (iOS only)
+
+Open your Xcode project and under "Build Settings -> Versioning -> Current Project Version", set the value to your current `CFBundleVersion` ("General -> Identity -> Build").
+
+---
+
 ## npm-scripts hook (automatic method)
 
 ### Setup
@@ -39,7 +49,7 @@ react-native-version will then update your `android/` and `ios/` code and automa
 npm install -g react-native-version
 ```
 
-### Example
+### Example usage
 
 ```shell
 cd AwesomeProject/
@@ -54,8 +64,9 @@ react-native-version
 -a, --amend               Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
 -A, --never-amend         Never amend the previous commit
 -b, --increment-build     Only increment build number
--d, --android [path]      Path to your "app/build.gradle" file
--i, --ios [path]          Path to your "Info.plist" file
+-d, --android [path]      Path to your "android/app/build.gradle" file
+-i, --ios [path]          Path to your "ios/" folder
+-r, --reset-build         Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to reset the build number after every version change. If you then need to push another build under the same version, you can use "-bt ios".
 -t, --target <platforms>  Only version specified platforms, eg. "--target android,ios"
 ```
 
@@ -88,7 +99,29 @@ RNV=android react-native-version --target ios
 ```
 :rage1: :speak_no_evil:
 
+## API
+
+```javascript
+import { version } from 'react-native-version';
+
+version({
+	amend: true,
+	resetBuild: true,
+	// ...
+});
+```
+
+### Methods
+
+#### version(program)
+Versions your app.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| program | <code>object</code> | commander/CLI-style options, camelCased |
+
 ## See also
 
+- [agvtool](https://developer.apple.com/library/content/qa/qa1827/_index.html)
 - [npm-version](https://docs.npmjs.com/cli/version)
 - [Semantic Versioning (semver)](http://semver.org/)
