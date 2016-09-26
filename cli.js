@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const list = require('./utils').list;
 const pkg = require('./package');
 const program = require('commander');
@@ -13,7 +14,7 @@ program
 .option('-b, --increment-build', 'Only increment build number')
 .option('-d, --android [path]', 'Path to your "android/app/build.gradle" file', defaults.android)
 .option('-i, --ios [path]', 'Path to your "ios/" folder', defaults.ios)
-.option('-r, --reset-build', 'Reset build number back to "1" (iOS only)')
+.option('-r, --reset-build', 'Reset build number back to "1" (iOS only). Unlike Android\'s "versionCode", iOS doesn\'t require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, ' + pkg.name + ' bumps both by default. You can use this option if you prefer to reset the build number after every version change. If you then need to push another build under the same version, you can use "-bt ios".')
 .option('-t, --target <platforms>', 'Only version specified platforms, eg. "--target android,ios"', list)
 /* eslint-enable max-len */
 .parse(process.argv);
