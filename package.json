@@ -1,6 +1,6 @@
 {
   "name": "react-native-version",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Version your React Native app in a `npm version` fashion.",
   "author": "Martin Stovicek",
   "license": "MIT",
