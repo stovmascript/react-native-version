@@ -2,11 +2,11 @@
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
-## Prerequisites (iOS only)
+## Prerequisites
 
 - Xcode Command Line Tools (`xcode-select --install`)
 
-## Project setup (iOS only)
+## Project setup
 
 Open your Xcode project and under "Build Settings -> Versioning -> Current Project Version", set the value to your current `CFBundleVersion` ("General -> Identity -> Build").
 
