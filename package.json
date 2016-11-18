@@ -13,8 +13,10 @@
     "commander": "^2.9.0"
   },
   "devDependencies": {
+    "ava": "^0.17.0",
     "eslint": "^3.4.0",
     "eslint-config-google": "^0.6.0",
+    "eslint-plugin-ava": "^4.0.0",
     "jsdoc-to-markdown": "^2.0.1"
   },
   "homepage": "https://github.com/stovmascript/react-native-version#readme",
@@ -40,6 +42,7 @@
     "versionName"
   ],
   "scripts": {
-    "docs": "jsdoc2md -d 4 index.js"
+    "docs": "jsdoc2md -d 4 index.js",
+    "test": "ava"
   }
 }
