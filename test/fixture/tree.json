@@ -1,0 +1,31 @@
+{
+  "amended": {
+    "head": [
+      "android/app/build.gradle",
+      "ios/AwesomeProjectEssentials.xcodeproj/project.pbxproj",
+      "ios/AwesomeProjectEssentials/Info.plist",
+      "ios/AwesomeProjectEssentialsTests/Info.plist",
+      "package.json"
+    ],
+    "index": [
+    ]
+  },
+  "notAmended": {
+    "head": [
+      "package.json"
+    ],
+    "index": [
+      "android/app/build.gradle",
+      "ios/AwesomeProjectEssentials.xcodeproj/project.pbxproj",
+      "ios/AwesomeProjectEssentials/Info.plist",
+      "ios/AwesomeProjectEssentialsTests/Info.plist"
+    ]
+  },
+  "versioned": {
+    "head": [
+      "package.json"
+    ],
+    "index": [
+    ]
+  }
+}
