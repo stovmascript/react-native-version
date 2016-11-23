@@ -1,4 +1,4 @@
-# react-native-version
+# react-native-version [![Build Status](https://travis-ci.org/stovmascript/react-native-version.svg?branch=master)](https://travis-ci.org/stovmascript/react-native-version)
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
