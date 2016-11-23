@@ -113,12 +113,14 @@ version({
 
 ### Methods
 
-#### version(program)
-Versions your app.
+#### version(program) ⇒ <code>string</code>
+Versions your app
+
+**Returns**: <code>string</code> - Last commit hash
 
 | Param | Type | Description |
 | --- | --- | --- |
-| program | <code>object</code> | commander/CLI-style options, camelCased |
+| program | <code>Object</code> | commander/CLI-style options, camelCased |
 
 ## See also
 

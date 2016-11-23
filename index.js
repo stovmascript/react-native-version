@@ -1,52 +1,63 @@
-const chalk = require('chalk');
 const child = require('child_process');
 const fs = require('fs');
 const list = require('./utils').list;
+const log = require('./utils').log;
 const path = require('path');
-
-const cwd = process.cwd();
-
-const appPkg = require(path.join(cwd, 'package.json'));
+const pSettle = require('p-settle');
 
 const env = {
 	target: process.env.RNV && list(process.env.RNV)
 };
 
-const defaults = {
-	android: path.join(cwd, 'android/app/build.gradle'),
-	ios: path.join(cwd, 'ios')
-};
+/**
+ * Returns default values for some options, namely android/ios file/folder paths
+ * @return {Object} Defaults
+ */
+function getDefaults() {
+	const cwd = process.cwd();
+
+	return {
+		android: path.join(cwd, 'android/app/build.gradle'),
+		cwd: cwd,
+		ios: path.join(cwd, 'ios')
+	};
+}
 
 /**
- * Versions your app.
- * @param  {object} program commander/CLI-style options, camelCased
+ * Versions your app
+ * @param {Object} program commander/CLI-style options, camelCased
+ * @return {string} Last commit hash
  */
 function version(program) {
-	program.android = program.android || defaults.android;
-	program.ios = program.ios || defaults.ios;
+	const programOpts = Object.assign({}, getDefaults(), program);
 
 	const targets = []
-	.concat(program.target, env.target)
+	.concat(programOpts.target, env.target)
 	.filter(function(target) {
 		return typeof target !== 'undefined';
 	});
 
-	const android = new Promise(function(resolve) {
+	const appPkg = require(path.join(programOpts.cwd, 'package.json'));
+
+	const android = new Promise(function(resolve, reject) {
 		if (!targets.length || targets.indexOf('android') > -1) {
-			fs.stat(program.android, function(err) {
+			fs.stat(programOpts.android, function(err) {
 				if (err) {
-					console.log(chalk.red('No gradle file found at ' + program.android));
-
-					console.log(chalk.yellow(
-						'Use the "--android" option to specify the path manually'
-					));
-
-					program.outputHelp();
+					reject([
+						{
+							style: 'red',
+							text: 'No gradle file found at ' + programOpts.android
+						},
+						{
+							style: 'yellow',
+							text: 'Use the "--android" option to specify the path manually'
+						}
+					]);
 				} else {
-					const androidFile = fs.readFileSync(program.android, 'utf8');
+					const androidFile = fs.readFileSync(programOpts.android, 'utf8');
 					var newAndroidFile = androidFile;
 
-					if (!program.incrementBuild) {
+					if (!programOpts.incrementBuild) {
 						newAndroidFile = newAndroidFile.replace(
 							/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
 						);
@@ -58,62 +69,68 @@ function version(program) {
 						return 'versionCode ' + newVersionCodeNumber;
 					});
 
-					fs.writeFileSync(program.android, newAndroidFile);
+					fs.writeFileSync(programOpts.android, newAndroidFile);
 					resolve();
 				}
 			});
 		}
 	});
 
-	const ios = new Promise(function(resolve) {
+	const ios = new Promise(function(resolve, reject) {
 		if (!targets.length || targets.indexOf('ios') > -1) {
-			fs.stat(program.ios, function(err) {
+			fs.stat(programOpts.ios, function(err) {
 				if (err) {
-					console.log(chalk.red('No project folder found at ' + program.ios));
-
-					console.log(chalk.yellow(
-						'Use the "--ios" option to specify the path manually'
-					));
-
-					program.outputHelp();
+					reject([
+						{
+							style: 'red',
+							text: 'No project folder found at ' + programOpts.ios
+						},
+						{
+							style: 'yellow',
+							text: 'Use the "--ios" option to specify the path manually'
+						}
+					]);
 				} else {
 					try {
 						child.execSync('xcode-select --print-path', {
 							stdio: ['ignore', 'ignore', 'pipe']
 						});
 					} catch (err) {
-						console.log(chalk.red(err));
-
-						console.log(chalk.yellow(
-							'Looks like Xcode Command Line Tools aren\'t installed'
-						));
-
-						console.log('');
-						console.log('  Install:');
-						console.log('');
-						console.log('    $ xcode-select --install');
-						console.log('');
-						process.exit(1);
+						reject([
+							{
+								style: 'red',
+								text: err
+							},
+							{
+								style: 'yellow',
+								text: 'Looks like Xcode Command Line Tools aren\'t installed'
+							},
+							{
+								text: '\n  Install:\n\n    $ xcode-select --install\n'
+							}
+						]);
 					}
 
 					const agvtoolOpts = {
-						cwd: program.ios
+						cwd: programOpts.ios
 					};
 
 					try {
 						child.execSync('agvtool what-version', agvtoolOpts);
 					} catch (err) {
-						console.log(chalk.red(err.stdout));
-						process.exit(1);
+						reject({
+							style: 'red',
+							text: err.stdout
+						});
 					}
 
-					if (!program.incrementBuild) {
+					if (!programOpts.incrementBuild) {
 						child.spawnSync(
 							'agvtool', ['new-marketing-version', appPkg.version], agvtoolOpts
 						);
 					}
 
-					if (program.resetBuild) {
+					if (programOpts.resetBuild) {
 						child.execSync('agvtool new-version -all 1', agvtoolOpts);
 					} else {
 						child.execSync('agvtool next-version -all', agvtoolOpts);
@@ -125,29 +142,53 @@ function version(program) {
 		}
 	});
 
-	Promise
-	.all([android, ios])
-	.then(function() {
-		if (
-			program.amend
-			|| process.env.npm_lifecycle_event === 'postversion' && !program.neverAmend
-		) {
-			child.spawnSync('git', ['add', program.android, program.ios]);
-			child.execSync('git commit --amend --no-edit');
+	return pSettle([android, ios]).then(function(result) {
+		const errs = result
+		.filter(function(err) {
+			return err.reason;
+		})
+		.map(function(err) {
+			return err.reason;
+		});
+
+		if (errs.length) {
+			errs
+			.reduce(function(a, b) {
+				return a.concat(b);
+			}, [])
+			.forEach(err => {
+				if (program.outputHelp) {
+					log(err);
+				}
+			});
+
+			if (program.outputHelp) {
+				program.outputHelp();
+			}
+
+			throw new Error('╻\n┏━━━━━━━━┛\n╹\n' + errs.map(function(errGrp, index) {
+				return errGrp.map(function(err) {
+					return err.text;
+				}).join('\n');
+			}).join('\n'));
 		}
+
+		const gitCmdOpts = {
+			cwd: programOpts.cwd
+		};
+
+		if (
+			programOpts.amend
+			|| process.env.npm_lifecycle_event === 'postversion' && !programOpts.neverAmend
+		) {
+			child.execSync('git commit -a --amend --no-edit', gitCmdOpts);
+		}
+
+		return child.execSync('git log -1 --pretty=%H', gitCmdOpts).toString();
 	});
 }
 
 module.exports = {
-
-	/**
-	 * Returns default values for some options, namely android/ios file/folder paths
-	 * @return {object} defaults
-	 */
-	getDefaults: function() {
-		return defaults;
-	},
-
+	getDefaults: getDefaults,
 	version: version
-
 };

@@ -1,6 +1,12 @@
 {
-  "extends": "google",
+  "extends": [
+    "google",
+    "plugin:ava/recommended"
+  ],
   "installedESLint": true,
+  "plugins": [
+    "ava"
+  ],
   "rules": {
     "indent": [
       "error",
