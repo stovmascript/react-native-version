@@ -16,10 +16,14 @@ temp.track();
  * @param {string} newVersion New version to pass to npm-version
  */
 function tempInitAndVersion(newVersion) {
-	child.execSync(
-		`git init && git add . && git commit -m "Initial commit" && npm version ${(
-			newVersion || 'patch'
-		)}`
+	child.execSync(`
+		git init \
+		&& git config user.email "test@zor.arpa" \
+		&& git config user.name "Test Zor" \
+		&& git add . \
+		&& git commit -m "Initial commit" \
+		&& npm version ${newVersion || 'patch'} \
+		`
 	);
 }
 
