@@ -1,4 +1,4 @@
-import {gitPathnames} from '../utils';
+import {execAsync} from '../utils';
 import {version} from '../';
 import apePackageJSON from './fixture/AwesomeProjectEssentials/package';
 import child from 'child_process';
@@ -28,18 +28,32 @@ function tempInitAndVersion(newVersion) {
 }
 
 /**
+ * Returns a filtered list of pathnames based on a supplied Git command
+ * @param {string} cmd Git shell command which outputs parsable file paths
+ * @param {Object} opts Child process options
+ * @return {Array} List of pathnames
+ */
+async function gitPathnames(cmd, opts) {
+	const result = await execAsync(cmd, opts);
+	return result.split('\n').filter(Boolean);
+}
+
+/**
  * Returns the current Git tree pathnames
  * @param {Object} t Test object
  * @return {Object} head & index pathnames
  */
-function getCurrTree(t) {
+async function getCurrTree(t) {
 	const childProcessOpts = {
 		cwd: t.context.tempDir
 	};
 
+	const head = await gitPathnames('git show --name-only --pretty=', childProcessOpts);
+	const index = await gitPathnames('git status -s | grep " M " | cut -c4-', childProcessOpts);
+
 	return {
-		head: gitPathnames('git show --name-only --pretty=', childProcessOpts),
-		index: gitPathnames('git status -s | grep " M " | cut -c4-', childProcessOpts)
+		head,
+		index
 	};
 }
 
@@ -49,24 +63,45 @@ function getCurrTree(t) {
  * @param {Object} script npm scripts to merge
  */
 function injectPackageJSON(t, script) {
-	fs.writeFileSync('package.json', JSON.stringify({
+	fs.writeFileSync('package.json', `${JSON.stringify({
 		...apePackageJSON,
 		scripts: {
 			...apePackageJSON.scripts,
 			...script
 		}
-	}), {
+	}, null, 2)}\n`, {
 		cwd: t.context.tempDir
 	});
 }
 
 /**
  * Versions an APE copy using the CLI
- * @param {Object} t Test Object
  * @param {Array} params Child process params
  */
-function tempVersionWithCLI(t, params) {
+function tempVersionWithCLI(params) {
 	child.spawnSync('node', [cliPath].concat(params).filter(Boolean));
+}
+
+/**
+ * Returns a commit hash based on the latest tag
+ * @param {Object} t Test Object
+ * @return {string} Commit hash
+ */
+function getCurrTagHash(t) {
+	return execAsync('git rev-list -n 1 $(git tag | tail -1)', {
+		cwd: t.context.tempDir
+	});
+}
+
+/**
+ * Returns the latest commit hash
+ * @param {Object} t Test Object
+ * @return {string} Commit hash
+ */
+function getCurrCommitHash(t) {
+	return execAsync('git rev-parse HEAD', {
+		cwd: t.context.tempDir
+	});
 }
 
 test.beforeEach(t => {
@@ -83,7 +118,7 @@ test('API: default', async t => {
 		cwd: t.context.tempDir
 	});
 
-	t.deepEqual(getCurrTree(t), expectedTree.notAmended);
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
 
 test('API: amend', async t => {
@@ -94,7 +129,7 @@ test('API: amend', async t => {
 		cwd: t.context.tempDir
 	});
 
-	t.deepEqual(getCurrTree(t), expectedTree.amended);
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 });
 
 test('API: neverAmend', async t => {
@@ -105,41 +140,82 @@ test('API: neverAmend', async t => {
 		neverAmend: true
 	});
 
-	t.deepEqual(getCurrTree(t), expectedTree.notAmended);
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
 
 test('CLI: default', async t => {
 	tempInitAndVersion();
-	tempVersionWithCLI(t);
-	t.deepEqual(getCurrTree(t), expectedTree.notAmended);
+	tempVersionWithCLI();
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
 
 test('CLI: amend', async t => {
 	tempInitAndVersion();
-	tempVersionWithCLI(t, ['-a']);
-	t.deepEqual(getCurrTree(t), expectedTree.amended);
+	tempVersionWithCLI(['-a']);
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 });
 
 test('CLI: neverAmend', async t => {
 	tempInitAndVersion();
-	tempVersionWithCLI(t, ['-A']);
-	t.deepEqual(getCurrTree(t), expectedTree.notAmended);
+	tempVersionWithCLI(['-A']);
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
+});
+
+test('preversion: default', async t => {
+	injectPackageJSON(t, {preversion: `node ${cliPath}`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+});
+
+test('preversion: amend', async t => {
+	injectPackageJSON(t, {preversion: `node ${cliPath} -a`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+});
+
+test('preversion: neverAmend', async t => {
+	injectPackageJSON(t, {preversion: `node ${cliPath} -A`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
+});
+
+test('version: default', async t => {
+	injectPackageJSON(t, {version: `node ${cliPath}`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+});
+
+test('version: amend', async t => {
+	injectPackageJSON(t, {version: `node ${cliPath} -a`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+});
+
+test('version: neverAmend', async t => {
+	injectPackageJSON(t, {version: `node ${cliPath} -A`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
 
 test('postversion: default', async t => {
 	injectPackageJSON(t, {postversion: `node ${cliPath}`});
 	tempInitAndVersion();
-	t.deepEqual(getCurrTree(t), expectedTree.amended);
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 });
 
 test('postversion: amend', async t => {
 	injectPackageJSON(t, {postversion: `node ${cliPath} -a`});
 	tempInitAndVersion();
-	t.deepEqual(getCurrTree(t), expectedTree.amended);
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.is(currTagHash, currCommitHash);
 });
 
 test('postversion: neverAmend', async t => {
 	injectPackageJSON(t, {postversion: `node ${cliPath} -A`});
 	tempInitAndVersion();
-	t.deepEqual(getCurrTree(t), expectedTree.notAmended);
+	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });

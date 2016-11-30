@@ -179,9 +179,21 @@ function version(program) {
 
 		if (
 			programOpts.amend
-			|| process.env.npm_lifecycle_event === 'postversion' && !programOpts.neverAmend
+			|| process.env.npm_lifecycle_event.indexOf('version') > -1 && !programOpts.neverAmend
 		) {
-			child.execSync('git commit -a --amend --no-edit', gitCmdOpts);
+			switch (process.env.npm_lifecycle_event) {
+				case 'preversion':
+				case 'version':
+					child.spawnSync('git', ['add', program.android, program.ios], gitCmdOpts);
+					break;
+
+				case 'postversion':
+				default:
+					child.execSync(
+						'git commit -a --amend --no-edit && git tag -f $(git tag | tail -1)',
+						gitCmdOpts
+					);
+			}
 		}
 
 		return child.execSync('git log -1 --pretty=%H', gitCmdOpts).toString();

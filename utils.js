@@ -10,13 +10,27 @@ function log(msg) {
 }
 
 /**
- * Returns a filtered list of pathnames based on a supplied Git command
- * @param {string} cmd Git shell command which outputs parsable file paths
- * @param {Object} opts Child process options
- * @return {Array} List of pathnames
+ * Promisified child_process.exec
+ * @param {string} cmd child_process.exec command
+ * @param {Object} opts child_process.exec options
+ * @return {Promise} ChildProcess Promise object
  */
-function gitPathnames(cmd, opts) {
-	return child.execSync(cmd, opts).toString().split('\n').filter(Boolean);
+function execAsync(cmd, opts) {
+	return new Promise(function(resolve, reject) {
+		child.exec(cmd, opts, function(err, stdout) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(stdout.trim());
+			}
+		});
+	})
+	.then(function(result) {
+		return result;
+	})
+	.catch(function(err) {
+		console.log(err);
+	});
 }
 
 module.exports = {
@@ -30,7 +44,7 @@ module.exports = {
 		return val.split(',');
 	},
 
-	gitPathnames: gitPathnames,
+	execAsync: execAsync,
 	log: log
 
 };
