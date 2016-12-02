@@ -1,4 +1,4 @@
-import {execAsync} from '../utils';
+import {execAsync} from '../util';
 import {version} from '../';
 import apePackageJSON from './fixture/AwesomeProjectEssentials/package';
 import child from 'child_process';

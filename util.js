@@ -2,6 +2,15 @@ const chalk = require('chalk');
 const child = require('child_process');
 
 /**
+ * Splits list items in comma-separated lists
+ * @param {string} val Comma-separated list
+ * @return {Array} List items
+ */
+function list(val) {
+	return val.split(',');
+}
+
+/**
  * Logs a message into the console with style
  * @param {Object} msg Object containing the message text and chalk style
  */
@@ -34,17 +43,7 @@ function execAsync(cmd, opts) {
 }
 
 module.exports = {
-
-	/**
-	 * Splits list items in comma-separated lists
-	 * @param {string} val Comma-separated list
-	 * @return {Array} List items
-	 */
-	list: function(val) {
-		return val.split(',');
-	},
-
 	execAsync: execAsync,
+	list: list,
 	log: log
-
 };

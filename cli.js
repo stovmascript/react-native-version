@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const list = require('./utils').list;
+const list = require('./util').list;
 const pkg = require('./package');
 const program = require('commander');
 const rnv = require('./');

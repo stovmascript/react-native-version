@@ -1,7 +1,7 @@
 const child = require('child_process');
 const fs = require('fs');
-const list = require('./utils').list;
-const log = require('./utils').log;
+const list = require('./util').list;
+const log = require('./util').log;
 const path = require('path');
 const pSettle = require('p-settle');
 
