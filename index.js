@@ -5,6 +5,13 @@ const log = require('./utils').log;
 const path = require('path');
 const pSettle = require('p-settle');
 
+/**
+ * Custom type definition for Promises
+ * @typedef Promise
+ * @property {*} result See the implementing function for the resolve type and description
+ * @property {Error} result Rejection error object
+ */
+
 const env = {
 	target: process.env.RNV && list(process.env.RNV)
 };
@@ -26,7 +33,7 @@ function getDefaults() {
 /**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
- * @return {string} Last commit hash
+ * @return {Promise<string|Error>} A promise which resolves with the last commit hash
  */
 function version(program) {
 	const programOpts = Object.assign({}, getDefaults(), program);
@@ -182,7 +189,6 @@ function version(program) {
 			|| process.env.npm_lifecycle_event.indexOf('version') > -1 && !programOpts.neverAmend
 		) {
 			switch (process.env.npm_lifecycle_event) {
-				case 'preversion':
 				case 'version':
 					child.spawnSync('git', ['add', program.android, program.ios], gitCmdOpts);
 					break;

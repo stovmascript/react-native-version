@@ -161,24 +161,6 @@ test('CLI: neverAmend', async t => {
 	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
 
-test('preversion: default', async t => {
-	injectPackageJSON(t, {preversion: `node ${cliPath}`});
-	tempInitAndVersion();
-	t.deepEqual(await getCurrTree(t), expectedTree.amended);
-});
-
-test('preversion: amend', async t => {
-	injectPackageJSON(t, {preversion: `node ${cliPath} -a`});
-	tempInitAndVersion();
-	t.deepEqual(await getCurrTree(t), expectedTree.amended);
-});
-
-test('preversion: neverAmend', async t => {
-	injectPackageJSON(t, {preversion: `node ${cliPath} -A`});
-	tempInitAndVersion();
-	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
-});
-
 test('version: default', async t => {
 	injectPackageJSON(t, {version: `node ${cliPath}`});
 	tempInitAndVersion();
