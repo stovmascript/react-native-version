@@ -57,6 +57,8 @@ npm version patch
 react-native-version
 ```
 
+Note: If you use the CLI to amend the npm-version commit, you will have to adjust the newly created git tag yourself. If you don't, the tag will point to the original commit created by npm-version, not the amended one. So if you care about that sort of thing, do a `git tag -f` BEFORE you push your tags.
+
 ## Options
 
 ```

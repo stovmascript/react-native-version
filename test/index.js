@@ -183,6 +183,11 @@ test('postversion: default', async t => {
 	injectPackageJSON(t, {postversion: `node ${cliPath}`});
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.is(currTagHash, currCommitHash);
 });
 
 test('postversion: amend', async t => {
