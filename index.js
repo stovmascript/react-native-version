@@ -1,9 +1,16 @@
 const child = require('child_process');
 const fs = require('fs');
-const list = require('./utils').list;
-const log = require('./utils').log;
+const list = require('./util').list;
+const log = require('./util').log;
 const path = require('path');
 const pSettle = require('p-settle');
+
+/**
+ * Custom type definition for Promises
+ * @typedef Promise
+ * @property {*} result See the implementing function for the resolve type and description
+ * @property {Error} result Rejection error object
+ */
 
 const env = {
 	target: process.env.RNV && list(process.env.RNV)
@@ -26,7 +33,7 @@ function getDefaults() {
 /**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
- * @return {string} Last commit hash
+ * @return {Promise<string|Error>} A promise which resolves with the last commit hash
  */
 function version(program) {
 	const programOpts = Object.assign({}, getDefaults(), program);
@@ -179,9 +186,20 @@ function version(program) {
 
 		if (
 			programOpts.amend
-			|| process.env.npm_lifecycle_event === 'postversion' && !programOpts.neverAmend
+			|| process.env.npm_lifecycle_event.indexOf('version') > -1 && !programOpts.neverAmend
 		) {
-			child.execSync('git commit -a --amend --no-edit', gitCmdOpts);
+			switch (process.env.npm_lifecycle_event) {
+				case 'version':
+					child.spawnSync('git', ['add', program.android, program.ios], gitCmdOpts);
+					break;
+
+				case 'postversion':
+				default:
+					child.execSync(
+						'git commit -a --amend --no-edit && git tag -f $(git tag | tail -1)',
+						gitCmdOpts
+					);
+			}
 		}
 
 		return child.execSync('git log -1 --pretty=%H', gitCmdOpts).toString();

@@ -31,9 +31,12 @@
     "url": "https://github.com/stovmascript/react-native-version/issues"
   },
   "keywords": [
+    "agvtool",
     "build",
     "bump",
     "CFBundleShortVersionString",
+    "CFBundleVersion",
+    "CURRENT_PROJECT_VERSION",
     "gradle",
     "info",
     "npm-version",

@@ -20,7 +20,7 @@ Open your Xcode project and under "Build Settings -> Versioning -> Current Proje
 npm install react-native-version --save
 ```
 
-Hook into the "postversion" npm script in your app's package.json:
+Hook into the "version" or "postversion" npm script in your app's package.json:
 
 ```js
 {
@@ -37,9 +37,9 @@ Hook into the "postversion" npm script in your app's package.json:
 
 ### Usage
 
-Before you publish a new build of your app, run `npm version <newVersion>`.
+Before you publish a new build of your app, run `npm version <newversion>`.
 
-react-native-version will then update your `android/` and `ios/` code and automatically amend the version bump commit created by `npm version`. This method should be useful for most cases. If you need more control, take a look at the CLI and options below.
+react-native-version will then update your `android/` and `ios/` code. Depending on the script and options you choose, it can also automatically amend the version bump commit and adjust the git tag created by `npm version`. This method should be useful in most cases. If you need more control, take a look at the CLI and options below.
 
 ## CLI
 
@@ -57,6 +57,8 @@ npm version patch
 react-native-version
 ```
 
+Note: If you use the CLI to amend the npm-version commit, you will have to adjust the newly created git tag yourself. If you don't, the tag will point to the original commit created by npm-version, not the amended one. So if you care about that sort of thing, do a `git tag -f` BEFORE you push your tags.
+
 ## Options
 
 ```
@@ -70,7 +72,7 @@ react-native-version
 -t, --target <platforms>  Only version specified platforms, eg. "--target android,ios"
 ```
 
-You can apply these options to the "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
+You can apply these options to the "version" or "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
 
 ```js
 {
@@ -113,14 +115,30 @@ version({
 
 ### Methods
 
-#### version(program) ⇒ <code>string</code>
+<a name="version"></a>
+
+#### version(program) ⇒ <code>Promise.&lt;(string\|Error)&gt;</code>
 Versions your app
 
-**Returns**: <code>string</code> - Last commit hash
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;(string\|Error)&gt;</code> - A promise which resolves with the last commit hash  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | program | <code>Object</code> | commander/CLI-style options, camelCased |
+
+<a name="Promise"></a>
+
+#### Promise
+Custom type definition for Promises
+
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | <code>\*</code> | See the implementing function for the resolve type and description |
+| result | <code>Error</code> | Rejection error object |
 
 ## See also
 
