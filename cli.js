@@ -8,8 +8,10 @@ const rnv = require('./');
 const defaults = rnv.getDefaults();
 
 program
+.version(pkg.version)
 /* eslint-disable max-len */
-.option('-a, --amend', 'Amend the previous commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.')
+.option('-a, --amend', 'Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when ' + pkg.name + ' is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.')
+.option('--skip-tag', 'For use with "--amend" if you don\'t want to update Git tags')
 .option('-A, --never-amend', 'Never amend the previous commit')
 .option('-b, --increment-build', 'Only increment build number')
 .option('-d, --android [path]', 'Path to your "android/app/build.gradle" file', defaults.android)

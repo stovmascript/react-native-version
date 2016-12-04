@@ -39,7 +39,7 @@ Hook into the "version" or "postversion" npm script in your app's package.json:
 
 Before you publish a new build of your app, run `npm version <newversion>`.
 
-react-native-version will then update your `android/` and `ios/` code. Depending on the script and options you choose, it can also automatically amend the version bump commit and adjust the git tag created by `npm version`. This method should be useful in most cases. If you need more control, take a look at the CLI and options below.
+react-native-version will then update your `android/` and `ios/` code. Depending on the script and options you choose, it can also automatically amend the version bump commit and update the Git tag created by `npm version`. This method should be useful in most cases. If you need more control, take a look at the CLI and options below.
 
 ## CLI
 
@@ -57,13 +57,13 @@ npm version patch
 react-native-version
 ```
 
-Note: If you use the CLI to amend the npm-version commit, you will have to adjust the newly created git tag yourself. If you don't, the tag will point to the original commit created by npm-version, not the amended one. So if you care about that sort of thing, do a `git tag -f` BEFORE you push your tags.
-
 ## Options
 
 ```
 -h, --help                output usage information
--a, --amend               Amend the previous commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
+-V, --version             output the version number
+-a, --amend               Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
+--skip-tag                For use with "--amend" if you don't want to update Git tags
 -A, --never-amend         Never amend the previous commit
 -b, --increment-build     Only increment build number
 -d, --android [path]      Path to your "android/app/build.gradle" file

@@ -195,10 +195,11 @@ function version(program) {
 
 				case 'postversion':
 				default:
-					child.execSync(
-						'git commit -a --amend --no-edit && git tag -f $(git tag | tail -1)',
-						gitCmdOpts
-					);
+					child.execSync('git commit -a --amend --no-edit', gitCmdOpts);
+
+					if (!program.skipTag) {
+						child.execSync('git tag -f $(git tag | tail -1)', gitCmdOpts);
+					}
 			}
 		}
 
