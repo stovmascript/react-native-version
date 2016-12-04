@@ -62,7 +62,7 @@ react-native-version
 ```
 -h, --help                output usage information
 -V, --version             output the version number
--a, --amend               Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when react-native-version is run from the "postversion" npm script. Use "--never-amend" if you never want to amend.
+-a, --amend               Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when react-native-version is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend.
 --skip-tag                For use with "--amend" if you don't want to update Git tags
 -A, --never-amend         Never amend the previous commit
 -b, --increment-build     Only increment build number

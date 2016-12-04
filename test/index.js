@@ -137,6 +137,23 @@ test('API: amend', async t => {
 	t.is(currTagHash, currCommitHash);
 });
 
+test('API: amend, skipTag', async t => {
+	tempInitAndVersion();
+
+	await version({
+		amend: true,
+		cwd: t.context.tempDir,
+		skipTag: true
+	});
+
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.not(currTagHash, currCommitHash);
+});
+
 test('API: neverAmend', async t => {
 	tempInitAndVersion();
 
@@ -165,6 +182,17 @@ test('CLI: amend', async t => {
 	t.is(currTagHash, currCommitHash);
 });
 
+test('CLI: amend, skipTag', async t => {
+	tempInitAndVersion();
+	tempVersionWithCLI(['-a', '--skip-tag']);
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.not(currTagHash, currCommitHash);
+});
+
 test('CLI: neverAmend', async t => {
 	tempInitAndVersion();
 	tempVersionWithCLI(['-A']);
@@ -182,8 +210,30 @@ test('version: default', async t => {
 	t.is(currTagHash, currCommitHash);
 });
 
+test('version: default, skipTag', async t => {
+	injectPackageJSON(t, {version: `node ${cliPath} --skip-tag`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.is(currTagHash, currCommitHash);
+});
+
 test('version: amend', async t => {
 	injectPackageJSON(t, {version: `node ${cliPath} -a`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.is(currTagHash, currCommitHash);
+});
+
+test('version: amend, skipTag', async t => {
+	injectPackageJSON(t, {version: `node ${cliPath} -a --skip-tag`});
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -208,6 +258,17 @@ test('postversion: default', async t => {
 	const currCommitHash = await getCurrCommitHash(t);
 
 	t.is(currTagHash, currCommitHash);
+});
+
+test('postversion: default, skipTag', async t => {
+	injectPackageJSON(t, {postversion: `node ${cliPath} --skip-tag`});
+	tempInitAndVersion();
+	t.deepEqual(await getCurrTree(t), expectedTree.amended);
+
+	const currTagHash = await getCurrTagHash(t);
+	const currCommitHash = await getCurrCommitHash(t);
+
+	t.not(currTagHash, currCommitHash);
 });
 
 test('postversion: amend', async t => {
