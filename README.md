@@ -106,10 +106,24 @@ RNV=android react-native-version --target ios
 ```javascript
 import { version } from 'react-native-version';
 
+async function doSomething() {
+	const versionResult = await version({
+		amend: true,
+		// ...
+	});
+}
+
+// or
+
 version({
 	amend: true,
-	resetBuild: true,
 	// ...
+})
+.then(commitHash => {
+	console.log(commitHash);
+})
+.catch(err => {
+	console.error(err);
 });
 ```
 
@@ -126,6 +140,8 @@ Versions your app
 | Param | Type | Description |
 | --- | --- | --- |
 | program | <code>Object</code> | commander/CLI-style options, camelCased |
+
+### Types
 
 <a name="Promise"></a>
 
