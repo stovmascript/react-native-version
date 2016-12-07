@@ -18,6 +18,8 @@ Open your Xcode project and under "Build Settings -> Versioning -> Current Proje
 
 ```shell
 npm install react-native-version --save
+# or
+yarn add react-native-version
 ```
 
 Hook into the "version" or "postversion" npm script in your app's package.json:
