@@ -40,14 +40,14 @@ function version(program) {
 
 	const targets = []
 	.concat(programOpts.target, env.target)
-	.filter(function(target) {
-		return typeof target !== 'undefined';
-	});
+	.filter(Boolean);
 
 	const appPkg = require(path.join(programOpts.cwd, 'package.json'));
+	var android;
+	var ios;
 
-	const android = new Promise(function(resolve, reject) {
-		if (!targets.length || targets.indexOf('android') > -1) {
+	if (!targets.length || targets.indexOf('android') > -1) {
+		android = new Promise(function(resolve, reject) {
 			fs.stat(programOpts.android, function(err) {
 				if (err) {
 					reject([
@@ -80,11 +80,11 @@ function version(program) {
 					resolve();
 				}
 			});
-		}
-	});
+		});
+	}
 
-	const ios = new Promise(function(resolve, reject) {
-		if (!targets.length || targets.indexOf('ios') > -1) {
+	if (!targets.length || targets.indexOf('ios') > -1) {
+		ios = new Promise(function(resolve, reject) {
 			fs.stat(programOpts.ios, function(err) {
 				if (err) {
 					reject([
@@ -146,10 +146,11 @@ function version(program) {
 					resolve();
 				}
 			});
-		}
-	});
+		});
+	}
 
-	return pSettle([android, ios]).then(function(result) {
+	return pSettle([android, ios].filter(Boolean))
+	.then(function(result) {
 		const errs = result
 		.filter(function(item) {
 			return item.isRejected;
@@ -173,11 +174,11 @@ function version(program) {
 				program.outputHelp();
 			}
 
-			throw new Error('╻\n┏━━━━━━━━┛\n╹\n' + errs.map(function(errGrp, index) {
+			throw errs.map(function(errGrp, index) {
 				return errGrp.map(function(err) {
 					return err.text;
-				}).join('\n');
-			}).join('\n'));
+				}).join(', ');
+			}).join('; ');
 		}
 
 		const gitCmdOpts = {
@@ -208,7 +209,10 @@ function version(program) {
 		return child.execSync('git log -1 --pretty=%H', gitCmdOpts).toString();
 	})
 	.catch(function(err) {
-		console.error(err);
+		if (process.env.RNV_ENV === 'ava') {
+			console.error(err);
+		}
+
 		process.exit(1);
 	});
 }
