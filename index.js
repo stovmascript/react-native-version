@@ -48,104 +48,96 @@ function version(program) {
 
 	if (!targets.length || targets.indexOf('android') > -1) {
 		android = new Promise(function(resolve, reject) {
-			fs.stat(programOpts.android, function(err) {
-				if (err) {
-					reject([
-						{
-							style: 'red',
-							text: 'No gradle file found at ' + programOpts.android
-						},
-						{
-							style: 'yellow',
-							text: 'Use the "--android" option to specify the path manually'
-						}
-					]);
-				} else {
-					const androidFile = fs.readFileSync(programOpts.android, 'utf8');
-					var newAndroidFile = androidFile;
+			var gradleFile;
 
-					if (!programOpts.incrementBuild) {
-						newAndroidFile = newAndroidFile.replace(
-							/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
-						);
+			try {
+				gradleFile = fs.readFileSync(programOpts.android, 'utf8');
+			} catch (err) {
+				reject([
+					{
+						style: 'red',
+						text: 'No gradle file found at ' + programOpts.android
+					},
+					{
+						style: 'yellow',
+						text: 'Use the "--android" option to specify the path manually'
 					}
+				]);
+			}
 
-					newAndroidFile = newAndroidFile
-					.replace(/versionCode (\d+)/, function(match, cg1) {
-						const newVersionCodeNumber = parseInt(cg1, 10) + 1;
-						return 'versionCode ' + newVersionCodeNumber;
-					});
+			if (!programOpts.incrementBuild) {
+				gradleFile = gradleFile.replace(
+					/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
+				);
+			}
 
-					fs.writeFileSync(programOpts.android, newAndroidFile);
-					resolve();
-				}
+			gradleFile = gradleFile
+			.replace(/versionCode (\d+)/, function(match, cg1) {
+				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
+				return 'versionCode ' + newVersionCodeNumber;
 			});
+
+			fs.writeFileSync(programOpts.android, gradleFile);
+			resolve();
 		});
 	}
 
 	if (!targets.length || targets.indexOf('ios') > -1) {
 		ios = new Promise(function(resolve, reject) {
-			fs.stat(programOpts.ios, function(err) {
-				if (err) {
-					reject([
-						{
-							style: 'red',
-							text: 'No project folder found at ' + programOpts.ios
-						},
-						{
-							style: 'yellow',
-							text: 'Use the "--ios" option to specify the path manually'
-						}
-					]);
-				} else {
-					try {
-						child.execSync('xcode-select --print-path', {
-							stdio: ['ignore', 'ignore', 'pipe']
-						});
-					} catch (err) {
-						reject([
-							{
-								style: 'red',
-								text: err
-							},
-							{
-								style: 'yellow',
-								text: 'Looks like Xcode Command Line Tools aren\'t installed'
-							},
-							{
-								text: '\n  Install:\n\n    $ xcode-select --install\n'
-							}
-						]);
+			try {
+				child.execSync('xcode-select --print-path', {
+					stdio: ['ignore', 'ignore', 'pipe']
+				});
+			} catch (err) {
+				reject([
+					{
+						style: 'red',
+						text: err
+					},
+					{
+						style: 'yellow',
+						text: 'Looks like Xcode Command Line Tools aren\'t installed'
+					},
+					{
+						text: '\n  Install:\n\n    $ xcode-select --install\n'
 					}
+				]);
 
-					const agvtoolOpts = {
-						cwd: programOpts.ios
-					};
+				return;
+			}
 
-					try {
-						child.execSync('agvtool what-version', agvtoolOpts);
-					} catch (err) {
-						reject({
-							style: 'red',
-							text: err.stdout
-						});
+			const agvtoolOpts = {
+				cwd: programOpts.ios
+			};
+
+			try {
+				child.execSync('agvtool what-version', agvtoolOpts);
+			} catch (err) {
+				reject([
+					{
+						style: 'red',
+						text: 'No project folder found at ' + programOpts.ios
+					},
+					{
+						style: 'yellow',
+						text: 'Use the "--ios" option to specify the path manually'
 					}
+				]);
 
-					if (!programOpts.incrementBuild) {
-						child.spawnSync(
-							'agvtool', ['new-marketing-version', appPkg.version], agvtoolOpts
-						);
-					}
+				return;
+			}
 
-					if (programOpts.resetBuild) {
-						child.execSync('agvtool new-version -all 1', agvtoolOpts);
-					} else {
-						child.execSync('agvtool next-version -all', agvtoolOpts);
-					}
+			if (!programOpts.incrementBuild) {
+				child.spawnSync('agvtool', ['new-marketing-version', appPkg.version], agvtoolOpts);
+			}
 
-					resolve();
-				}
-			});
+			if (programOpts.resetBuild) {
+				child.execSync('agvtool new-version -all 1', agvtoolOpts);
+			} else {
+				child.execSync('agvtool next-version -all', agvtoolOpts);
+			}
+
+			resolve();
 		});
 	}
 
