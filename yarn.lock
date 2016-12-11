@@ -2712,9 +2712,15 @@ osenv@^0.1.0:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-p-settle@^1.0.0:
+p-reflect@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/p-settle/-/p-settle-1.0.0.tgz#1f83b402c248ab285f37b6dab7bccf28e9e6aed8"
+  resolved "https://registry.yarnpkg.com/p-reflect/-/p-reflect-1.0.0.tgz#f4fa1ee1bb546d8eb3ec0321148dfe0a79137bb8"
+
+p-settle@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/p-settle/-/p-settle-2.0.0.tgz#b6cda5ab86e7173639164909b526adcc42b87733"
+  dependencies:
+    p-reflect "^1.0.0"
 
 package-hash@^1.1.0:
   version "1.2.0"

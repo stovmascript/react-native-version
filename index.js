@@ -151,11 +151,11 @@ function version(program) {
 
 	return pSettle([android, ios]).then(function(result) {
 		const errs = result
-		.filter(function(err) {
-			return err.reason;
+		.filter(function(item) {
+			return item.isRejected;
 		})
-		.map(function(err) {
-			return err.reason;
+		.map(function(item) {
+			return item.reason;
 		});
 
 		if (errs.length) {
@@ -186,7 +186,9 @@ function version(program) {
 
 		if (
 			programOpts.amend
-			|| process.env.npm_lifecycle_event.indexOf('version') > -1 && !programOpts.neverAmend
+			|| process.env.npm_lifecycle_event
+			&& process.env.npm_lifecycle_event.indexOf('version') > -1
+			&& !programOpts.neverAmend
 		) {
 			switch (process.env.npm_lifecycle_event) {
 				case 'version':
@@ -204,6 +206,10 @@ function version(program) {
 		}
 
 		return child.execSync('git log -1 --pretty=%H', gitCmdOpts).toString();
+	})
+	.catch(function(err) {
+		console.error(err);
+		process.exit(1);
 	});
 }
 
