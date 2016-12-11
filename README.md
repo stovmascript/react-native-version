@@ -18,6 +18,8 @@ Open your Xcode project and under "Build Settings -> Versioning -> Current Proje
 
 ```shell
 npm install react-native-version --save
+# or
+yarn add react-native-version
 ```
 
 Hook into the "version" or "postversion" npm script in your app's package.json:
@@ -106,10 +108,24 @@ RNV=android react-native-version --target ios
 ```javascript
 import { version } from 'react-native-version';
 
+async function doSomething() {
+	const versionResult = await version({
+		amend: true,
+		// ...
+	});
+}
+
+// or
+
 version({
 	amend: true,
-	resetBuild: true,
 	// ...
+})
+.then(commitHash => {
+	console.log(commitHash);
+})
+.catch(err => {
+	console.error(err);
 });
 ```
 
@@ -126,6 +142,8 @@ Versions your app
 | Param | Type | Description |
 | --- | --- | --- |
 | program | <code>Object</code> | commander/CLI-style options, camelCased |
+
+### Types
 
 <a name="Promise"></a>
 
