@@ -1,5 +1,5 @@
 import beforeEachCLI from './helpers/beforeEachCLI';
-import expectedTree from './fixture/tree';
+import expectedTree from './fixtures/tree';
 import getCurrTree from './helpers/getCurrTree';
 import test from 'ava';
 import versionTempWithCLI from './helpers/versionTempWithCLI';

@@ -1,5 +1,5 @@
 import beforeEachCLI from './helpers/beforeEachCLI';
-import expectedTree from './fixture/tree';
+import expectedTree from './fixtures/tree';
 import getCurrCommitHash from './helpers/getCurrCommitHash';
 import getCurrTagHash from './helpers/getCurrTagHash';
 import getCurrTree from './helpers/getCurrTree';
