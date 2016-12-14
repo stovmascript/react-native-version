@@ -21,33 +21,79 @@ const env = {
  * @return {Object} Defaults
  */
 function getDefaults() {
-	const cwd = process.cwd();
-
 	return {
-		android: path.join(cwd, 'android/app/build.gradle'),
-		cwd: cwd,
-		ios: path.join(cwd, 'ios')
+		android: 'android/app/build.gradle',
+		ios: 'ios'
 	};
 }
 
 /**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
+ * @param {string} projectPath Path to your React Native project
  * @return {Promise<string|Error>} A promise which resolves with the last commit hash
  */
-function version(program) {
-	const programOpts = Object.assign({}, getDefaults(), program);
+function version(program, projectPath) {
+	const prog = Object.assign({}, getDefaults(), program || {});
+	const projPath = path.resolve(process.cwd(), projectPath || prog.args[0] || '');
+
+	const programOpts = Object.assign({}, prog, {
+		android: path.join(projPath, prog.android),
+		ios: path.join(projPath, prog.ios)
+	});
 
 	const targets = []
 	.concat(programOpts.target, env.target)
 	.filter(Boolean);
 
-	const appPkg = require(path.join(programOpts.cwd, 'package.json'));
+	const appPkgJSONPath = path.join(projPath, 'package.json');
+	const MISSING_RN_DEP = 'MISSING_RN_DEP';
+	var appPkg;
+
+	try {
+		appPkg = require(appPkgJSONPath);
+
+		if (!appPkg.dependencies['react-native']) {
+			throw new Error(MISSING_RN_DEP);
+		}
+	} catch (err) {
+		if (err.message === MISSING_RN_DEP) {
+			log({
+				style: 'red',
+				text: 'Is this the right folder? React Native isn\'t listed as a dependency in '
+				+ appPkgJSONPath
+			});
+		} else {
+			log({
+				style: 'red',
+				text: err.message
+			});
+
+			log({
+				style: 'red',
+				text: 'Is this the right folder? Looks like there isn\'t a package.json here'
+			});
+		}
+
+		log({
+			style: 'yellow',
+			text: 'Pass the project path as an argument, see --help for usage'
+		});
+
+		if (program.outputHelp) {
+			program.outputHelp();
+		}
+
+		process.exit(1);
+	}
+
 	var android;
 	var ios;
 
 	if (!targets.length || targets.indexOf('android') > -1) {
 		android = new Promise(function(resolve, reject) {
+			log({text: 'Versioning Android...'}, programOpts.quiet);
+
 			var gradleFile;
 
 			try {
@@ -78,12 +124,15 @@ function version(program) {
 			});
 
 			fs.writeFileSync(programOpts.android, gradleFile);
+			log({text: 'Android updated'}, programOpts.quiet);
 			resolve();
 		});
 	}
 
 	if (!targets.length || targets.indexOf('ios') > -1) {
 		ios = new Promise(function(resolve, reject) {
+			log({text: 'Versioning iOS...'}, programOpts.quiet);
+
 			try {
 				child.execSync('xcode-select --print-path', {
 					stdio: ['ignore', 'ignore', 'pipe']
@@ -137,6 +186,7 @@ function version(program) {
 				child.execSync('agvtool next-version -all', agvtoolOpts);
 			}
 
+			log({text: 'iOS updated'}, programOpts.quiet);
 			resolve();
 		});
 	}
@@ -174,7 +224,7 @@ function version(program) {
 		}
 
 		const gitCmdOpts = {
-			cwd: programOpts.cwd
+			cwd: projPath
 		};
 
 		if (
@@ -183,20 +233,31 @@ function version(program) {
 			&& process.env.npm_lifecycle_event.indexOf('version') > -1
 			&& !programOpts.neverAmend
 		) {
+			log({text: 'Amending...'}, programOpts.quiet);
+
 			switch (process.env.npm_lifecycle_event) {
 				case 'version':
-					child.spawnSync('git', ['add', program.android, program.ios], gitCmdOpts);
+					child.spawnSync(
+						'git', ['add', programOpts.android, programOpts.ios], gitCmdOpts
+					);
+
 					break;
 
 				case 'postversion':
 				default:
 					child.execSync('git commit -a --amend --no-edit', gitCmdOpts);
 
-					if (!program.skipTag) {
+					if (!programOpts.skipTag) {
+						log({text: 'Adjusting Git tag...'}, programOpts.quiet);
 						child.execSync('git tag -f $(git tag | tail -1)', gitCmdOpts);
 					}
 			}
 		}
+
+		log({
+			style: 'green',
+			text: 'Done'
+		}, programOpts.quiet);
 
 		return child.execSync('git log -1 --pretty=%H', gitCmdOpts).toString();
 	})
@@ -204,6 +265,11 @@ function version(program) {
 		if (process.env.RNV_ENV === 'ava') {
 			console.error(err);
 		}
+
+		log({
+			style: 'red',
+			text: 'Done, with errors.'
+		});
 
 		process.exit(1);
 	});
