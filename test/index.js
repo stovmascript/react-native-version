@@ -1,6 +1,6 @@
 import {version} from '../';
 import beforeEach from './helpers/beforeEach';
-import expectedTree from './fixture/tree';
+import expectedTree from './fixtures/tree';
 import getCurrCommitHash from './helpers/getCurrCommitHash';
 import getCurrTagHash from './helpers/getCurrTagHash';
 import getCurrTree from './helpers/getCurrTree';
@@ -18,8 +18,8 @@ test('API: default', async t => {
 	tempInitAndVersion();
 
 	await version({
-		cwd: t.context.tempDir
-	});
+		quiet: true
+	}, t.context.tempDir);
 
 	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
@@ -29,8 +29,8 @@ test('API: amend', async t => {
 
 	await version({
 		amend: true,
-		cwd: t.context.tempDir
-	});
+		quiet: true
+	}, t.context.tempDir);
 
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -45,9 +45,9 @@ test('API: amend, skipTag', async t => {
 
 	await version({
 		amend: true,
-		cwd: t.context.tempDir,
+		quiet: true,
 		skipTag: true
-	});
+	}, t.context.tempDir);
 
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -61,9 +61,9 @@ test('API: neverAmend', async t => {
 	tempInitAndVersion();
 
 	await version({
-		cwd: t.context.tempDir,
-		neverAmend: true
-	});
+		neverAmend: true,
+		quiet: true
+	}, t.context.tempDir);
 
 	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });

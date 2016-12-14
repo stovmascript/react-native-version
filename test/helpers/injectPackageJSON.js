@@ -1,4 +1,4 @@
-const apePackageJSON = require('../fixture/AwesomeProjectEssentials/package');
+const apePackageJSON = require('../fixtures/AwesomeProjectEssentials/package');
 const fs = require('fs-extra');
 
 /**

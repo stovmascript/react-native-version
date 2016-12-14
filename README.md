@@ -49,6 +49,8 @@ react-native-version will then update your `android/` and `ios/` code. Depending
 
 ```shell
 npm install -g react-native-version
+# or
+yarn global add react-native-version
 ```
 
 ### Example usage
@@ -65,13 +67,14 @@ react-native-version
 -h, --help                output usage information
 -V, --version             output the version number
 -a, --amend               Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when react-native-version is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend.
---skip-tag                For use with "--amend" if you don't want to update Git tags
--A, --never-amend         Never amend the previous commit
--b, --increment-build     Only increment build number
--d, --android [path]      Path to your "android/app/build.gradle" file
--i, --ios [path]          Path to your "ios/" folder
--r, --reset-build         Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to reset the build number after every version change. If you then need to push another build under the same version, you can use "-bt ios".
--t, --target <platforms>  Only version specified platforms, eg. "--target android,ios"
+--skip-tag                For use with "--amend", if you don't want to update Git tags.
+-A, --never-amend         Never amend the previous commit.
+-b, --increment-build     Only increment build number.
+-d, --android [path]      Path to your "android/app/build.gradle" file.
+-i, --ios [path]          Path to your "ios/" folder.
+-q, --quiet               Be quiet, only report errors.
+-r, --reset-build         Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.
+-t, --target <platforms>  Only version specified platforms, eg. "--target android,ios".
 ```
 
 You can apply these options to the "version" or "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
@@ -133,7 +136,7 @@ version({
 
 <a name="version"></a>
 
-#### version(program) ⇒ <code>Promise.&lt;(string\|Error)&gt;</code>
+#### version(program, projectPath) ⇒ <code>Promise.&lt;(string\|Error)&gt;</code>
 Versions your app
 
 **Kind**: global function  
@@ -142,6 +145,7 @@ Versions your app
 | Param | Type | Description |
 | --- | --- | --- |
 | program | <code>Object</code> | commander/CLI-style options, camelCased |
+| projectPath | <code>string</code> | Path to your React Native project |
 
 ### Types
 
