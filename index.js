@@ -206,7 +206,7 @@ function version(program, projectPath) {
 			.reduce(function(a, b) {
 				return a.concat(b);
 			}, [])
-			.forEach(err => {
+			.forEach(function(err) {
 				if (program.outputHelp) {
 					log(err);
 				}
