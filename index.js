@@ -135,7 +135,7 @@ function version(program, projectPath) {
         var manifestFile = fs.readFileSync(manifestPath, 'utf8')
         var nextManifest = manifestFile
         .replace(/android:versionCode="\d+"/g, `android:versionCode="${newVersionCodeNumber}"`)
-        .replace(/android:versionName=".*"/g, `android:versionCode="${appPkg.version}"`)
+        .replace(/android:versionName=".*"/g, `android:versionName="${appPkg.version}"`)
 
         fs.writeFileSync(manifestPath, nextManifest)
       })
