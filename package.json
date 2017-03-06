@@ -1,6 +1,6 @@
 {
   "name": "react-native-version",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Version your React Native app in a `npm version` fashion.",
   "author": "Martin Stovicek",
   "license": "MIT",
@@ -22,13 +22,13 @@
     "jsdoc-to-markdown": "^2.0.1",
     "temp": "^0.8.3"
   },
-  "homepage": "https://github.com/stovmascript/react-native-version#readme",
+  "homepage": "https://github.com/netbeast/react-native-version#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stovmascript/react-native-version.git"
+    "url": "git+https://github.com/netbeast/react-native-version.git"
   },
   "bugs": {
-    "url": "https://github.com/stovmascript/react-native-version/issues"
+    "url": "https://github.com/netbeast/react-native-version/issues"
   },
   "keywords": [
     "agvtool",
