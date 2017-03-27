@@ -6,7 +6,7 @@ const execAsync = require('./execAsync');
  * @return {string} Commit hash
  */
 function getCurrTagHash(t) {
-	return execAsync('git rev-list -n 1 $(git tag | tail -1)', {
+	return execAsync('git rev-list -n 1 $(git tag --sort=v:refname | tail -1)', {
 		cwd: t.context.tempDir
 	});
 }
