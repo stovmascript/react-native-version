@@ -2,6 +2,8 @@
   "amended": {
     "head": [
       "android/app/build.gradle",
+      "ios/AwesomeProjectEssentials-tvOS/Info.plist",
+      "ios/AwesomeProjectEssentials-tvOSTests/Info.plist",
       "ios/AwesomeProjectEssentials.xcodeproj/project.pbxproj",
       "ios/AwesomeProjectEssentials/Info.plist",
       "ios/AwesomeProjectEssentialsTests/Info.plist",
@@ -16,6 +18,8 @@
     ],
     "index": [
       "android/app/build.gradle",
+      "ios/AwesomeProjectEssentials-tvOS/Info.plist",
+      "ios/AwesomeProjectEssentials-tvOSTests/Info.plist",
       "ios/AwesomeProjectEssentials.xcodeproj/project.pbxproj",
       "ios/AwesomeProjectEssentials/Info.plist",
       "ios/AwesomeProjectEssentialsTests/Info.plist"
