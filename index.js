@@ -249,7 +249,7 @@ function version(program, projectPath) {
 
 					if (!programOpts.skipTag) {
 						log({text: 'Adjusting Git tag...'}, programOpts.quiet);
-						child.execSync('git tag -f $(git tag | tail -1)', gitCmdOpts);
+						child.execSync('git tag -f $(git tag --sort=v:refname | tail -1)', gitCmdOpts);
 					}
 			}
 		}
