@@ -10,7 +10,7 @@ const defaults = rnv.getDefaults();
 program
 .version(pkg.version)
 .description(pkg.description)
-.arguments('[projectPath]')
+.arguments('[projectPath] [buildNumber]')
 /* eslint-disable max-len */
 .option('-a, --amend', 'Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when ' + pkg.name + ' is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend.')
 .option('--skip-tag', 'For use with "--amend", if you don\'t want to update Git tags.')
