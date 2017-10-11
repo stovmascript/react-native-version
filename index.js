@@ -4,6 +4,7 @@ const list = require('./util').list;
 const log = require('./util').log;
 const path = require('path');
 const pSettle = require('p-settle');
+const semver = require('semver');
 
 /**
  * Custom type definition for Promises
@@ -31,11 +32,13 @@ function getDefaults() {
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
  * @param {string} projectPath Path to your React Native project
+ * @param {Number} buildNumber Build number to set
  * @return {Promise<string|Error>} A promise which resolves with the last commit hash
  */
-function version(program, projectPath) {
+function version(program, projectPath, buildNumber) {
 	const prog = Object.assign({}, getDefaults(), program || {});
 	const projPath = path.resolve(process.cwd(), projectPath || prog.args[0] || '');
+	const buildNum = buildNumber || prog.args[1] || 0;
 
 	const programOpts = Object.assign({}, prog, {
 		android: path.join(projPath, prog.android),
@@ -90,6 +93,10 @@ function version(program, projectPath) {
 	var android;
 	var ios;
 
+	var majorVersion = semver.major(appPkg.version);
+	var minorVersion = semver.minor(appPkg.version);
+	var patchVersion = semver.patch(appPkg.version);
+
 	if (!targets.length || targets.indexOf('android') > -1) {
 		android = new Promise(function(resolve, reject) {
 			log({text: 'Versioning Android...'}, programOpts.quiet);
@@ -112,14 +119,21 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.incrementBuild) {
+				var versionName = appPkg.version;
+				if (buildNum) versionName += '+' + buildNum;
 				gradleFile = gradleFile.replace(
-					/versionName "(.*)"/, 'versionName "' + appPkg.version + '"'
+					/versionName "(.*)"/, 'versionName "' + versionName + '"'
 				);
 			}
 
 			gradleFile = gradleFile
 			.replace(/versionCode (\d+)/, function(match, cg1) {
-				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
+				const newVersionCodeNumber = (
+					majorVersion * 1000000000 +
+					minorVersion * 1000000 +
+					patchVersion * 1000 +
+					parseInt(buildNum ? buildNum : cg1, 10)
+				);
 				return 'versionCode ' + newVersionCodeNumber;
 			});
 
@@ -160,7 +174,7 @@ function version(program, projectPath) {
 			};
 
 			try {
-				child.execSync('agvtool what-version', agvtoolOpts);
+				child.execSync('agvtool what-version -terse', agvtoolOpts).toString();
 			} catch (err) {
 				reject([
 					{
@@ -177,11 +191,21 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.incrementBuild) {
-				child.spawnSync('agvtool', ['new-marketing-version', appPkg.version], agvtoolOpts);
+				var versionName = appPkg.version;
+				if (buildNum) versionName += '+' + buildNum;
+				child.spawnSync('agvtool', ['new-marketing-version', versionName], agvtoolOpts);
 			}
 
 			if (programOpts.resetBuild) {
 				child.execSync('agvtool new-version -all 1', agvtoolOpts);
+			} else if (buildNum) {
+				const newVersionNumber = (
+					majorVersion * 1000000000 +
+					minorVersion * 1000000 +
+					patchVersion * 1000 +
+					parseInt(buildNum, 10)
+				);
+				child.execSync('agvtool new-version -all ' + newVersionNumber, agvtoolOpts);
 			} else {
 				child.execSync('agvtool next-version -all', agvtoolOpts);
 			}
