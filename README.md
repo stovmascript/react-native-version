@@ -16,22 +16,22 @@ Open your Xcode project and under "Build Settings -> Versioning -> Current Proje
 
 ### Setup
 
-```shell
-npm install react-native-version --save
+```bash
+npm install react-native-version --save-dev
 # or
-yarn add react-native-version
+yarn add react-native-version --dev
 ```
 
 Hook into the "version" or "postversion" npm script in your app's package.json:
 
-```js
+```diff
 {
 	"name": "AwesomeProject",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"postversion": "react-native-version"
++		"postversion": "react-native-version"
 	},
 	// ...
 }
@@ -47,7 +47,7 @@ react-native-version will then update your `android/` and `ios/` code. Depending
 
 ### Setup
 
-```shell
+```bash
 npm install -g react-native-version
 # or
 yarn global add react-native-version
@@ -55,7 +55,7 @@ yarn global add react-native-version
 
 ### Example usage
 
-```shell
+```bash
 cd AwesomeProject/
 npm version patch
 react-native-version
@@ -93,7 +93,7 @@ You can apply these options to the "version" or "postversion" script too. If for
 
 The default behaviour is to version all React Native platforms. You can target specific platforms by passing a comma-separated list to the "--target" option, or by using the `RNV` environment variable:
 
-```shell
+```bash
 RNV=android,ios npm version patch
 # or
 RNV=android,ios react-native-version
@@ -101,7 +101,7 @@ RNV=android,ios react-native-version
 
 When using the CLI, you can even combine both methods and make your teammates rage :smiling_imp: :suspect::
 
-```shell
+```bash
 RNV=android react-native-version --target ios
 ```
 :rage1: :speak_no_evil:
@@ -167,3 +167,4 @@ Custom type definition for Promises
 - [agvtool](https://developer.apple.com/library/content/qa/qa1827/_index.html)
 - [npm-version](https://docs.npmjs.com/cli/version)
 - [Semantic Versioning (semver)](http://semver.org/)
+- [ionic-version](https://github.com/stovmascript/ionic-version)

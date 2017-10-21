@@ -1,24 +1,7 @@
 {
-  "extends": [
-    "google",
-    "plugin:ava/recommended"
-  ],
-  "installedESLint": true,
-  "plugins": [
-    "ava"
-  ],
+  "extends": ["plugin:ava/recommended"],
+  "plugins": ["prettier", "ava"],
   "rules": {
-    "indent": [
-      "error",
-      "tab",
-      {
-        "SwitchCase": 1
-      }
-    ],
-    "max-len": [
-      "error",
-      100
-    ],
-    "operator-linebreak": "off"
+    "prettier/prettier": "error"
   }
 }
