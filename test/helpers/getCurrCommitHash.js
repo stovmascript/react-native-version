@@ -1,4 +1,4 @@
-const execAsync = require('./execAsync');
+const execAsync = require("./execAsync");
 
 /**
  * Returns the latest commit hash
@@ -6,7 +6,7 @@ const execAsync = require('./execAsync');
  * @return {string} Commit hash
  */
 function getCurrCommitHash(t) {
-	return execAsync('git rev-parse HEAD', {
+	return execAsync("git rev-parse HEAD", {
 		cwd: t.context.tempDir
 	});
 }

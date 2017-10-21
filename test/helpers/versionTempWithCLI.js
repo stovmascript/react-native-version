@@ -1,4 +1,4 @@
-const child = require('child_process');
+const child = require("child_process");
 
 /**
  * Versions an APE copy using the CLI
@@ -6,11 +6,11 @@ const child = require('child_process');
  */
 function versionTempWithCLI(params) {
 	const versionProcess = child.spawnSync(
-		'node',
-		[require.resolve('../../cli')].concat(params).filter(Boolean),
+		"node",
+		[require.resolve("../../cli")].concat(params).filter(Boolean),
 		{
 			env: Object.assign({}, process.env, {
-				RNV_ENV: 'ava'
+				RNV_ENV: "ava"
 			})
 		}
 	);

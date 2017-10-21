@@ -1,4 +1,4 @@
-const child = require('child_process');
+const child = require("child_process");
 
 /**
  * Promisified child_process.exec
@@ -16,12 +16,12 @@ function execAsync(cmd, opts) {
 			}
 		});
 	})
-	.then(function(result) {
-		return result;
-	})
-	.catch(function(err) {
-		console.log(err);
-	});
+		.then(function(result) {
+			return result;
+		})
+		.catch(function(err) {
+			console.log(err);
+		});
 }
 
 module.exports = execAsync;

@@ -1,4 +1,4 @@
-const chalk = require('chalk');
+const chalk = require("chalk");
 
 /**
  * Splits list items in comma-separated lists
@@ -6,7 +6,7 @@ const chalk = require('chalk');
  * @return {Array} List items
  */
 function list(val) {
-	return val.split(',');
+	return val.split(",");
 }
 
 /**
@@ -16,7 +16,7 @@ function list(val) {
  */
 function log(msg, silent) {
 	if (!silent) {
-		console.log('[RNV]', chalk[msg.style || 'reset'](msg.text));
+		console.log("[RNV]", chalk[msg.style || "reset"](msg.text));
 	}
 }
 

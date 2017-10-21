@@ -1,4 +1,4 @@
-const child = require('child_process');
+const child = require("child_process");
 
 /**
  * Inits and npm-versions an APE copy
@@ -11,9 +11,8 @@ function tempInitAndVersion(newVersion) {
 		&& git config user.name "Test Zor" \
 		&& git add . \
 		&& git commit -m "Initial commit" \
-		&& npm version ${newVersion || 'patch'} \
-		`
-	);
+		&& npm version ${newVersion || "patch"} \
+		`);
 }
 
 module.exports = tempInitAndVersion;

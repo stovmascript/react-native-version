@@ -1,5 +1,5 @@
-const beforeEach = require('./beforeEach');
-const tempInitAndVersion = require('./tempInitAndVersion');
+const beforeEach = require("./beforeEach");
+const tempInitAndVersion = require("./tempInitAndVersion");
 
 module.exports = function(t) {
 	beforeEach(t);

@@ -9,13 +9,10 @@
       "ios/AwesomeProjectEssentialsTests/Info.plist",
       "package.json"
     ],
-    "index": [
-    ]
+    "index": []
   },
   "notAmended": {
-    "head": [
-      "package.json"
-    ],
+    "head": ["package.json"],
     "index": [
       "android/app/build.gradle",
       "ios/AwesomeProjectEssentials-tvOS/Info.plist",
@@ -26,10 +23,7 @@
     ]
   },
   "versioned": {
-    "head": [
-      "package.json"
-    ],
-    "index": [
-    ]
+    "head": ["package.json"],
+    "index": []
   }
 }
