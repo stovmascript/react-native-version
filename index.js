@@ -1,9 +1,16 @@
+const beautify = require("js-beautify").html;
 const child = require("child_process");
+const detectIndent = require("detect-indent");
+const flatten = require("lodash.flatten");
 const fs = require("fs");
 const list = require("./util").list;
 const log = require("./util").log;
 const path = require("path");
+const plist = require("plist");
 const pSettle = require("p-settle");
+const stripIndents = require("common-tags/lib/stripIndents");
+const unique = require("lodash.uniq");
+const Xcode = require("pbxproj-dom/xcode").Xcode;
 
 /**
  * Custom type definition for Promises
@@ -139,62 +146,157 @@ function version(program, projectPath) {
 		ios = new Promise(function(resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
-			try {
-				child.execSync("xcode-select --print-path", {
-					stdio: ["ignore", "ignore", "pipe"]
-				});
-			} catch (err) {
-				reject([
-					{
-						style: "red",
-						text: err
-					},
-					{
-						style: "yellow",
-						text: "Looks like Xcode Command Line Tools aren't installed"
-					},
-					{
-						text: "\n  Install:\n\n    $ xcode-select --install\n"
-					}
-				]);
+			// try {
+			// 	child.execSync("xcode-select --print-path", {
+			// 		stdio: ["ignore", "ignore", "pipe"]
+			// 	});
+			// } catch (err) {
+			// 	reject([
+			// 		{
+			// 			style: "red",
+			// 			text: err
+			// 		},
+			// 		{
+			// 			style: "yellow",
+			// 			text: "Looks like Xcode Command Line Tools aren't installed"
+			// 		},
+			// 		{
+			// 			text: "\n  Install:\n\n    $ xcode-select --install\n"
+			// 		}
+			// 	]);
+			//
+			// 	return;
+			// }
+			//
+			// const agvtoolOpts = {
+			// 	cwd: programOpts.ios
+			// };
+			//
+			// try {
+			// 	child.execSync("agvtool what-version", agvtoolOpts);
+			// } catch (err) {
+			// 	reject([
+			// 		{
+			// 			style: "red",
+			// 			text: "No project folder found at " + programOpts.ios
+			// 		},
+			// 		{
+			// 			style: "yellow",
+			// 			text: 'Use the "--ios" option to specify the path manually'
+			// 		}
+			// 	]);
+			//
+			// 	return;
+			// }
+			//
+			// if (!programOpts.incrementBuild) {
+			// 	child.spawnSync(
+			// 		"agvtool",
+			// 		["new-marketing-version", appPkg.version],
+			// 		agvtoolOpts
+			// 	);
+			// }
+			//
+			// if (programOpts.resetBuild) {
+			// 	child.execSync("agvtool new-version -all 1", agvtoolOpts);
+			// } else {
+			// 	child.execSync("agvtool next-version -all", agvtoolOpts);
+			// }
 
-				return;
-			}
+			const xcode = Xcode.open(
+				path.join(
+					programOpts.ios,
+					"AwesomeProjectEssentials.xcodeproj/project.pbxproj"
+				)
+			);
 
-			const agvtoolOpts = {
-				cwd: programOpts.ios
-			};
+			xcode.document.projects.forEach(project => {
+				const plistFilenames = unique(
+					flatten(
+						project.targets.map(target => {
+							return target.buildConfigurationsList.buildConfigurations.map(
+								config => {
+									if (target.name === appPkg.name) {
+										config.patch({
+											buildSettings: {
+												CURRENT_PROJECT_VERSION:
+													parseInt(
+														config.ast.value
+															.get("buildSettings")
+															.get("CURRENT_PROJECT_VERSION").text,
+														10
+													) + 1
+											}
+										});
+									}
 
-			try {
-				child.execSync("agvtool what-version", agvtoolOpts);
-			} catch (err) {
-				reject([
-					{
-						style: "red",
-						text: "No project folder found at " + programOpts.ios
-					},
-					{
-						style: "yellow",
-						text: 'Use the "--ios" option to specify the path manually'
-					}
-				]);
-
-				return;
-			}
-
-			if (!programOpts.incrementBuild) {
-				child.spawnSync(
-					"agvtool",
-					["new-marketing-version", appPkg.version],
-					agvtoolOpts
+									return config.ast.value
+										.get("buildSettings")
+										.get("INFOPLIST_FILE").text;
+								}
+							);
+						})
+					)
 				);
-			}
 
-			if (programOpts.resetBuild) {
-				child.execSync("agvtool new-version -all 1", agvtoolOpts);
-			} else {
-				child.execSync("agvtool next-version -all", agvtoolOpts);
-			}
+				const plistFiles = plistFilenames.map(filename => {
+					return fs.readFileSync(path.join(programOpts.ios, filename), "utf8");
+				});
+
+				const parsedPlistFiles = plistFiles.map(file => {
+					return plist.parse(file);
+				});
+
+				parsedPlistFiles.forEach((json, index) => {
+					fs.writeFileSync(
+						path.join(programOpts.ios, plistFilenames[index]),
+						plist.build(
+							Object.assign(
+								{},
+								json,
+								!programOpts.incrementBuild
+									? {
+											CFBundleShortVersionString: appPkg.version
+										}
+									: {},
+								{
+									CFBundleVersion: `${programOpts.resetBuild
+										? 1
+										: parseInt(json.CFBundleVersion, 10) + 1}`
+								}
+							)
+						)
+					);
+				});
+
+				plistFilenames.forEach((filename, index) => {
+					const indent = detectIndent(plistFiles[index]);
+
+					fs.writeFileSync(
+						path.join(programOpts.ios, filename),
+						stripIndents`
+						<?xml version="1.0" encoding="UTF-8"?>
+						<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+						<plist version="1.0">` +
+							"\n" +
+							beautify(
+								fs
+									.readFileSync(path.join(programOpts.ios, filename), "utf8")
+									.match(/<dict>[\s\S]*<\/dict>/)[0],
+								{
+									end_with_newline: true,
+									indent_char: indent.indent,
+									indent_size: indent.amount
+								}
+							) +
+							stripIndents`
+						</plist>` +
+							"\n"
+					);
+				});
+			});
+
+			xcode.save();
 
 			log({ text: "iOS updated" }, programOpts.quiet);
 			resolve();
