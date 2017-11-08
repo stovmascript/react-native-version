@@ -207,7 +207,8 @@ function version(program, projectPath) {
 				const xcode = Xcode.open(
 					path.join(
 						programOpts.ios,
-						"AwesomeProjectEssentials.xcodeproj/project.pbxproj"
+						`${appPkg.name}.xcodeproj`,
+						"project.pbxproj"
 					)
 				);
 
