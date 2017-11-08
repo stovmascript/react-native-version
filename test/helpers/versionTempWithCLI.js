@@ -6,8 +6,8 @@ const child = require("child_process");
  */
 function versionTempWithCLI(params) {
 	const versionProcess = child.spawnSync(
-		"node",
-		[require.resolve("../../cli")].concat(params).filter(Boolean),
+		require.resolve("../../cli"),
+		[].concat(params).filter(Boolean),
 		{
 			env: Object.assign({}, process.env, {
 				RNV_ENV: "ava"

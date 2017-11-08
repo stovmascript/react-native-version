@@ -81,7 +81,7 @@ test("API: neverAmend", async t => {
 });
 
 test("version: default", async t => {
-	injectPackageJSON(t, { version: `node ${cliPath}` });
+	injectPackageJSON(t, { version: `${cliPath}` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -92,7 +92,7 @@ test("version: default", async t => {
 });
 
 test("version: default, skipTag", async t => {
-	injectPackageJSON(t, { version: `node ${cliPath} --skip-tag` });
+	injectPackageJSON(t, { version: `${cliPath} --skip-tag` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -103,7 +103,7 @@ test("version: default, skipTag", async t => {
 });
 
 test("version: amend", async t => {
-	injectPackageJSON(t, { version: `node ${cliPath} -a` });
+	injectPackageJSON(t, { version: `${cliPath} -a` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -114,7 +114,7 @@ test("version: amend", async t => {
 });
 
 test("version: amend, skipTag", async t => {
-	injectPackageJSON(t, { version: `node ${cliPath} -a --skip-tag` });
+	injectPackageJSON(t, { version: `${cliPath} -a --skip-tag` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -125,13 +125,13 @@ test("version: amend, skipTag", async t => {
 });
 
 test("version: neverAmend", async t => {
-	injectPackageJSON(t, { version: `node ${cliPath} -A` });
+	injectPackageJSON(t, { version: `${cliPath} -A` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
 
 test("postversion: default", async t => {
-	injectPackageJSON(t, { postversion: `node ${cliPath}` });
+	injectPackageJSON(t, { postversion: `${cliPath}` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -142,7 +142,7 @@ test("postversion: default", async t => {
 });
 
 test("postversion: default, skipTag", async t => {
-	injectPackageJSON(t, { postversion: `node ${cliPath} --skip-tag` });
+	injectPackageJSON(t, { postversion: `${cliPath} --skip-tag` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -153,7 +153,7 @@ test("postversion: default, skipTag", async t => {
 });
 
 test("postversion: amend", async t => {
-	injectPackageJSON(t, { postversion: `node ${cliPath} -a` });
+	injectPackageJSON(t, { postversion: `${cliPath} -a` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -164,7 +164,7 @@ test("postversion: amend", async t => {
 });
 
 test("postversion: amend, skipTag", async t => {
-	injectPackageJSON(t, { postversion: `node ${cliPath} -a --skip-tag` });
+	injectPackageJSON(t, { postversion: `${cliPath} -a --skip-tag` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.amended);
 
@@ -175,7 +175,7 @@ test("postversion: amend, skipTag", async t => {
 });
 
 test("postversion: neverAmend", async t => {
-	injectPackageJSON(t, { postversion: `node ${cliPath} -A` });
+	injectPackageJSON(t, { postversion: `${cliPath} -A` });
 	tempInitAndVersion();
 	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });
