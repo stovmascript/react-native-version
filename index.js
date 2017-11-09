@@ -1,7 +1,7 @@
 const beautify = require("js-beautify").html;
 const child = require("child_process");
 const detectIndent = require("detect-indent");
-const flatten = require("lodash.flatten");
+const flatten = require("lodash.flattendeep");
 const fs = require("fs");
 const list = require("./util").list;
 const log = require("./util").log;
@@ -32,6 +32,28 @@ function getDefaults() {
 		android: "android/app/build.gradle",
 		ios: "ios"
 	};
+}
+
+/**
+ * Returns Info.plist filenames
+ * @param {Xcode} xcode Opened Xcode project file
+ * @return {Array} Plist filenames
+ */
+function getPlistFilenames(xcode) {
+	return unique(
+		flatten(
+			xcode.document.projects.map(project => {
+				return project.targets.map(target => {
+					return target.buildConfigurationsList.buildConfigurations.map(
+						config => {
+							return config.ast.value.get("buildSettings").get("INFOPLIST_FILE")
+								.text;
+						}
+					);
+				});
+			})
+		)
+	);
 }
 
 /**
@@ -212,34 +234,29 @@ function version(program, projectPath) {
 					)
 				);
 
-				xcode.document.projects.forEach(project => {
-					const plistFilenames = unique(
-						flatten(
-							project.targets.map(target => {
-								return target.buildConfigurationsList.buildConfigurations.map(
-									config => {
-										if (target.name === appPkg.name) {
-											config.patch({
-												buildSettings: {
-													CURRENT_PROJECT_VERSION:
-														parseInt(
-															config.ast.value
-																.get("buildSettings")
-																.get("CURRENT_PROJECT_VERSION").text,
-															10
-														) + 1
-												}
-											});
-										}
+				const plistFilenames = getPlistFilenames(xcode);
 
-										return config.ast.value
-											.get("buildSettings")
-											.get("INFOPLIST_FILE").text;
-									}
-								);
-							})
-						)
-					);
+				xcode.document.projects.forEach(project => {
+					project.targets.forEach(target => {
+						target.buildConfigurationsList.buildConfigurations.forEach(
+							config => {
+								if (target.name === appPkg.name) {
+									config.patch({
+										buildSettings: {
+											CURRENT_PROJECT_VERSION: programOpts.resetBuild
+												? 1
+												: parseInt(
+														config.ast.value
+															.get("buildSettings")
+															.get("CURRENT_PROJECT_VERSION").text,
+														10
+													) + 1
+										}
+									});
+								}
+							}
+						);
+					});
 
 					const plistFiles = plistFilenames.map(filename => {
 						return fs.readFileSync(
@@ -407,5 +424,6 @@ function version(program, projectPath) {
 
 module.exports = {
 	getDefaults: getDefaults,
+	getPlistFilenames: getPlistFilenames,
 	version: version
 };

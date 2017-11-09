@@ -6,9 +6,9 @@ import getCurrVersion from "./helpers/getCurrVersion";
 import test from "ava";
 import versionTempWithCLI from "./helpers/versionTempWithCLI";
 
-test("CLI: default", async t => {
+test("CLI: incrementBuild", async t => {
 	beforeEachCLI(t);
-	versionTempWithCLI();
-	t.deepEqual(getCurrVersion(t), expectedVersion.default);
+	versionTempWithCLI(["-b"]);
+	t.deepEqual(getCurrVersion(t), expectedVersion.incrementBuild);
 	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
 });

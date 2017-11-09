@@ -6,9 +6,9 @@ import getCurrVersion from "./helpers/getCurrVersion";
 import test from "ava";
 import versionTempWithCLI from "./helpers/versionTempWithCLI";
 
-test("CLI: default", async t => {
+test("CLI: resetBuild", async t => {
 	beforeEachCLI(t);
-	versionTempWithCLI();
-	t.deepEqual(getCurrVersion(t), expectedVersion.default);
-	t.deepEqual(await getCurrTree(t), expectedTree.notAmended);
+	versionTempWithCLI(["-r"]);
+	t.deepEqual(getCurrVersion(t), expectedVersion.resetBuild);
+	t.deepEqual(await getCurrTree(t), expectedTree.resetBuild.notAmended);
 });
