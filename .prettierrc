@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "options": {
+        "useTabs": true
+      }
+    }
+  ]
+}

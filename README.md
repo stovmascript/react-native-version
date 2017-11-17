@@ -1,37 +1,27 @@
-# react-native-version [![Build Status](https://travis-ci.org/stovmascript/react-native-version.svg?branch=master)](https://travis-ci.org/stovmascript/react-native-version)
+# react-native-version [![Build Status](https://travis-ci.org/stovmascript/react-native-version.svg?branch=master)](https://travis-ci.org/stovmascript/react-native-version) [![npm](https://img.shields.io/npm/v/react-native-version.svg)](https://www.npmjs.com/package/react-native-version) [![npm](https://img.shields.io/npm/dm/react-native-version.svg)](https://www.npmjs.com/package/react-native-version)
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
-
-## Prerequisites
-
-- Xcode Command Line Tools (`xcode-select --install`)
-
-## Project setup
-
-Open your Xcode project and under "Build Settings -> Versioning -> Current Project Version", set the value to your current `CFBundleVersion` ("General -> Identity -> Build").
-
----
 
 ## npm-scripts hook (automatic method)
 
 ### Setup
 
-```shell
-npm install react-native-version --save
+```bash
+$ npm install react-native-version --save-dev
 # or
-yarn add react-native-version
+$ yarn add react-native-version --dev
 ```
 
 Hook into the "version" or "postversion" npm script in your app's package.json:
 
-```js
+```diff
 {
 	"name": "AwesomeProject",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"postversion": "react-native-version"
++		"postversion": "react-native-version"
 	},
 	// ...
 }
@@ -47,18 +37,18 @@ react-native-version will then update your `android/` and `ios/` code. Depending
 
 ### Setup
 
-```shell
-npm install -g react-native-version
+```bash
+$ npm install -g react-native-version
 # or
-yarn global add react-native-version
+$ yarn global add react-native-version
 ```
 
 ### Example usage
 
-```shell
-cd AwesomeProject/
-npm version patch
-react-native-version
+```bash
+$ cd AwesomeProject/
+$ npm version patch
+$ react-native-version
 ```
 
 ## Options
@@ -72,6 +62,7 @@ react-native-version
 -b, --increment-build     Only increment build number.
 -d, --android [path]      Path to your "android/app/build.gradle" file.
 -i, --ios [path]          Path to your "ios/" folder.
+-L, --legacy              Version iOS using agvtool (macOS only). Requires Xcode Command Line Tools.
 -q, --quiet               Be quiet, only report errors.
 -r, --reset-build         Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.
 -t, --target <platforms>  Only version specified platforms, eg. "--target android,ios".
@@ -93,16 +84,16 @@ You can apply these options to the "version" or "postversion" script too. If for
 
 The default behaviour is to version all React Native platforms. You can target specific platforms by passing a comma-separated list to the "--target" option, or by using the `RNV` environment variable:
 
-```shell
-RNV=android,ios npm version patch
+```bash
+$ RNV=android,ios npm version patch
 # or
-RNV=android,ios react-native-version
+$ RNV=android,ios react-native-version
 ```
 
 When using the CLI, you can even combine both methods and make your teammates rage :smiling_imp: :suspect::
 
-```shell
-RNV=android react-native-version --target ios
+```bash
+$ RNV=android react-native-version --target ios
 ```
 :rage1: :speak_no_evil:
 
@@ -132,7 +123,46 @@ version({
 });
 ```
 
-### Methods
+### Functions
+
+<dl>
+<dt><a href="#getDefaults">getDefaults()</a> ⇒ <code>Object</code></dt>
+<dd><p>Returns default values for some options, namely android/ios file/folder paths</p>
+</dd>
+<dt><a href="#getPlistFilenames">getPlistFilenames(xcode)</a> ⇒ <code>Array</code></dt>
+<dd><p>Returns Info.plist filenames</p>
+</dd>
+<dt><a href="#version">version(program, projectPath)</a> ⇒ <code>Promise.&lt;(string|Error)&gt;</code></dt>
+<dd><p>Versions your app</p>
+</dd>
+</dl>
+
+### Typedefs
+
+<dl>
+<dt><a href="#Promise">Promise</a></dt>
+<dd><p>Custom type definition for Promises</p>
+</dd>
+</dl>
+
+<a name="getDefaults"></a>
+
+#### getDefaults() ⇒ <code>Object</code>
+Returns default values for some options, namely android/ios file/folder paths
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - Defaults  
+<a name="getPlistFilenames"></a>
+
+#### getPlistFilenames(xcode) ⇒ <code>Array</code>
+Returns Info.plist filenames
+
+**Kind**: global function  
+**Returns**: <code>Array</code> - Plist filenames  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| xcode | <code>Xcode</code> | Opened Xcode project file |
 
 <a name="version"></a>
 
@@ -146,8 +176,6 @@ Versions your app
 | --- | --- | --- |
 | program | <code>Object</code> | commander/CLI-style options, camelCased |
 | projectPath | <code>string</code> | Path to your React Native project |
-
-### Types
 
 <a name="Promise"></a>
 
@@ -167,3 +195,4 @@ Custom type definition for Promises
 - [agvtool](https://developer.apple.com/library/content/qa/qa1827/_index.html)
 - [npm-version](https://docs.npmjs.com/cli/version)
 - [Semantic Versioning (semver)](http://semver.org/)
+- [ionic-version](https://github.com/stovmascript/ionic-version)
