@@ -5,7 +5,7 @@ import npmScriptsMacro from "./helpers/npmScriptsMacro";
 import test from "ava";
 
 test(
-	"postversion: default, legacy",
+	"postversion (legacy)",
 	npmScriptsMacro,
 	{ postversion: "-L" },
 	expected.version.default,
@@ -13,7 +13,7 @@ test(
 );
 
 test(
-	"postversion: default",
+	"postversion",
 	npmScriptsMacro,
 	{ postversion: "" },
 	expected.version.default,
@@ -21,7 +21,7 @@ test(
 );
 
 test(
-	"version: default, legacy",
+	"version (legacy)",
 	npmScriptsMacro,
 	{ version: "-L" },
 	expected.version.default,
@@ -29,7 +29,7 @@ test(
 );
 
 test(
-	"version: default",
+	"version",
 	npmScriptsMacro,
 	{ version: "" },
 	expected.version.default,
@@ -37,33 +37,21 @@ test(
 );
 
 test(
-	"CLI: default, legacy",
+	"CLI (legacy)",
 	cliMacro,
 	["-L"],
 	expected.version.default,
 	expected.tree.notAmended
 );
 
-test(
-	"CLI: default",
-	cliMacro,
-	[],
-	expected.version.default,
-	expected.tree.notAmended
-);
+test("CLI", cliMacro, [], expected.version.default, expected.tree.notAmended);
 
 test(
-	"API: default, legacy",
+	"API (legacy)",
 	apiMacro,
 	{ legacy: true },
 	expected.version.default,
 	expected.tree.notAmended
 );
 
-test(
-	"API: default",
-	apiMacro,
-	{},
-	expected.version.default,
-	expected.tree.notAmended
-);
+test("API", apiMacro, {}, expected.version.default, expected.tree.notAmended);

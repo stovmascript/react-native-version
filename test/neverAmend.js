@@ -5,7 +5,7 @@ import npmScriptsMacro from "./helpers/npmScriptsMacro";
 import test from "ava";
 
 test(
-	"postversion: neverAmend, legacy",
+	"postversion (legacy)",
 	npmScriptsMacro,
 	{ postversion: "-A -L" },
 	expected.version.default,
@@ -13,7 +13,7 @@ test(
 );
 
 test(
-	"postversion: neverAmend",
+	"postversion",
 	npmScriptsMacro,
 	{ postversion: "-A" },
 	expected.version.default,
@@ -21,7 +21,7 @@ test(
 );
 
 test(
-	"version: neverAmend, legacy",
+	"version (legacy)",
 	npmScriptsMacro,
 	{ version: "-A -L" },
 	expected.version.default,
@@ -29,7 +29,7 @@ test(
 );
 
 test(
-	"version: neverAmend",
+	"version",
 	npmScriptsMacro,
 	{ version: "-A" },
 	expected.version.default,
@@ -37,7 +37,7 @@ test(
 );
 
 test(
-	"CLI: neverAmend, legacy",
+	"CLI (legacy)",
 	cliMacro,
 	["-A", "-L"],
 	expected.version.default,
@@ -45,7 +45,7 @@ test(
 );
 
 test(
-	"CLI: neverAmend",
+	"CLI",
 	cliMacro,
 	["-A"],
 	expected.version.default,
@@ -53,7 +53,7 @@ test(
 );
 
 test(
-	"API: neverAmend, legacy",
+	"API (legacy)",
 	apiMacro,
 	{ neverAmend: true, legacy: true },
 	expected.version.default,
@@ -61,7 +61,7 @@ test(
 );
 
 test(
-	"API: neverAmend",
+	"API",
 	apiMacro,
 	{ neverAmend: true },
 	expected.version.default,

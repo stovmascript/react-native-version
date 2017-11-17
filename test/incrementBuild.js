@@ -5,7 +5,7 @@ import npmScriptsMacro from "./helpers/npmScriptsMacro";
 import test from "ava";
 
 test(
-	"postversion: incrementBuild, legacy",
+	"postversion (legacy)",
 	npmScriptsMacro,
 	{ postversion: "-b -L" },
 	expected.version.incrementBuild,
@@ -13,7 +13,7 @@ test(
 );
 
 test(
-	"postversion: incrementBuild",
+	"postversion",
 	npmScriptsMacro,
 	{ postversion: "-b" },
 	expected.version.incrementBuild,
@@ -21,7 +21,7 @@ test(
 );
 
 test(
-	"version: incrementBuild, legacy",
+	"version (legacy)",
 	npmScriptsMacro,
 	{ version: "-b -L" },
 	expected.version.incrementBuild,
@@ -29,7 +29,7 @@ test(
 );
 
 test(
-	"version: incrementBuild",
+	"version",
 	npmScriptsMacro,
 	{ version: "-b" },
 	expected.version.incrementBuild,
@@ -37,7 +37,7 @@ test(
 );
 
 test(
-	"CLI: incrementBuild, legacy",
+	"CLI (legacy)",
 	cliMacro,
 	["-b", "-L"],
 	expected.version.incrementBuild,
@@ -45,7 +45,7 @@ test(
 );
 
 test(
-	"CLI: incrementBuild",
+	"CLI",
 	cliMacro,
 	["-b"],
 	expected.version.incrementBuild,
@@ -53,7 +53,7 @@ test(
 );
 
 test(
-	"API: incrementBuild, legacy",
+	"API (legacy)",
 	apiMacro,
 	{ incrementBuild: true, legacy: true },
 	expected.version.incrementBuild,
@@ -61,7 +61,7 @@ test(
 );
 
 test(
-	"API: incrementBuild",
+	"API",
 	apiMacro,
 	{ incrementBuild: true },
 	expected.version.incrementBuild,

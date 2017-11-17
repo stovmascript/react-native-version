@@ -1,4 +1,5 @@
 import beforeEach from "./beforeEach";
+import { cliPath } from "../fixtures";
 import fs from "fs-extra";
 import getCurrCommitHash from "./getCurrCommitHash";
 import getCurrTagHash from "./getCurrTagHash";
@@ -6,8 +7,6 @@ import getCurrTree from "./getCurrTree";
 import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
 import testPkgJSON from "../fixtures/AwesomeProjectEssentials/package";
-
-const cliPath = require.resolve("../../cli");
 
 export default async (t, script, version, tree) => {
 	beforeEach(t);

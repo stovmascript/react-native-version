@@ -27,7 +27,7 @@ export default t => {
 		const target = path.dirname(filename);
 
 		const parsedPlist = plist.parse(
-			fs.readFileSync(path.join(t.context.tempDir, "ios", filename), "utf8")
+			fs.readFileSync(path.join(t.context.tempDir, paths.ios, filename), "utf8")
 		);
 
 		CFBundleShortVersionString[target] = parsedPlist.CFBundleShortVersionString;

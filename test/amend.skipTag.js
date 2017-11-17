@@ -5,7 +5,7 @@ import npmScriptsMacro from "./helpers/npmScriptsMacro";
 import test from "ava";
 
 test(
-	"postversion: amend, skipTag, legacy",
+	"postversion (legacy)",
 	npmScriptsMacro,
 	{ postversion: "-a --skip-tag -L" },
 	expected.version.default,
@@ -13,7 +13,7 @@ test(
 );
 
 test(
-	"postversion: amend, skipTag",
+	"postversion",
 	npmScriptsMacro,
 	{ postversion: "-a --skip-tag" },
 	expected.version.default,
@@ -21,7 +21,7 @@ test(
 );
 
 test(
-	"version: amend, skipTag, legacy",
+	"version (legacy)",
 	npmScriptsMacro,
 	{ version: "-a --skip-tag -L" },
 	expected.version.default,
@@ -29,7 +29,7 @@ test(
 );
 
 test(
-	"version: amend, skipTag",
+	"version",
 	npmScriptsMacro,
 	{ version: "-a --skip-tag" },
 	expected.version.default,
@@ -37,7 +37,7 @@ test(
 );
 
 test(
-	"CLI: amend, skipTag, legacy",
+	"CLI (legacy)",
 	cliMacro,
 	["-a", "--skip-tag", "-L"],
 	expected.version.default,
@@ -45,7 +45,7 @@ test(
 );
 
 test(
-	"CLI: amend, skipTag",
+	"CLI",
 	cliMacro,
 	["-a", "--skip-tag"],
 	expected.version.default,
@@ -53,7 +53,7 @@ test(
 );
 
 test(
-	"API: amend, skipTag, legacy",
+	"API (legacy)",
 	apiMacro,
 	{ amend: true, skipTag: true, legacy: true },
 	expected.version.default,
@@ -61,7 +61,7 @@ test(
 );
 
 test(
-	"API: amend, skipTag",
+	"API",
 	apiMacro,
 	{ amend: true, skipTag: true },
 	expected.version.default,

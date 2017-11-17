@@ -3,7 +3,7 @@ import npmScriptsMacro from "./helpers/npmScriptsMacro";
 import test from "ava";
 
 test(
-	"postversion: default, skipTag, legacy",
+	"postversion (legacy)",
 	npmScriptsMacro,
 	{ postversion: "--skip-tag -L" },
 	expected.version.default,
@@ -11,7 +11,7 @@ test(
 );
 
 test(
-	"postversion: default, skipTag",
+	"postversion",
 	npmScriptsMacro,
 	{ postversion: "--skip-tag" },
 	expected.version.default,
@@ -19,7 +19,7 @@ test(
 );
 
 test(
-	"version: default, skipTag, legacy",
+	"version (legacy)",
 	npmScriptsMacro,
 	{ version: "--skip-tag -L" },
 	expected.version.default,
@@ -27,7 +27,7 @@ test(
 );
 
 test(
-	"version: default, skipTag",
+	"version",
 	npmScriptsMacro,
 	{ version: "--skip-tag" },
 	expected.version.default,

@@ -5,7 +5,7 @@ import npmScriptsMacro from "./helpers/npmScriptsMacro";
 import test from "ava";
 
 test(
-	"postversion: resetBuild, legacy",
+	"postversion (legacy)",
 	npmScriptsMacro,
 	{ postversion: "-r -L" },
 	expected.version.resetBuild,
@@ -13,7 +13,7 @@ test(
 );
 
 test(
-	"postversion: resetBuild",
+	"postversion",
 	npmScriptsMacro,
 	{ postversion: "-r" },
 	expected.version.resetBuild,
@@ -21,7 +21,7 @@ test(
 );
 
 test(
-	"version: resetBuild, legacy",
+	"version (legacy)",
 	npmScriptsMacro,
 	{ version: "-r -L" },
 	expected.version.resetBuild,
@@ -29,7 +29,7 @@ test(
 );
 
 test(
-	"version: resetBuild",
+	"version",
 	npmScriptsMacro,
 	{ version: "-r" },
 	expected.version.resetBuild,
@@ -37,7 +37,7 @@ test(
 );
 
 test(
-	"CLI: resetBuild, legacy",
+	"CLI (legacy)",
 	cliMacro,
 	["-r", "-L"],
 	expected.version.resetBuild,
@@ -45,7 +45,7 @@ test(
 );
 
 test(
-	"CLI: resetBuild",
+	"CLI",
 	cliMacro,
 	["-r"],
 	expected.version.resetBuild,
@@ -53,7 +53,7 @@ test(
 );
 
 test(
-	"API: resetBuild, legacy",
+	"API (legacy)",
 	apiMacro,
 	{ resetBuild: true, legacy: true },
 	expected.version.resetBuild,
@@ -61,7 +61,7 @@ test(
 );
 
 test(
-	"API: resetBuild",
+	"API",
 	apiMacro,
 	{ resetBuild: true },
 	expected.version.resetBuild,

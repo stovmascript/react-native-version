@@ -60,7 +60,7 @@
   "scripts": {
     "precommit": "lint-staged",
     "docs": "jsdoc2md -d 4 index.js",
-    "test": "ava"
+    "test": "./test.sh"
   },
   "lint-staged": {
     "*.{js,json}": ["prettier --write", "git add"]

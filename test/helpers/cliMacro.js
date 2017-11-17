@@ -1,5 +1,6 @@
 import beforeEach from "./beforeEach";
 import child from "child_process";
+import { cliPath } from "../fixtures";
 import getCurrCommitHash from "./getCurrCommitHash";
 import getCurrTagHash from "./getCurrTagHash";
 import getCurrTree from "./getCurrTree";
@@ -12,7 +13,7 @@ export default async (t, params, version, tree) => {
 	tempInitAndVersion();
 
 	const versionProcess = child.spawnSync(
-		require.resolve("../../cli"),
+		cliPath,
 		[].concat(params).filter(Boolean),
 		{
 			env: Object.assign({}, process.env, {
