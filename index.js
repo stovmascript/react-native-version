@@ -1,7 +1,7 @@
 const beautify = require("js-beautify").html;
 const child = require("child_process");
 const detectIndent = require("detect-indent");
-const flatten = require("lodash.flattendeep");
+const flattenDeep = require("lodash.flattendeep");
 const fs = require("fs");
 const list = require("./util").list;
 const log = require("./util").log;
@@ -41,7 +41,7 @@ function getDefaults() {
  */
 function getPlistFilenames(xcode) {
 	return unique(
-		flatten(
+		flattenDeep(
 			xcode.document.projects.map(project => {
 				return project.targets.map(target => {
 					return target.buildConfigurationsList.buildConfigurations.map(
