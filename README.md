@@ -7,9 +7,9 @@ Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/v
 ### Setup
 
 ```bash
-npm install react-native-version --save-dev
+$ npm install react-native-version --save-dev
 # or
-yarn add react-native-version --dev
+$ yarn add react-native-version --dev
 ```
 
 Hook into the "version" or "postversion" npm script in your app's package.json:
@@ -38,17 +38,17 @@ react-native-version will then update your `android/` and `ios/` code. Depending
 ### Setup
 
 ```bash
-npm install -g react-native-version
+$ npm install -g react-native-version
 # or
-yarn global add react-native-version
+$ yarn global add react-native-version
 ```
 
 ### Example usage
 
 ```bash
-cd AwesomeProject/
-npm version patch
-react-native-version
+$ cd AwesomeProject/
+$ npm version patch
+$ react-native-version
 ```
 
 ## Options
@@ -85,15 +85,15 @@ You can apply these options to the "version" or "postversion" script too. If for
 The default behaviour is to version all React Native platforms. You can target specific platforms by passing a comma-separated list to the "--target" option, or by using the `RNV` environment variable:
 
 ```bash
-RNV=android,ios npm version patch
+$ RNV=android,ios npm version patch
 # or
-RNV=android,ios react-native-version
+$ RNV=android,ios react-native-version
 ```
 
 When using the CLI, you can even combine both methods and make your teammates rage :smiling_imp: :suspect::
 
 ```bash
-RNV=android react-native-version --target ios
+$ RNV=android react-native-version --target ios
 ```
 :rage1: :speak_no_evil:
 
@@ -123,7 +123,46 @@ version({
 });
 ```
 
-### Methods
+### Functions
+
+<dl>
+<dt><a href="#getDefaults">getDefaults()</a> ⇒ <code>Object</code></dt>
+<dd><p>Returns default values for some options, namely android/ios file/folder paths</p>
+</dd>
+<dt><a href="#getPlistFilenames">getPlistFilenames(xcode)</a> ⇒ <code>Array</code></dt>
+<dd><p>Returns Info.plist filenames</p>
+</dd>
+<dt><a href="#version">version(program, projectPath)</a> ⇒ <code>Promise.&lt;(string|Error)&gt;</code></dt>
+<dd><p>Versions your app</p>
+</dd>
+</dl>
+
+### Typedefs
+
+<dl>
+<dt><a href="#Promise">Promise</a></dt>
+<dd><p>Custom type definition for Promises</p>
+</dd>
+</dl>
+
+<a name="getDefaults"></a>
+
+#### getDefaults() ⇒ <code>Object</code>
+Returns default values for some options, namely android/ios file/folder paths
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - Defaults  
+<a name="getPlistFilenames"></a>
+
+#### getPlistFilenames(xcode) ⇒ <code>Array</code>
+Returns Info.plist filenames
+
+**Kind**: global function  
+**Returns**: <code>Array</code> - Plist filenames  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| xcode | <code>Xcode</code> | Opened Xcode project file |
 
 <a name="version"></a>
 
@@ -137,8 +176,6 @@ Versions your app
 | --- | --- | --- |
 | program | <code>Object</code> | commander/CLI-style options, camelCased |
 | projectPath | <code>string</code> | Path to your React Native project |
-
-### Types
 
 <a name="Promise"></a>
 
