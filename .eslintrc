@@ -1,7 +1,0 @@
-{
-  "extends": ["plugin:ava/recommended"],
-  "plugins": ["prettier", "ava"],
-  "rules": {
-    "prettier/prettier": "error"
-  }
-}
