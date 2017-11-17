@@ -2,16 +2,6 @@
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
-## Prerequisites
-
-- Xcode Command Line Tools (`xcode-select --install`)
-
-## Project setup
-
-Open your Xcode project and under "Build Settings -> Versioning -> Current Project Version", set the value to your current `CFBundleVersion` ("General -> Identity -> Build").
-
----
-
 ## npm-scripts hook (automatic method)
 
 ### Setup
@@ -72,6 +62,7 @@ react-native-version
 -b, --increment-build     Only increment build number.
 -d, --android [path]      Path to your "android/app/build.gradle" file.
 -i, --ios [path]          Path to your "ios/" folder.
+-L, --legacy              Version iOS using agvtool (macOS only). Requires Xcode Command Line Tools.
 -q, --quiet               Be quiet, only report errors.
 -r, --reset-build         Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.
 -t, --target <platforms>  Only version specified platforms, eg. "--target android,ios".

@@ -1,18 +1,12 @@
-const child = require("child_process");
+import child from "child_process";
 
-/**
- * Inits and npm-versions an APE copy
- * @param {string} newVersion New version to pass to npm-version
- */
-function tempInitAndVersion(newVersion) {
+export default () => {
 	child.execSync(`
 		git init \
 		&& git config user.email "test@zor.arpa" \
 		&& git config user.name "Test Zor" \
 		&& git add . \
 		&& git commit -m "Initial commit" \
-		&& npm version ${newVersion || "patch"} \
+		&& npm version patch \
 		`);
-}
-
-module.exports = tempInitAndVersion;
+};

@@ -29,6 +29,10 @@ program
 		defaults.android
 	)
 	.option("-i, --ios [path]", 'Path to your "ios/" folder.', defaults.ios)
+	.option(
+		"-L, --legacy",
+		"Version iOS using agvtool (macOS only). Requires Xcode Command Line Tools."
+	)
 	.option("-q, --quiet", "Be quiet, only report errors.")
 	.option(
 		"-r, --reset-build",

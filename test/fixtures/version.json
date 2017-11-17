@@ -1,0 +1,56 @@
+{
+  "default": {
+    "CFBundleShortVersionString": {
+      "AwesomeProjectEssentials-tvOS": "0.0.2",
+      "AwesomeProjectEssentials-tvOSTests": "0.0.2",
+      "AwesomeProjectEssentials": "0.0.2",
+      "AwesomeProjectEssentialsTests": "0.0.2"
+    },
+    "CFBundleVersion": {
+      "AwesomeProjectEssentials-tvOS": "2",
+      "AwesomeProjectEssentials-tvOSTests": "2",
+      "AwesomeProjectEssentials": "2",
+      "AwesomeProjectEssentialsTests": "2"
+    },
+    "CURRENT_PROJECT_VERSION": "2",
+    "version": "0.0.2",
+    "versionCode": "2",
+    "versionName": "0.0.2"
+  },
+  "incrementBuild": {
+    "CFBundleShortVersionString": {
+      "AwesomeProjectEssentials-tvOS": "1.0",
+      "AwesomeProjectEssentials-tvOSTests": "1.0",
+      "AwesomeProjectEssentials": "1.0",
+      "AwesomeProjectEssentialsTests": "1.0"
+    },
+    "CFBundleVersion": {
+      "AwesomeProjectEssentials-tvOS": "2",
+      "AwesomeProjectEssentials-tvOSTests": "2",
+      "AwesomeProjectEssentials": "2",
+      "AwesomeProjectEssentialsTests": "2"
+    },
+    "CURRENT_PROJECT_VERSION": "2",
+    "version": "0.0.2",
+    "versionCode": "2",
+    "versionName": "1.0"
+  },
+  "resetBuild": {
+    "CFBundleShortVersionString": {
+      "AwesomeProjectEssentials-tvOS": "0.0.2",
+      "AwesomeProjectEssentials-tvOSTests": "0.0.2",
+      "AwesomeProjectEssentials": "0.0.2",
+      "AwesomeProjectEssentialsTests": "0.0.2"
+    },
+    "CFBundleVersion": {
+      "AwesomeProjectEssentials-tvOS": "1",
+      "AwesomeProjectEssentials-tvOSTests": "1",
+      "AwesomeProjectEssentials": "1",
+      "AwesomeProjectEssentialsTests": "1"
+    },
+    "CURRENT_PROJECT_VERSION": "1",
+    "version": "0.0.2",
+    "versionCode": "2",
+    "versionName": "0.0.2"
+  }
+}

@@ -1,9 +1,16 @@
+const beautify = require("js-beautify").html;
 const child = require("child_process");
+const detectIndent = require("detect-indent");
+const flatten = require("lodash.flattendeep");
 const fs = require("fs");
 const list = require("./util").list;
 const log = require("./util").log;
 const path = require("path");
+const plist = require("plist");
 const pSettle = require("p-settle");
+const stripIndents = require("common-tags/lib/stripIndents");
+const unique = require("lodash.uniq");
+const Xcode = require("pbxproj-dom/xcode").Xcode;
 
 /**
  * Custom type definition for Promises
@@ -25,6 +32,28 @@ function getDefaults() {
 		android: "android/app/build.gradle",
 		ios: "ios"
 	};
+}
+
+/**
+ * Returns Info.plist filenames
+ * @param {Xcode} xcode Opened Xcode project file
+ * @return {Array} Plist filenames
+ */
+function getPlistFilenames(xcode) {
+	return unique(
+		flatten(
+			xcode.document.projects.map(project => {
+				return project.targets.map(target => {
+					return target.buildConfigurationsList.buildConfigurations.map(
+						config => {
+							return config.ast.value.get("buildSettings").get("INFOPLIST_FILE")
+								.text;
+						}
+					);
+				});
+			})
+		)
+	);
 }
 
 /**
@@ -139,61 +168,157 @@ function version(program, projectPath) {
 		ios = new Promise(function(resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
-			try {
-				child.execSync("xcode-select --print-path", {
-					stdio: ["ignore", "ignore", "pipe"]
-				});
-			} catch (err) {
-				reject([
-					{
-						style: "red",
-						text: err
-					},
-					{
-						style: "yellow",
-						text: "Looks like Xcode Command Line Tools aren't installed"
-					},
-					{
-						text: "\n  Install:\n\n    $ xcode-select --install\n"
-					}
-				]);
+			if (program.legacy) {
+				try {
+					child.execSync("xcode-select --print-path", {
+						stdio: ["ignore", "ignore", "pipe"]
+					});
+				} catch (err) {
+					reject([
+						{
+							style: "red",
+							text: err
+						},
+						{
+							style: "yellow",
+							text: "Looks like Xcode Command Line Tools aren't installed"
+						},
+						{
+							text: "\n  Install:\n\n    $ xcode-select --install\n"
+						}
+					]);
 
-				return;
-			}
+					return;
+				}
 
-			const agvtoolOpts = {
-				cwd: programOpts.ios
-			};
+				const agvtoolOpts = {
+					cwd: programOpts.ios
+				};
 
-			try {
-				child.execSync("agvtool what-version", agvtoolOpts);
-			} catch (err) {
-				reject([
-					{
-						style: "red",
-						text: "No project folder found at " + programOpts.ios
-					},
-					{
-						style: "yellow",
-						text: 'Use the "--ios" option to specify the path manually'
-					}
-				]);
+				try {
+					child.execSync("agvtool what-version", agvtoolOpts);
+				} catch (err) {
+					reject([
+						{
+							style: "red",
+							text: "No project folder found at " + programOpts.ios
+						},
+						{
+							style: "yellow",
+							text: 'Use the "--ios" option to specify the path manually'
+						}
+					]);
 
-				return;
-			}
+					return;
+				}
 
-			if (!programOpts.incrementBuild) {
-				child.spawnSync(
-					"agvtool",
-					["new-marketing-version", appPkg.version],
-					agvtoolOpts
-				);
-			}
+				if (!programOpts.incrementBuild) {
+					child.spawnSync(
+						"agvtool",
+						["new-marketing-version", appPkg.version],
+						agvtoolOpts
+					);
+				}
 
-			if (programOpts.resetBuild) {
-				child.execSync("agvtool new-version -all 1", agvtoolOpts);
+				if (programOpts.resetBuild) {
+					child.execSync("agvtool new-version -all 1", agvtoolOpts);
+				} else {
+					child.execSync("agvtool next-version -all", agvtoolOpts);
+				}
 			} else {
-				child.execSync("agvtool next-version -all", agvtoolOpts);
+				const xcode = Xcode.open(
+					path.join(
+						programOpts.ios,
+						`${appPkg.name}.xcodeproj`,
+						"project.pbxproj"
+					)
+				);
+
+				const plistFilenames = getPlistFilenames(xcode);
+
+				xcode.document.projects.forEach(project => {
+					project.targets.forEach(target => {
+						target.buildConfigurationsList.buildConfigurations.forEach(
+							config => {
+								if (target.name === appPkg.name) {
+									config.patch({
+										buildSettings: {
+											CURRENT_PROJECT_VERSION: programOpts.resetBuild
+												? 1
+												: parseInt(
+														config.ast.value
+															.get("buildSettings")
+															.get("CURRENT_PROJECT_VERSION").text,
+														10
+													) + 1
+										}
+									});
+								}
+							}
+						);
+					});
+
+					const plistFiles = plistFilenames.map(filename => {
+						return fs.readFileSync(
+							path.join(programOpts.ios, filename),
+							"utf8"
+						);
+					});
+
+					const parsedPlistFiles = plistFiles.map(file => {
+						return plist.parse(file);
+					});
+
+					parsedPlistFiles.forEach((json, index) => {
+						fs.writeFileSync(
+							path.join(programOpts.ios, plistFilenames[index]),
+							plist.build(
+								Object.assign(
+									{},
+									json,
+									!programOpts.incrementBuild
+										? {
+												CFBundleShortVersionString: appPkg.version
+											}
+										: {},
+									{
+										CFBundleVersion: `${programOpts.resetBuild
+											? 1
+											: parseInt(json.CFBundleVersion, 10) + 1}`
+									}
+								)
+							)
+						);
+					});
+
+					plistFilenames.forEach((filename, index) => {
+						const indent = detectIndent(plistFiles[index]);
+
+						fs.writeFileSync(
+							path.join(programOpts.ios, filename),
+							stripIndents`
+							<?xml version="1.0" encoding="UTF-8"?>
+							<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+							<plist version="1.0">` +
+								"\n" +
+								beautify(
+									fs
+										.readFileSync(path.join(programOpts.ios, filename), "utf8")
+										.match(/<dict>[\s\S]*<\/dict>/)[0],
+									{
+										end_with_newline: true,
+										indent_char: indent.indent,
+										indent_size: indent.amount
+									}
+								) +
+								stripIndents`
+							</plist>` +
+								"\n"
+						);
+					});
+				});
+
+				xcode.save();
 			}
 
 			log({ text: "iOS updated" }, programOpts.quiet);
@@ -299,5 +424,6 @@ function version(program, projectPath) {
 
 module.exports = {
 	getDefaults: getDefaults,
+	getPlistFilenames: getPlistFilenames,
 	version: version
 };
