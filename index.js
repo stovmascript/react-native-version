@@ -25,6 +25,7 @@ const env = {
 
 /**
  * Returns default values for some options, namely android/ios file/folder paths
+ * @private
  * @return {Object} Defaults
  */
 function getDefaults() {
@@ -36,6 +37,7 @@ function getDefaults() {
 
 /**
  * Returns Info.plist filenames
+ * @private
  * @param {Xcode} xcode Opened Xcode project file
  * @return {Array} Plist filenames
  */

@@ -53,6 +53,7 @@ $ react-native-version
 
 ## Options
 
+<!-- START cli -->
 	-h, --help                output usage information
 	-V, --version             output the version number
 	-a, --amend               Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when react-native-version is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend.
@@ -65,6 +66,8 @@ $ react-native-version
 	-q, --quiet               Be quiet, only report errors.
 	-r, --reset-build         Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.
 	-t, --target <platforms>  Only version specified platforms, eg. "--target android,ios".
+
+<!-- END cli -->
 
 You can apply these options to the "version" or "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
 
@@ -121,15 +124,10 @@ version({
 });
 ```
 
+<!-- START api -->
 ### Functions
 
 <dl>
-<dt><a href="#getDefaults">getDefaults()</a> ⇒ <code>Object</code></dt>
-<dd><p>Returns default values for some options, namely android/ios file/folder paths</p>
-</dd>
-<dt><a href="#getPlistFilenames">getPlistFilenames(xcode)</a> ⇒ <code>Array</code></dt>
-<dd><p>Returns Info.plist filenames</p>
-</dd>
 <dt><a href="#version">version(program, projectPath)</a> ⇒ <code>Promise.&lt;(string|Error)&gt;</code></dt>
 <dd><p>Versions your app</p>
 </dd>
@@ -143,28 +141,9 @@ version({
 </dd>
 </dl>
 
-<a name="getDefaults"></a>
-
-#### getDefaults() ⇒ <code>Object</code>
-Returns default values for some options, namely android/ios file/folder paths
-
-**Kind**: global function  
-**Returns**: <code>Object</code> - Defaults  
-<a name="getPlistFilenames"></a>
-
-#### getPlistFilenames(xcode) ⇒ <code>Array</code>
-Returns Info.plist filenames
-
-**Kind**: global function  
-**Returns**: <code>Array</code> - Plist filenames  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| xcode | <code>Xcode</code> | Opened Xcode project file |
-
 <a name="version"></a>
 
-#### version(program, projectPath) ⇒ <code>Promise.&lt;(string\|Error)&gt;</code>
+### version(program, projectPath) ⇒ <code>Promise.&lt;(string\|Error)&gt;</code>
 Versions your app
 
 **Kind**: global function  
@@ -177,7 +156,7 @@ Versions your app
 
 <a name="Promise"></a>
 
-#### Promise
+### Promise
 Custom type definition for Promises
 
 **Kind**: global typedef  
@@ -187,6 +166,8 @@ Custom type definition for Promises
 | --- | --- | --- |
 | result | <code>\*</code> | See the implementing function for the resolve type and description |
 | result | <code>Error</code> | Rejection error object |
+
+<!-- END api -->
 
 ## See also
 
