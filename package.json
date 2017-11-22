@@ -1,6 +1,6 @@
 {
   "name": "react-native-version",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Version your React Native app in a `npm version` fashion.",
   "author": "Martin Stovicek",
   "license": "MIT",
@@ -24,6 +24,7 @@
     "ava": "^0.23.0",
     "fs-extra": "^1.0.0",
     "husky": "^0.14.3",
+    "injectmd": "^1.0.0",
     "jsdoc-to-markdown": "^2.0.1",
     "lint-staged": "^4.3.0",
     "prettier": "^1.7.4",
@@ -56,7 +57,7 @@
   ],
   "scripts": {
     "precommit": "lint-staged",
-    "docs": "jsdoc2md -d 4 index.js",
+    "docs": "./docs.sh",
     "test": "./test.sh"
   },
   "lint-staged": {

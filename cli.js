@@ -19,7 +19,7 @@ program
 	)
 	.option(
 		"--skip-tag",
-		'For use with "--amend", if you don\'t want to update Git tags.'
+		'For use with "--amend", if you don\'t want to update Git tags. Use this option if you have git-tag-version set to false in your npm config or you use "--no-git-tag-version" during npm-version.'
 	)
 	.option("-A, --never-amend", "Never amend the previous commit.")
 	.option("-b, --increment-build", "Only increment build number.")

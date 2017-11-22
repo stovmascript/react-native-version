@@ -25,6 +25,7 @@ const env = {
 
 /**
  * Returns default values for some options, namely android/ios file/folder paths
+ * @private
  * @return {Object} Defaults
  */
 function getDefaults() {
@@ -36,6 +37,7 @@ function getDefaults() {
 
 /**
  * Returns Info.plist filenames
+ * @private
  * @param {Xcode} xcode Opened Xcode project file
  * @return {Array} Plist filenames
  */
@@ -226,14 +228,17 @@ function version(program, projectPath) {
 					child.execSync("agvtool next-version -all", agvtoolOpts);
 				}
 			} else {
-				const xcode = Xcode.open(
-					path.join(
-						programOpts.ios,
-						`${appPkg.name}.xcodeproj`,
-						"project.pbxproj"
-					)
-				);
+				// Find any folder ending in .xcodeproj
+				const xcodeProjects = fs
+					.readdirSync(programOpts.ios)
+					.filter(file => /\.xcodeproj$/i.test(file));
 
+				if (xcodeProjects.length < 1) {
+					throw new Error(`Xcode project not found in "${programOpts.ios}"`);
+				}
+
+				const projectFolder = path.join(programOpts.ios, xcodeProjects[0]);
+				const xcode = Xcode.open(path.join(projectFolder, "project.pbxproj"));
 				const plistFilenames = getPlistFilenames(xcode);
 
 				xcode.document.projects.forEach(project => {
