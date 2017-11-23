@@ -200,16 +200,27 @@ function version(program, projectPath) {
 				try {
 					child.execSync("agvtool what-version", agvtoolOpts);
 				} catch (err) {
-					reject([
-						{
-							style: "red",
-							text: "No project folder found at " + programOpts.ios
-						},
-						{
-							style: "yellow",
-							text: 'Use the "--ios" option to specify the path manually'
-						}
-					]);
+					const stdout = err.stdout.toString().trim();
+
+					reject(
+						stdout.indexOf("directory") > -1
+							? [
+									{
+										style: "red",
+										text: "No project folder found at " + programOpts.ios
+									},
+									{
+										style: "yellow",
+										text: 'Use the "--ios" option to specify the path manually'
+									}
+								]
+							: [
+									{
+										style: "red",
+										text: stdout
+									}
+								]
+					);
 
 					return;
 				}
@@ -348,7 +359,7 @@ function version(program, projectPath) {
 					}, [])
 					.forEach(function(err) {
 						if (program.outputHelp) {
-							log(err);
+							err.text && log(err);
 						}
 					});
 
