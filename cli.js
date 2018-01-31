@@ -45,6 +45,10 @@ program
 		'Only version specified platforms, eg. "--target android,ios".',
 		list
 	)
+        .option(
+		"-n",
+		'skip git hooks'
+	)
 	.parse(process.argv);
 
 rnv.version(program);
