@@ -321,11 +321,12 @@ function version(program, projectPath) {
 									fs
 										.readFileSync(path.join(programOpts.ios, filename), "utf8")
 										.match(/<dict>[\s\S]*<\/dict>/)[0],
-									{
-										end_with_newline: true,
-										indent_char: indent.indent,
-										indent_size: indent.amount
-									}
+									Object.assign(
+										{ end_with_newline: true },
+										indent.type === "tab"
+											? { indent_with_tabs: true }
+											: { indent_size: indent.amount }
+									)
 								) +
 								stripIndents`
 							</plist>` +
