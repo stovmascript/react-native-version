@@ -213,13 +213,13 @@ function version(program, projectPath) {
 										style: "yellow",
 										text: 'Use the "--ios" option to specify the path manually'
 									}
-								]
+							  ]
 							: [
 									{
 										style: "red",
 										text: stdout
 									}
-								]
+							  ]
 					);
 
 					return;
@@ -266,7 +266,7 @@ function version(program, projectPath) {
 															.get("buildSettings")
 															.get("CURRENT_PROJECT_VERSION").text,
 														10
-													) + 1
+												  ) + 1
 										}
 									});
 								}
@@ -295,12 +295,14 @@ function version(program, projectPath) {
 									!programOpts.incrementBuild
 										? {
 												CFBundleShortVersionString: appPkg.version
-											}
+										  }
 										: {},
 									{
-										CFBundleVersion: `${programOpts.resetBuild
-											? 1
-											: parseInt(json.CFBundleVersion, 10) + 1}`
+										CFBundleVersion: `${
+											programOpts.resetBuild
+												? 1
+												: parseInt(json.CFBundleVersion, 10) + 1
+										}`
 									}
 								)
 							)
@@ -407,13 +409,13 @@ function version(program, projectPath) {
 
 						if (!programOpts.skipTag) {
 							log({ text: "Adjusting Git tag..." }, programOpts.quiet);
-							const tags = child.execSync('git tag --sort=v:refname').toString().split('\n');
-							const tag = tags[tags.length - 2];
 
-							child.execSync(
-								"git tag -f " + tag,
-								gitCmdOpts
-							);
+							const tags = child
+								.execSync("git tag --sort=v:refname")
+								.toString()
+								.split("\n");
+
+							child.execSync(`git tag -f ${tags[tags.length - 2]}`, gitCmdOpts);
 						}
 				}
 			}
