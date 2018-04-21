@@ -407,8 +407,11 @@ function version(program, projectPath) {
 
 						if (!programOpts.skipTag) {
 							log({ text: "Adjusting Git tag..." }, programOpts.quiet);
+							const tags = child.execSync('git tag --sort=v:refname').toString().split('\n');
+							const tag = tags[tags.length - 2];
+
 							child.execSync(
-								"git tag -f $(git tag --sort=v:refname | tail -1)",
+								"git tag -f " + tag,
 								gitCmdOpts
 							);
 						}
