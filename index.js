@@ -200,16 +200,27 @@ function version(program, projectPath) {
 				try {
 					child.execSync("agvtool what-version", agvtoolOpts);
 				} catch (err) {
-					reject([
-						{
-							style: "red",
-							text: "No project folder found at " + programOpts.ios
-						},
-						{
-							style: "yellow",
-							text: 'Use the "--ios" option to specify the path manually'
-						}
-					]);
+					const stdout = err.stdout.toString().trim();
+
+					reject(
+						stdout.indexOf("directory") > -1
+							? [
+									{
+										style: "red",
+										text: "No project folder found at " + programOpts.ios
+									},
+									{
+										style: "yellow",
+										text: 'Use the "--ios" option to specify the path manually'
+									}
+								]
+							: [
+									{
+										style: "red",
+										text: stdout
+									}
+								]
+					);
 
 					return;
 				}
@@ -310,11 +321,12 @@ function version(program, projectPath) {
 									fs
 										.readFileSync(path.join(programOpts.ios, filename), "utf8")
 										.match(/<dict>[\s\S]*<\/dict>/)[0],
-									{
-										end_with_newline: true,
-										indent_char: indent.indent,
-										indent_size: indent.amount
-									}
+									Object.assign(
+										{ end_with_newline: true },
+										indent.type === "tab"
+											? { indent_with_tabs: true }
+											: { indent_size: indent.amount }
+									)
 								) +
 								stripIndents`
 							</plist>` +
@@ -348,7 +360,7 @@ function version(program, projectPath) {
 					}, [])
 					.forEach(function(err) {
 						if (program.outputHelp) {
-							log(err);
+							err.text && log(err);
 						}
 					});
 
@@ -395,8 +407,11 @@ function version(program, projectPath) {
 
 						if (!programOpts.skipTag) {
 							log({ text: "Adjusting Git tag..." }, programOpts.quiet);
+							const tags = child.execSync('git tag --sort=v:refname').toString().split('\n');
+							const tag = tags[tags.length - 2];
+
 							child.execSync(
-								"git tag -f $(git tag --sort=v:refname | tail -1)",
+								"git tag -f " + tag,
 								gitCmdOpts
 							);
 						}
