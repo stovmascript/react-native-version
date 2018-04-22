@@ -23,6 +23,7 @@ program
 	)
 	.option("-A, --never-amend", "Never amend the previous commit.")
 	.option("-b, --increment-build", "Only increment build number.")
+	.option("-B, --never-increment-build", "Never increment build number.")
 	.option(
 		"-d, --android [path]",
 		'Path to your "android/app/build.gradle" file.',
