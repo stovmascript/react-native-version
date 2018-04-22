@@ -152,13 +152,18 @@ function version(program, projectPath) {
 				);
 			}
 
-			gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
-				match,
-				cg1
-			) {
-				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
-				return "versionCode " + newVersionCodeNumber;
-			});
+			if (!programOpts.neverIncrementBuild) {
+				gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
+					match,
+					cg1
+				) {
+					const newVersionCodeNumber = programOpts.setBuild
+						? programOpts.setBuild
+						: parseInt(cg1, 10) + 1;
+
+					return "versionCode " + newVersionCodeNumber;
+				});
+			}
 
 			fs.writeFileSync(programOpts.android, gradleFile);
 			log({ text: "Android updated" }, programOpts.quiet);
@@ -233,10 +238,19 @@ function version(program, projectPath) {
 					);
 				}
 
-				if (programOpts.resetBuild) {
-					child.execSync("agvtool new-version -all 1", agvtoolOpts);
-				} else {
-					child.execSync("agvtool next-version -all", agvtoolOpts);
+				if (!programOpts.neverIncrementBuild) {
+					if (programOpts.resetBuild) {
+						child.execSync("agvtool new-version -all 1", agvtoolOpts);
+					} else {
+						child.execSync("agvtool next-version -all", agvtoolOpts);
+					}
+
+					if (programOpts.setBuild) {
+						child.execSync(
+							`agvtool new-version -all ${program.setBuild}`,
+							agvtoolOpts
+						);
+					}
 				}
 			} else {
 				// Find any folder ending in .xcodeproj
@@ -253,26 +267,36 @@ function version(program, projectPath) {
 				const plistFilenames = getPlistFilenames(xcode);
 
 				xcode.document.projects.forEach(project => {
-					project.targets.forEach(target => {
-						target.buildConfigurationsList.buildConfigurations.forEach(
-							config => {
-								if (target.name === appPkg.name) {
-									config.patch({
-										buildSettings: {
-											CURRENT_PROJECT_VERSION: programOpts.resetBuild
-												? 1
-												: parseInt(
-														config.ast.value
-															.get("buildSettings")
-															.get("CURRENT_PROJECT_VERSION").text,
-														10
-												  ) + 1
+					!programOpts.neverIncrementBuild &&
+						project.targets.forEach(target => {
+							target.buildConfigurationsList.buildConfigurations.forEach(
+								config => {
+									if (target.name === appPkg.name) {
+										var CURRENT_PROJECT_VERSION = 1;
+
+										if (!programOpts.resetBuild) {
+											CURRENT_PROJECT_VERSION =
+												parseInt(
+													config.ast.value
+														.get("buildSettings")
+														.get("CURRENT_PROJECT_VERSION").text,
+													10
+												) + 1;
 										}
-									});
+
+										if (programOpts.setBuild) {
+											CURRENT_PROJECT_VERSION = programOpts.setBuild;
+										}
+
+										config.patch({
+											buildSettings: {
+												CURRENT_PROJECT_VERSION
+											}
+										});
+									}
 								}
-							}
-						);
-					});
+							);
+						});
 
 					const plistFiles = plistFilenames.map(filename => {
 						return fs.readFileSync(
@@ -297,13 +321,23 @@ function version(program, projectPath) {
 												CFBundleShortVersionString: appPkg.version
 										  }
 										: {},
-									{
-										CFBundleVersion: `${
-											programOpts.resetBuild
-												? 1
-												: parseInt(json.CFBundleVersion, 10) + 1
-										}`
-									}
+									!programOpts.neverIncrementBuild
+										? Object.assign(
+												{},
+												{
+													CFBundleVersion: `${
+														programOpts.resetBuild
+															? 1
+															: parseInt(json.CFBundleVersion, 10) + 1
+													}`
+												},
+												programOpts.setBuild
+													? {
+															CFBundleVersion: programOpts.setBuild.toString()
+													  }
+													: {}
+										  )
+										: {}
 								)
 							)
 						);
