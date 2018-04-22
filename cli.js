@@ -41,6 +41,11 @@ program
 			' bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.'
 	)
 	.option(
+		"-s, --set-build <number>",
+		"Set a build number. WARNING: Watch out when setting high values. This option follows Android's app versioning specifics - the value has to be an integer and cannot be greater than 2100000000. You cannot decrement this value after publishing to Google Play! More info at: https://developer.android.com/studio/publish/versioning.html#appversioning",
+		parseInt
+	)
+	.option(
 		"-t, --target <platforms>",
 		'Only version specified platforms, eg. "--target android,ios".',
 		list

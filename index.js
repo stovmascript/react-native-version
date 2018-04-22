@@ -156,7 +156,10 @@ function version(program, projectPath) {
 				match,
 				cg1
 			) {
-				const newVersionCodeNumber = parseInt(cg1, 10) + 1;
+				const newVersionCodeNumber = programOpts.setBuild
+					? programOpts.setBuild
+					: parseInt(cg1, 10) + 1;
+
 				return "versionCode " + newVersionCodeNumber;
 			});
 
@@ -238,6 +241,13 @@ function version(program, projectPath) {
 				} else {
 					child.execSync("agvtool next-version -all", agvtoolOpts);
 				}
+
+				if (programOpts.setBuild) {
+					child.execSync(
+						`agvtool new-version -all ${program.setBuild}`,
+						agvtoolOpts
+					);
+				}
 			} else {
 				// Find any folder ending in .xcodeproj
 				const xcodeProjects = fs
@@ -257,16 +267,25 @@ function version(program, projectPath) {
 						target.buildConfigurationsList.buildConfigurations.forEach(
 							config => {
 								if (target.name === appPkg.name) {
+									var CURRENT_PROJECT_VERSION = 1;
+
+									if (!programOpts.resetBuild) {
+										CURRENT_PROJECT_VERSION =
+											parseInt(
+												config.ast.value
+													.get("buildSettings")
+													.get("CURRENT_PROJECT_VERSION").text,
+												10
+											) + 1;
+									}
+
+									if (programOpts.setBuild) {
+										CURRENT_PROJECT_VERSION = programOpts.setBuild;
+									}
+
 									config.patch({
 										buildSettings: {
-											CURRENT_PROJECT_VERSION: programOpts.resetBuild
-												? 1
-												: parseInt(
-														config.ast.value
-															.get("buildSettings")
-															.get("CURRENT_PROJECT_VERSION").text,
-														10
-												  ) + 1
+											CURRENT_PROJECT_VERSION
 										}
 									});
 								}
@@ -303,7 +322,12 @@ function version(program, projectPath) {
 												? 1
 												: parseInt(json.CFBundleVersion, 10) + 1
 										}`
-									}
+									},
+									programOpts.setBuild
+										? {
+												CFBundleVersion: programOpts.setBuild.toString()
+										  }
+										: {}
 								)
 							)
 						);
