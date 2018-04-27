@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ "$CI" != "true" || "$TRAVIS_OS_NAME" == "osx" ]]; then
-	ava
+	ava $@
 else
-	ava --match="!*legacy*"
+	ava --match="!*legacy*" $@
 fi

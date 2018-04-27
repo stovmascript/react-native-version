@@ -1,4 +1,5 @@
-const execAsync = require("./execAsync");
+import execAsync from "./execAsync";
+import { version as expected } from "../fixtures";
 
 /**
  * Returns a commit hash based on the latest tag
@@ -6,7 +7,7 @@ const execAsync = require("./execAsync");
  * @return {string} Commit hash
  */
 function getCurrTagHash(t) {
-	return execAsync("git rev-list -n 1 $(git tag --sort=v:refname | tail -1)", {
+	return execAsync(`git rev-list -n 1 v${expected.default.version}`, {
 		cwd: t.context.tempDir
 	});
 }

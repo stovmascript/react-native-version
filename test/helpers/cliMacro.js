@@ -7,7 +7,7 @@ import getCurrTree from "./getCurrTree";
 import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
 
-export default async (t, params, version, tree) => {
+export default async (t, params, expectedVersion, expectedTree) => {
 	beforeEach(t);
 	delete process.env.npm_lifecycle_event;
 	tempInitAndVersion();
@@ -26,8 +26,8 @@ export default async (t, params, version, tree) => {
 		throw new Error(versionProcess.stderr.toString());
 	}
 
-	t.deepEqual(getCurrVersion(t), version);
-	t.deepEqual(await getCurrTree(t), tree);
+	t.deepEqual(getCurrVersion(t), expectedVersion);
+	t.deepEqual(await getCurrTree(t), expectedTree);
 
 	if (params.indexOf("--skip-tag") > -1) {
 		t.not(await getCurrTagHash(t), await getCurrCommitHash(t));
