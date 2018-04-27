@@ -8,13 +8,13 @@ import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
 import testPkgJSON from "../fixtures/AwesomeProjectEssentials/package";
 
-export default async (t, script, version, tree) => {
+export default async (t, params, expectedVersion, expectedTree) => {
 	beforeEach(t);
 
 	const newScript = {};
 
-	Object.keys(script).forEach(key => {
-		newScript[key] = `${cliPath} ${script[key]}`;
+	Object.keys(params).forEach(key => {
+		newScript[key] = `${cliPath} ${params[key]}`;
 	});
 
 	const newTestPkgJSON = JSON.stringify(
@@ -30,10 +30,10 @@ export default async (t, script, version, tree) => {
 	});
 
 	tempInitAndVersion();
-	t.deepEqual(getCurrVersion(t), version);
-	t.deepEqual(await getCurrTree(t), tree);
+	t.deepEqual(getCurrVersion(t), expectedVersion);
+	t.deepEqual(await getCurrTree(t), expectedTree);
 
-	if (!script.version && newTestPkgJSON.indexOf("--skip-tag") > -1) {
+	if (!params.version && newTestPkgJSON.indexOf("--skip-tag") > -1) {
 		t.not(await getCurrTagHash(t), await getCurrCommitHash(t));
 	} else {
 		t.is(await getCurrTagHash(t), await getCurrCommitHash(t));

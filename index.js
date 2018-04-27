@@ -425,6 +425,13 @@ function version(program, projectPath) {
 					process.env.npm_lifecycle_event.indexOf("version") > -1 &&
 					!programOpts.neverAmend)
 			) {
+				const latestTag =
+					(programOpts.amend || process.env.npm_config_git_tag_version) &&
+					child
+						.execSync("git describe --exact-match HEAD", gitCmdOpts)
+						.toString()
+						.trim();
+
 				log({ text: "Amending..." }, programOpts.quiet);
 
 				switch (process.env.npm_lifecycle_event) {
@@ -441,15 +448,9 @@ function version(program, projectPath) {
 					default:
 						child.execSync("git commit -a --amend --no-edit", gitCmdOpts);
 
-						if (!programOpts.skipTag) {
+						if (!programOpts.skipTag && latestTag) {
 							log({ text: "Adjusting Git tag..." }, programOpts.quiet);
-
-							const tags = child
-								.execSync("git tag --sort=v:refname")
-								.toString()
-								.split("\n");
-
-							child.execSync(`git tag -f ${tags[tags.length - 2]}`, gitCmdOpts);
+							child.execSync(`git tag -f ${latestTag}`, gitCmdOpts);
 						}
 				}
 			}
