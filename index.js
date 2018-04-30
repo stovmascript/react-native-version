@@ -396,7 +396,10 @@ function version(program, projectPath) {
 					}, [])
 					.forEach(function(err) {
 						if (program.outputHelp) {
-							err.text && log(err);
+							log(
+								Object.assign({ style: "red", text: err.toString() }, err),
+								programOpts.quiet
+							);
 						}
 					});
 
