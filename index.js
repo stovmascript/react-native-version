@@ -45,7 +45,7 @@ function getPlistFilenames(xcode) {
 	return unique(
 		flattenDeep(
 			xcode.document.projects.map(project => {
-				return project.targets.map(target => {
+				return project.targets.filter(Boolean).map(target => {
 					return target.buildConfigurationsList.buildConfigurations.map(
 						config => {
 							return config.ast.value.get("buildSettings").get("INFOPLIST_FILE")
@@ -268,7 +268,7 @@ function version(program, projectPath) {
 
 				xcode.document.projects.forEach(project => {
 					!programOpts.neverIncrementBuild &&
-						project.targets.forEach(target => {
+						project.targets.filter(Boolean).forEach(target => {
 							target.buildConfigurationsList.buildConfigurations.forEach(
 								config => {
 									if (target.name === appPkg.name) {
