@@ -34,7 +34,7 @@
     "plist": "^2.1.0"
   },
   "devDependencies": {
-    "ava": "^0.23.0",
+    "ava": "^0.25.0",
     "fs-extra": "^1.0.0",
     "husky": "^0.14.3",
     "import-sort-cli": "^4.2.0",
@@ -42,9 +42,9 @@
     "import-sort-style-eslint": "^4.2.0",
     "injectmd": "^1.0.0",
     "jsdoc-to-markdown": "^2.0.1",
-    "lint-staged": "^4.3.0",
+    "lint-staged": "^7.1.0",
     "prettier": "^1.7.4",
-    "prettier-package-json": "^1.5.1",
+    "prettier-package-json": "^1.6.0",
     "sort-json": "^1.6.1",
     "temp": "^0.8.3"
   },
@@ -67,7 +67,7 @@
   ],
   "lint-staged": {
     "*.json": ["sort-json", "git add"],
-    "*.{js,json}": ["prettier --write", "git add"],
+    "*.{js,json,md}": ["prettier --write", "git add"],
     "*.{js}": ["import-sort --write", "git add"],
     "package.json": ["prettier-package-json --write", "git add"]
   }
