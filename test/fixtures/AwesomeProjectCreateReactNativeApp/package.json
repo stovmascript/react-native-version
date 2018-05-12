@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "AwesomeProjectCreateReactNativeApp",
+  "version": "0.1.0",
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "android": "react-native-scripts android",
+    "eject": "react-native-scripts eject",
+    "ios": "react-native-scripts ios",
+    "start": "react-native-scripts start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "expo": "^27.0.1",
+    "react": "16.3.1",
+    "react-native": "~0.55.2"
+  },
+  "devDependencies": {
+    "jest-expo": "~27.0.0",
+    "react-native-scripts": "1.14.0",
+    "react-test-renderer": "16.3.1"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  }
+}
