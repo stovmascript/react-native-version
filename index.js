@@ -8,6 +8,7 @@ const log = require("./util").log;
 const path = require("path");
 const plist = require("plist");
 const pSettle = require("p-settle");
+const resolveFrom = require("resolve-from");
 const stripIndents = require("common-tags/lib/stripIndents");
 const unique = require("lodash.uniq");
 const Xcode = require("pbxproj-dom/xcode").Xcode;
@@ -79,22 +80,16 @@ function version(program, projectPath) {
 
 	const targets = [].concat(programOpts.target, env.target).filter(Boolean);
 	const appPkgJSONPath = path.join(projPath, "package.json");
-	const MISSING_RN_DEP = "MISSING_RN_DEP";
 	var appPkg;
 
 	try {
+		resolveFrom(projPath, "react-native");
 		appPkg = require(appPkgJSONPath);
-
-		if (!appPkg.dependencies["react-native"]) {
-			throw new Error(MISSING_RN_DEP);
-		}
 	} catch (err) {
-		if (err.message === MISSING_RN_DEP) {
+		if (err.message === "Cannot find module 'react-native'") {
 			log({
 				style: "red",
-				text:
-					"Is this the right folder? React Native isn't listed as a dependency in " +
-					appPkgJSONPath
+				text: `Is this the right folder? ${err.message} in ${projPath}`
 			});
 		} else {
 			log({

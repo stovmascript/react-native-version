@@ -31,7 +31,8 @@
     "lodash.uniq": "^4.5.0",
     "p-settle": "^2.0.0",
     "pbxproj-dom": "^1.0.11",
-    "plist": "^2.1.0"
+    "plist": "^2.1.0",
+    "resolve-from": "^4.0.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -69,6 +70,6 @@
     "*.json": ["sort-json", "git add"],
     "*.{js,json,md}": ["prettier --write", "git add"],
     "*.{js}": ["import-sort --write", "git add"],
-    "package.json": ["prettier-package-json --write", "git add"]
+    "*package.json": ["prettier-package-json --write", "git add"]
   }
 }

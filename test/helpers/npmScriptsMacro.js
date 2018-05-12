@@ -6,7 +6,7 @@ import getCurrTagHash from "./getCurrTagHash";
 import getCurrTree from "./getCurrTree";
 import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
-import testPkgJSON from "../fixtures/AwesomeProjectEssentials/package";
+import testPkgJSON from "../fixtures/AwesomeProject/package";
 
 export default async (t, params, expectedVersion, expectedTree) => {
 	beforeEach(t);

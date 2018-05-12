@@ -7,7 +7,7 @@ temp.track();
 module.exports = function(t) {
 	t.context.tempDir = temp.mkdirSync("rnv-");
 	fs.copySync(
-		path.join(__dirname, "../fixtures/AwesomeProjectEssentials"),
+		path.join(__dirname, "../fixtures/AwesomeProject"),
 		t.context.tempDir
 	);
 	process.chdir(t.context.tempDir);
