@@ -1,6 +1,7 @@
 const beautify = require("js-beautify").html;
 const child = require("child_process");
 const detectIndent = require("detect-indent");
+const dottie = require("dottie");
 const flattenDeep = require("lodash.flattendeep");
 const fs = require("fs");
 const list = require("./util").list;
@@ -79,12 +80,11 @@ function version(program, projectPath) {
 	});
 
 	const targets = [].concat(programOpts.target, env.target).filter(Boolean);
-	const appPkgJSONPath = path.join(projPath, "package.json");
 	var appPkg;
 
 	try {
 		resolveFrom(projPath, "react-native");
-		appPkg = require(appPkgJSONPath);
+		appPkg = require(path.join(projPath, "package.json"));
 	} catch (err) {
 		if (err.message === "Cannot find module 'react-native'") {
 			log({
@@ -116,6 +116,23 @@ function version(program, projectPath) {
 		process.exit(1);
 	}
 
+	const appJSONPath = path.join(projPath, "app.json");
+	var appJSON;
+	var isExpoApp;
+
+	try {
+		appJSON = require(appJSONPath);
+		isExpoApp = resolveFrom(projPath, "expo");
+
+		if (isExpoApp) {
+			appJSON = Object.assign({}, appJSON, {
+				expo: Object.assign({}, appJSON.expo, {
+					version: appPkg.version
+				})
+			});
+		}
+	} catch (err) {}
+
 	var android;
 	var ios;
 
@@ -128,19 +145,20 @@ function version(program, projectPath) {
 			try {
 				gradleFile = fs.readFileSync(programOpts.android, "utf8");
 			} catch (err) {
-				reject([
-					{
-						style: "red",
-						text: "No gradle file found at " + programOpts.android
-					},
-					{
-						style: "yellow",
-						text: 'Use the "--android" option to specify the path manually'
-					}
-				]);
+				isExpoApp ||
+					reject([
+						{
+							style: "red",
+							text: "No gradle file found at " + programOpts.android
+						},
+						{
+							style: "yellow",
+							text: 'Use the "--android" option to specify the path manually'
+						}
+					]);
 			}
 
-			if (!programOpts.incrementBuild) {
+			if (!programOpts.incrementBuild && !isExpoApp) {
 				gradleFile = gradleFile.replace(
 					/versionName "(.*)"/,
 					'versionName "' + appPkg.version + '"'
@@ -148,19 +166,40 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.neverIncrementBuild) {
-				gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
-					match,
-					cg1
-				) {
-					const newVersionCodeNumber = programOpts.setBuild
-						? programOpts.setBuild
-						: parseInt(cg1, 10) + 1;
+				if (isExpoApp) {
+					const versionCode = dottie.get(appJSON, "expo.android.versionCode");
 
-					return "versionCode " + newVersionCodeNumber;
-				});
+					appJSON = Object.assign({}, appJSON, {
+						expo: Object.assign({}, appJSON.expo, {
+							android: Object.assign({}, appPkg.android, {
+								versionCode: programOpts.setBuild
+									? programOpts.setBuild
+									: versionCode
+										? versionCode + 1
+										: 1
+							})
+						})
+					});
+				} else {
+					gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
+						match,
+						cg1
+					) {
+						const newVersionCodeNumber = programOpts.setBuild
+							? programOpts.setBuild
+							: parseInt(cg1, 10) + 1;
+
+						return "versionCode " + newVersionCodeNumber;
+					});
+				}
 			}
 
-			fs.writeFileSync(programOpts.android, gradleFile);
+			if (isExpoApp) {
+				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
+			} else {
+				fs.writeFileSync(programOpts.android, gradleFile);
+			}
+
 			log({ text: "Android updated" }, programOpts.quiet);
 			resolve();
 		});
@@ -247,6 +286,22 @@ function version(program, projectPath) {
 						);
 					}
 				}
+			} else if (isExpoApp && !programOpts.neverIncrementBuild) {
+				const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
+
+				appJSON = Object.assign({}, appJSON, {
+					expo: Object.assign({}, appJSON.expo, {
+						ios: Object.assign({}, appPkg.ios, {
+							buildNumber: programOpts.setBuild
+								? programOpts.setBuild.toString()
+								: buildNumber && !programOpts.resetBuild
+									? `${parseInt(buildNumber, 10) + 1}`
+									: "1"
+						})
+					})
+				});
+
+				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
 			} else {
 				// Find any folder ending in .xcodeproj
 				const xcodeProjects = fs
