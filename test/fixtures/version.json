@@ -1,92 +1,127 @@
 {
   "default": {
-    "CFBundleShortVersionString": {
-      "AwesomeProject": "2.0.1",
-      "AwesomeProject-tvOS": "2.0.1",
-      "AwesomeProject-tvOSTests": "2.0.1",
-      "AwesomeProjectTests": "2.0.1"
+    "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "2",
+        "AwesomeProject-tvOS": "2",
+        "AwesomeProject-tvOSTests": "2",
+        "AwesomeProjectTests": "2"
+      },
+      "CURRENT_PROJECT_VERSION": "2",
+      "version": "2.0.1",
+      "versionCode": "2",
+      "versionName": "2.0.1"
     },
-    "CFBundleVersion": {
-      "AwesomeProject": "2",
-      "AwesomeProject-tvOS": "2",
-      "AwesomeProject-tvOSTests": "2",
-      "AwesomeProjectTests": "2"
-    },
-    "CURRENT_PROJECT_VERSION": "2",
-    "version": "2.0.1",
-    "versionCode": "2",
-    "versionName": "2.0.1"
+    "my-new-project": {
+      "buildNumber": "2",
+      "version": "2.0.1",
+      "versionCode": 2
+    }
   },
   "incrementBuild": {
-    "CFBundleShortVersionString": {
-      "AwesomeProject": "1.0",
-      "AwesomeProject-tvOS": "1.0",
-      "AwesomeProject-tvOSTests": "1.0",
-      "AwesomeProjectTests": "1.0"
+    "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "1.0",
+        "AwesomeProject-tvOS": "1.0",
+        "AwesomeProject-tvOSTests": "1.0",
+        "AwesomeProjectTests": "1.0"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "2",
+        "AwesomeProject-tvOS": "2",
+        "AwesomeProject-tvOSTests": "2",
+        "AwesomeProjectTests": "2"
+      },
+      "CURRENT_PROJECT_VERSION": "2",
+      "version": "2.0.1",
+      "versionCode": "2",
+      "versionName": "1.0"
     },
-    "CFBundleVersion": {
-      "AwesomeProject": "2",
-      "AwesomeProject-tvOS": "2",
-      "AwesomeProject-tvOSTests": "2",
-      "AwesomeProjectTests": "2"
-    },
-    "CURRENT_PROJECT_VERSION": "2",
-    "version": "2.0.1",
-    "versionCode": "2",
-    "versionName": "1.0"
+    "my-new-project": {
+      "buildNumber": "2",
+      "version": "2.0.1",
+      "versionCode": 2
+    }
   },
   "neverIncrementBuild": {
-    "CFBundleShortVersionString": {
-      "AwesomeProject": "2.0.1",
-      "AwesomeProject-tvOS": "2.0.1",
-      "AwesomeProject-tvOSTests": "2.0.1",
-      "AwesomeProjectTests": "2.0.1"
+    "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "1",
+        "AwesomeProject-tvOS": "1",
+        "AwesomeProject-tvOSTests": "1",
+        "AwesomeProjectTests": "1"
+      },
+      "CURRENT_PROJECT_VERSION": "1",
+      "version": "2.0.1",
+      "versionCode": "1",
+      "versionName": "2.0.1"
     },
-    "CFBundleVersion": {
-      "AwesomeProject": "1",
-      "AwesomeProject-tvOS": "1",
-      "AwesomeProject-tvOSTests": "1",
-      "AwesomeProjectTests": "1"
-    },
-    "CURRENT_PROJECT_VERSION": "1",
-    "version": "2.0.1",
-    "versionCode": "1",
-    "versionName": "2.0.1"
+    "my-new-project": {
+      "buildNumber": "1",
+      "version": "2.0.1",
+      "versionCode": 1
+    }
   },
   "resetBuild": {
-    "CFBundleShortVersionString": {
-      "AwesomeProject": "2.0.1",
-      "AwesomeProject-tvOS": "2.0.1",
-      "AwesomeProject-tvOSTests": "2.0.1",
-      "AwesomeProjectTests": "2.0.1"
+    "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "1",
+        "AwesomeProject-tvOS": "1",
+        "AwesomeProject-tvOSTests": "1",
+        "AwesomeProjectTests": "1"
+      },
+      "CURRENT_PROJECT_VERSION": "1",
+      "version": "2.0.1",
+      "versionCode": "2",
+      "versionName": "2.0.1"
     },
-    "CFBundleVersion": {
-      "AwesomeProject": "1",
-      "AwesomeProject-tvOS": "1",
-      "AwesomeProject-tvOSTests": "1",
-      "AwesomeProjectTests": "1"
-    },
-    "CURRENT_PROJECT_VERSION": "1",
-    "version": "2.0.1",
-    "versionCode": "2",
-    "versionName": "2.0.1"
+    "my-new-project": {
+      "buildNumber": "2",
+      "version": "2.0.1",
+      "versionCode": 2
+    }
   },
   "setBuild": {
-    "CFBundleShortVersionString": {
-      "AwesomeProject": "2.0.1",
-      "AwesomeProject-tvOS": "2.0.1",
-      "AwesomeProject-tvOSTests": "2.0.1",
-      "AwesomeProjectTests": "2.0.1"
+    "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "33",
+        "AwesomeProject-tvOS": "33",
+        "AwesomeProject-tvOSTests": "33",
+        "AwesomeProjectTests": "33"
+      },
+      "CURRENT_PROJECT_VERSION": "33",
+      "version": "2.0.1",
+      "versionCode": "33",
+      "versionName": "2.0.1"
     },
-    "CFBundleVersion": {
-      "AwesomeProject": "33",
-      "AwesomeProject-tvOS": "33",
-      "AwesomeProject-tvOSTests": "33",
-      "AwesomeProjectTests": "33"
-    },
-    "CURRENT_PROJECT_VERSION": "33",
-    "version": "2.0.1",
-    "versionCode": "33",
-    "versionName": "2.0.1"
+    "my-new-project": {
+      "buildNumber": "33",
+      "version": "2.0.1",
+      "versionCode": 33
+    }
   }
 }
