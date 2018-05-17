@@ -1,52 +1,82 @@
 {
   "amended": {
-    "head": [
-      "android/app/build.gradle",
-      "ios/AwesomeProjectEssentials-tvOS/Info.plist",
-      "ios/AwesomeProjectEssentials-tvOSTests/Info.plist",
-      "ios/AwesomeProjectEssentials.xcodeproj/project.pbxproj",
-      "ios/AwesomeProjectEssentials/Info.plist",
-      "ios/AwesomeProjectEssentialsTests/Info.plist",
-      "package.json"
-    ],
-    "index": []
-  },
-  "buildNumber": {
-    "amended": {
+    "AwesomeProject": {
       "head": [
         "android/app/build.gradle",
-        "ios/AwesomeProjectEssentials-tvOS/Info.plist",
-        "ios/AwesomeProjectEssentials-tvOSTests/Info.plist",
-        "ios/AwesomeProjectEssentials/Info.plist",
-        "ios/AwesomeProjectEssentialsTests/Info.plist",
+        "ios/AwesomeProject-tvOS/Info.plist",
+        "ios/AwesomeProject-tvOSTests/Info.plist",
+        "ios/AwesomeProject.xcodeproj/project.pbxproj",
+        "ios/AwesomeProject/Info.plist",
+        "ios/AwesomeProjectTests/Info.plist",
         "package.json"
       ],
       "index": []
     },
+    "my-new-project": {
+      "head": ["app.json", "package.json"],
+      "index": []
+    }
+  },
+  "buildNumber": {
+    "amended": {
+      "AwesomeProject": {
+        "head": [
+          "android/app/build.gradle",
+          "ios/AwesomeProject-tvOS/Info.plist",
+          "ios/AwesomeProject-tvOSTests/Info.plist",
+          "ios/AwesomeProject/Info.plist",
+          "ios/AwesomeProjectTests/Info.plist",
+          "package.json"
+        ],
+        "index": []
+      },
+      "my-new-project": {
+        "head": ["app.json", "package.json"],
+        "index": []
+      }
+    },
     "notAmended": {
-      "head": ["package.json"],
-      "index": [
-        "android/app/build.gradle",
-        "ios/AwesomeProjectEssentials-tvOS/Info.plist",
-        "ios/AwesomeProjectEssentials-tvOSTests/Info.plist",
-        "ios/AwesomeProjectEssentials/Info.plist",
-        "ios/AwesomeProjectEssentialsTests/Info.plist"
-      ]
+      "AwesomeProject": {
+        "head": ["package.json"],
+        "index": [
+          "android/app/build.gradle",
+          "ios/AwesomeProject-tvOS/Info.plist",
+          "ios/AwesomeProject-tvOSTests/Info.plist",
+          "ios/AwesomeProject/Info.plist",
+          "ios/AwesomeProjectTests/Info.plist"
+        ]
+      },
+      "my-new-project": {
+        "head": ["package.json"],
+        "index": ["app.json"]
+      }
     }
   },
   "notAmended": {
-    "head": ["package.json"],
-    "index": [
-      "android/app/build.gradle",
-      "ios/AwesomeProjectEssentials-tvOS/Info.plist",
-      "ios/AwesomeProjectEssentials-tvOSTests/Info.plist",
-      "ios/AwesomeProjectEssentials.xcodeproj/project.pbxproj",
-      "ios/AwesomeProjectEssentials/Info.plist",
-      "ios/AwesomeProjectEssentialsTests/Info.plist"
-    ]
+    "AwesomeProject": {
+      "head": ["package.json"],
+      "index": [
+        "android/app/build.gradle",
+        "ios/AwesomeProject-tvOS/Info.plist",
+        "ios/AwesomeProject-tvOSTests/Info.plist",
+        "ios/AwesomeProject.xcodeproj/project.pbxproj",
+        "ios/AwesomeProject/Info.plist",
+        "ios/AwesomeProjectTests/Info.plist"
+      ]
+    },
+    "my-new-project": {
+      "head": ["package.json"],
+      "index": ["app.json"]
+    }
   },
   "versioned": {
-    "head": ["package.json"],
-    "index": []
+    "AwesomeProject": {
+      "head": ["package.json"],
+      "index": []
+    },
+    "my-new-project": {
+      "head": ["package.json", "app.json"],
+      "index": []
+    }
   }
 }

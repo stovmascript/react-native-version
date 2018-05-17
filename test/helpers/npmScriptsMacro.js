@@ -6,9 +6,16 @@ import getCurrTagHash from "./getCurrTagHash";
 import getCurrTree from "./getCurrTree";
 import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
-import testPkgJSON from "../fixtures/AwesomeProjectEssentials/package";
+import testPkgJSON from "../fixtures/AwesomeProject/package";
 
-export default async (t, params, expectedVersion, expectedTree) => {
+export default async (
+	t,
+	params,
+	testProject,
+	expectedVersion,
+	expectedTree
+) => {
+	t.context.testProject = testProject;
 	beforeEach(t);
 
 	const newScript = {};
@@ -30,8 +37,9 @@ export default async (t, params, expectedVersion, expectedTree) => {
 	});
 
 	tempInitAndVersion();
-	t.deepEqual(getCurrVersion(t), expectedVersion);
-	t.deepEqual(await getCurrTree(t), expectedTree);
+	t.plan(3);
+	t.deepEqual(getCurrVersion(t), expectedVersion[t.context.testProject]);
+	t.deepEqual(await getCurrTree(t), expectedTree[t.context.testProject]);
 
 	if (!params.version && newTestPkgJSON.indexOf("--skip-tag") > -1) {
 		t.not(await getCurrTagHash(t), await getCurrCommitHash(t));

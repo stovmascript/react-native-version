@@ -7,7 +7,14 @@ import getCurrTree from "./getCurrTree";
 import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
 
-export default async (t, params, expectedVersion, expectedTree) => {
+export default async (
+	t,
+	params,
+	testProject,
+	expectedVersion,
+	expectedTree
+) => {
+	t.context.testProject = testProject;
 	beforeEach(t);
 	delete process.env.npm_lifecycle_event;
 	tempInitAndVersion();
@@ -26,8 +33,9 @@ export default async (t, params, expectedVersion, expectedTree) => {
 		throw new Error(versionProcess.stderr.toString());
 	}
 
-	t.deepEqual(getCurrVersion(t), expectedVersion);
-	t.deepEqual(await getCurrTree(t), expectedTree);
+	t.plan(3);
+	t.deepEqual(getCurrVersion(t), expectedVersion[t.context.testProject]);
+	t.deepEqual(await getCurrTree(t), expectedTree[t.context.testProject]);
 
 	if (params.indexOf("--skip-tag") > -1) {
 		t.not(await getCurrTagHash(t), await getCurrCommitHash(t));

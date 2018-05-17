@@ -1,6 +1,7 @@
 const beautify = require("js-beautify").html;
 const child = require("child_process");
 const detectIndent = require("detect-indent");
+const dottie = require("dottie");
 const flattenDeep = require("lodash.flattendeep");
 const fs = require("fs");
 const list = require("./util").list;
@@ -8,6 +9,7 @@ const log = require("./util").log;
 const path = require("path");
 const plist = require("plist");
 const pSettle = require("p-settle");
+const resolveFrom = require("resolve-from");
 const stripIndents = require("common-tags/lib/stripIndents");
 const unique = require("lodash.uniq");
 const Xcode = require("pbxproj-dom/xcode").Xcode;
@@ -59,6 +61,21 @@ function getPlistFilenames(xcode) {
 }
 
 /**
+ * Determines whether the project is an Expo app or a plain React Native app
+ * @private
+ * @return {Boolean} true if the project is an Expo app
+ */
+function isExpoProject(projPath) {
+	var isExpoApp;
+
+	try {
+		isExpoApp = resolveFrom(projPath, "expo");
+	} catch (err) {}
+
+	return !!isExpoApp;
+}
+
+/**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
  * @param {string} projectPath Path to your React Native project
@@ -78,23 +95,16 @@ function version(program, projectPath) {
 	});
 
 	const targets = [].concat(programOpts.target, env.target).filter(Boolean);
-	const appPkgJSONPath = path.join(projPath, "package.json");
-	const MISSING_RN_DEP = "MISSING_RN_DEP";
 	var appPkg;
 
 	try {
-		appPkg = require(appPkgJSONPath);
-
-		if (!appPkg.dependencies["react-native"]) {
-			throw new Error(MISSING_RN_DEP);
-		}
+		resolveFrom(projPath, "react-native");
+		appPkg = require(path.join(projPath, "package.json"));
 	} catch (err) {
-		if (err.message === MISSING_RN_DEP) {
+		if (err.message === "Cannot find module 'react-native'") {
 			log({
 				style: "red",
-				text:
-					"Is this the right folder? React Native isn't listed as a dependency in " +
-					appPkgJSONPath
+				text: `Is this the right folder? ${err.message} in ${projPath}`
 			});
 		} else {
 			log({
@@ -121,6 +131,24 @@ function version(program, projectPath) {
 		process.exit(1);
 	}
 
+	var appJSON;
+	const appJSONPath = path.join(projPath, "app.json");
+	const isExpoApp = isExpoProject(projPath);
+
+	isExpoApp && log({ text: "Expo detected" }, programOpts.quiet);
+
+	try {
+		appJSON = require(appJSONPath);
+
+		if (isExpoApp && !programOpts.incrementBuild) {
+			appJSON = Object.assign({}, appJSON, {
+				expo: Object.assign({}, appJSON.expo, {
+					version: appPkg.version
+				})
+			});
+		}
+	} catch (err) {}
+
 	var android;
 	var ios;
 
@@ -133,19 +161,20 @@ function version(program, projectPath) {
 			try {
 				gradleFile = fs.readFileSync(programOpts.android, "utf8");
 			} catch (err) {
-				reject([
-					{
-						style: "red",
-						text: "No gradle file found at " + programOpts.android
-					},
-					{
-						style: "yellow",
-						text: 'Use the "--android" option to specify the path manually'
-					}
-				]);
+				isExpoApp ||
+					reject([
+						{
+							style: "red",
+							text: "No gradle file found at " + programOpts.android
+						},
+						{
+							style: "yellow",
+							text: 'Use the "--android" option to specify the path manually'
+						}
+					]);
 			}
 
-			if (!programOpts.incrementBuild) {
+			if (!programOpts.incrementBuild && !isExpoApp) {
 				gradleFile = gradleFile.replace(
 					/versionName "(.*)"/,
 					'versionName "' + appPkg.version + '"'
@@ -153,19 +182,40 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.neverIncrementBuild) {
-				gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
-					match,
-					cg1
-				) {
-					const newVersionCodeNumber = programOpts.setBuild
-						? programOpts.setBuild
-						: parseInt(cg1, 10) + 1;
+				if (isExpoApp) {
+					const versionCode = dottie.get(appJSON, "expo.android.versionCode");
 
-					return "versionCode " + newVersionCodeNumber;
-				});
+					appJSON = Object.assign({}, appJSON, {
+						expo: Object.assign({}, appJSON.expo, {
+							android: Object.assign({}, appJSON.expo.android, {
+								versionCode: programOpts.setBuild
+									? programOpts.setBuild
+									: versionCode
+										? versionCode + 1
+										: 1
+							})
+						})
+					});
+				} else {
+					gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
+						match,
+						cg1
+					) {
+						const newVersionCodeNumber = programOpts.setBuild
+							? programOpts.setBuild
+							: parseInt(cg1, 10) + 1;
+
+						return "versionCode " + newVersionCodeNumber;
+					});
+				}
 			}
 
-			fs.writeFileSync(programOpts.android, gradleFile);
+			if (isExpoApp) {
+				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
+			} else {
+				fs.writeFileSync(programOpts.android, gradleFile);
+			}
+
 			log({ text: "Android updated" }, programOpts.quiet);
 			resolve();
 		});
@@ -175,7 +225,25 @@ function version(program, projectPath) {
 		ios = new Promise(function(resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
-			if (program.legacy) {
+			if (isExpoApp) {
+				if (!programOpts.neverIncrementBuild) {
+					const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
+
+					appJSON = Object.assign({}, appJSON, {
+						expo: Object.assign({}, appJSON.expo, {
+							ios: Object.assign({}, appJSON.expo.ios, {
+								buildNumber: programOpts.setBuild
+									? programOpts.setBuild.toString()
+									: buildNumber && !programOpts.resetBuild
+										? `${parseInt(buildNumber, 10) + 1}`
+										: "1"
+							})
+						})
+					});
+				}
+
+				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
+			} else if (program.legacy) {
 				try {
 					child.execSync("xcode-select --print-path", {
 						stdio: ["ignore", "ignore", "pipe"]
@@ -441,7 +509,9 @@ function version(program, projectPath) {
 					case "version":
 						child.spawnSync(
 							"git",
-							["add", programOpts.android, programOpts.ios],
+							["add"].concat(
+								isExpoApp ? appJSONPath : [programOpts.android, programOpts.ios]
+							),
 							gitCmdOpts
 						);
 
@@ -485,5 +555,6 @@ function version(program, projectPath) {
 module.exports = {
 	getDefaults: getDefaults,
 	getPlistFilenames: getPlistFilenames,
+	isExpoProject: isExpoProject,
 	version: version
 };

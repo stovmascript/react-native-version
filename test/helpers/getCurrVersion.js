@@ -1,4 +1,4 @@
-import { getDefaults, getPlistFilenames } from "../../";
+import { getDefaults, getPlistFilenames, isExpoProject } from "../../";
 
 import { Xcode } from "pbxproj-dom/xcode";
 import flattenDeep from "lodash.flattendeep";
@@ -10,6 +10,21 @@ import unique from "lodash.uniq";
 export default t => {
 	const paths = getDefaults();
 	const pkg = require(path.join(t.context.tempDir, "package.json"));
+
+	const app = JSON.parse(
+		fs.readFileSync(path.join(t.context.tempDir, "app.json"), {
+			encoding: "utf8"
+		})
+	);
+
+	if (isExpoProject(t.context.tempDir)) {
+		return {
+			appVersion: app.expo.version,
+			buildNumber: app.expo.ios.buildNumber,
+			version: pkg.version,
+			versionCode: app.expo.android.versionCode
+		};
+	}
 
 	const xcode = Xcode.open(
 		path.join(
