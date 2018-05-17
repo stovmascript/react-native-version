@@ -62,6 +62,7 @@ function getPlistFilenames(xcode) {
 
 /**
  * Determines whether the project is an Expo app or a plain React Native app
+ * @private
  * @return {Boolean} true if the project is an Expo app
  */
 function isExpoProject(projPath) {
@@ -133,6 +134,8 @@ function version(program, projectPath) {
 	var appJSON;
 	const appJSONPath = path.join(projPath, "app.json");
 	const isExpoApp = isExpoProject(projPath);
+
+	isExpoApp && log({ text: "Expo detected" }, programOpts.quiet);
 
 	try {
 		appJSON = require(appJSONPath);

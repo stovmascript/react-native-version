@@ -74,11 +74,12 @@ $ react-native-version
 
 You can apply these options to the "version" or "postversion" script too. If for example you want to commit the changes made by RNV yourself, add the "--never-amend" option:
 
-```js
+```diff
 {
 	// ...
 	"scripts": {
-		"postversion": "react-native-version --never-amend"
+-		"postversion": "react-native-version"
++		"postversion": "react-native-version --never-amend"
 	},
 	// ...
 }

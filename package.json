@@ -1,6 +1,7 @@
 {
   "name": "react-native-version",
-  "description": "Version your React Native app in a `npm version` fashion.",
+  "description":
+    "Version your React Native or Expo app in a `npm version` fashion.",
   "license": "MIT",
   "author": "Martin Stovicek",
   "homepage": "https://github.com/stovmascript/react-native-version#readme",
@@ -53,10 +54,14 @@
   "keywords": [
     "CFBundleShortVersionString",
     "CFBundleVersion",
+    "CRNA",
     "CURRENT_PROJECT_VERSION",
     "agvtool",
     "build",
+    "buildNumber",
     "bump",
+    "create-react-native-app",
+    "expo",
     "gradle",
     "info",
     "npm-version",
