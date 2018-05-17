@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "android": {
+      "versionCode": 1
+    },
+    "assetBundlePatterns": ["**/*"],
+    "description": "This project is really great.",
+    "icon": "./assets/icon.png",
+    "ios": {
+      "buildNumber": "1",
+      "supportsTablet": true
+    },
+    "name": "my-new-project",
+    "orientation": "portrait",
+    "platforms": ["ios", "android"],
+    "privacy": "public",
+    "sdkVersion": "27.0.0",
+    "slug": "my-new-project",
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "version": "1.0.0"
+  }
+}
