@@ -19,6 +19,7 @@
       "versionName": "2.0.1"
     },
     "my-new-project": {
+      "appVersion": "2.0.1",
       "buildNumber": "2",
       "version": "2.0.1",
       "versionCode": 2
@@ -44,6 +45,7 @@
       "versionName": "1.0"
     },
     "my-new-project": {
+      "appVersion": "1.0.0",
       "buildNumber": "2",
       "version": "2.0.1",
       "versionCode": 2
@@ -69,6 +71,7 @@
       "versionName": "2.0.1"
     },
     "my-new-project": {
+      "appVersion": "2.0.1",
       "buildNumber": "1",
       "version": "2.0.1",
       "versionCode": 1
@@ -94,7 +97,8 @@
       "versionName": "2.0.1"
     },
     "my-new-project": {
-      "buildNumber": "2",
+      "appVersion": "2.0.1",
+      "buildNumber": "1",
       "version": "2.0.1",
       "versionCode": 2
     }
@@ -119,6 +123,7 @@
       "versionName": "2.0.1"
     },
     "my-new-project": {
+      "appVersion": "2.0.1",
       "buildNumber": "33",
       "version": "2.0.1",
       "versionCode": 33

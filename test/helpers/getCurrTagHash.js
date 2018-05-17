@@ -7,9 +7,12 @@ import { version as expected } from "../fixtures";
  * @return {string} Commit hash
  */
 function getCurrTagHash(t) {
-	return execAsync(`git rev-list -n 1 v${expected.default.version}`, {
-		cwd: t.context.tempDir
-	});
+	return execAsync(
+		`git rev-list -n 1 v${expected.default[t.context.testProject].version}`,
+		{
+			cwd: t.context.tempDir
+		}
+	);
 }
 
 module.exports = getCurrTagHash;

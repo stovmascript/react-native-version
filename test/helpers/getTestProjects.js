@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const testProjectsPath = "../fixtures";
+const testProjectsPath = path.join(__dirname, "../fixtures");
 
 export default async () => {
 	return new Promise(resolveFiles => {

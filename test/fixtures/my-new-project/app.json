@@ -1,9 +1,13 @@
 {
   "expo": {
+    "android": {
+      "versionCode": 1
+    },
     "assetBundlePatterns": ["**/*"],
     "description": "This project is really great.",
     "icon": "./assets/icon.png",
     "ios": {
+      "buildNumber": "1",
       "supportsTablet": true
     },
     "name": "my-new-project",

@@ -6,12 +6,20 @@ import getCurrVersion from "./getCurrVersion";
 import tempInitAndVersion from "./tempInitAndVersion";
 import { version } from "../../";
 
-export default async (t, params, expectedVersion, expectedTree) => {
+export default async (
+	t,
+	params,
+	testProject,
+	expectedVersion,
+	expectedTree
+) => {
+	t.context.testProject = testProject;
 	beforeEach(t);
 	tempInitAndVersion();
 	await version(Object.assign({}, params, { quiet: true }), t.context.tempDir);
-	t.deepEqual(getCurrVersion(t), expectedVersion);
-	t.deepEqual(await getCurrTree(t), expectedTree);
+	t.plan(3);
+	t.deepEqual(getCurrVersion(t), expectedVersion[t.context.testProject]);
+	t.deepEqual(await getCurrTree(t), expectedTree[t.context.testProject]);
 
 	if (params.skipTag) {
 		t.not(await getCurrTagHash(t), await getCurrCommitHash(t));

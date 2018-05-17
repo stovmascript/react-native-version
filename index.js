@@ -61,6 +61,20 @@ function getPlistFilenames(xcode) {
 }
 
 /**
+ * Determines whether the project is an Expo app or a plain React Native app
+ * @return {Boolean} true if the project is an Expo app
+ */
+function isExpoProject(projPath) {
+	var isExpoApp;
+
+	try {
+		isExpoApp = resolveFrom(projPath, "expo");
+	} catch (err) {}
+
+	return !!isExpoApp;
+}
+
+/**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
  * @param {string} projectPath Path to your React Native project
@@ -116,15 +130,14 @@ function version(program, projectPath) {
 		process.exit(1);
 	}
 
-	const appJSONPath = path.join(projPath, "app.json");
 	var appJSON;
-	var isExpoApp;
+	const appJSONPath = path.join(projPath, "app.json");
+	const isExpoApp = isExpoProject(projPath);
 
 	try {
 		appJSON = require(appJSONPath);
-		isExpoApp = resolveFrom(projPath, "expo");
 
-		if (isExpoApp) {
+		if (isExpoApp && !programOpts.incrementBuild) {
 			appJSON = Object.assign({}, appJSON, {
 				expo: Object.assign({}, appJSON.expo, {
 					version: appPkg.version
@@ -171,7 +184,7 @@ function version(program, projectPath) {
 
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
-							android: Object.assign({}, appPkg.android, {
+							android: Object.assign({}, appJSON.expo.android, {
 								versionCode: programOpts.setBuild
 									? programOpts.setBuild
 									: versionCode
@@ -209,7 +222,25 @@ function version(program, projectPath) {
 		ios = new Promise(function(resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
-			if (program.legacy) {
+			if (isExpoApp) {
+				if (!programOpts.neverIncrementBuild) {
+					const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
+
+					appJSON = Object.assign({}, appJSON, {
+						expo: Object.assign({}, appJSON.expo, {
+							ios: Object.assign({}, appJSON.expo.ios, {
+								buildNumber: programOpts.setBuild
+									? programOpts.setBuild.toString()
+									: buildNumber && !programOpts.resetBuild
+										? `${parseInt(buildNumber, 10) + 1}`
+										: "1"
+							})
+						})
+					});
+				}
+
+				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
+			} else if (program.legacy) {
 				try {
 					child.execSync("xcode-select --print-path", {
 						stdio: ["ignore", "ignore", "pipe"]
@@ -286,22 +317,6 @@ function version(program, projectPath) {
 						);
 					}
 				}
-			} else if (isExpoApp && !programOpts.neverIncrementBuild) {
-				const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
-
-				appJSON = Object.assign({}, appJSON, {
-					expo: Object.assign({}, appJSON.expo, {
-						ios: Object.assign({}, appPkg.ios, {
-							buildNumber: programOpts.setBuild
-								? programOpts.setBuild.toString()
-								: buildNumber && !programOpts.resetBuild
-									? `${parseInt(buildNumber, 10) + 1}`
-									: "1"
-						})
-					})
-				});
-
-				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
 			} else {
 				// Find any folder ending in .xcodeproj
 				const xcodeProjects = fs
@@ -491,7 +506,9 @@ function version(program, projectPath) {
 					case "version":
 						child.spawnSync(
 							"git",
-							["add", programOpts.android, programOpts.ios],
+							["add"].concat(
+								isExpoApp ? appJSONPath : [programOpts.android, programOpts.ios]
+							),
 							gitCmdOpts
 						);
 
@@ -535,5 +552,6 @@ function version(program, projectPath) {
 module.exports = {
 	getDefaults: getDefaults,
 	getPlistFilenames: getPlistFilenames,
+	isExpoProject: isExpoProject,
 	version: version
 };
