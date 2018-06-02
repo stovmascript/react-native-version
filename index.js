@@ -10,6 +10,7 @@ const path = require("path");
 const plist = require("plist");
 const pSettle = require("p-settle");
 const resolveFrom = require("resolve-from");
+const semver = require("semver");
 const stripIndents = require("common-tags/lib/stripIndents");
 const unique = require("lodash.uniq");
 const Xcode = require("pbxproj-dom/xcode").Xcode;
@@ -498,6 +499,12 @@ function version(program, projectPath) {
 			) {
 				const latestTag =
 					(programOpts.amend || process.env.npm_config_git_tag_version) &&
+					semver.valid(
+						child
+							.execSync("git log -1 --pretty=%s", gitCmdOpts)
+							.toString()
+							.trim()
+					) &&
 					child
 						.execSync("git describe --exact-match HEAD", gitCmdOpts)
 						.toString()
