@@ -13,9 +13,11 @@ program
 	.arguments("[projectPath]")
 	.option(
 		"-a, --amend",
-		"Amend the previous commit. Also updates the latest Git tag to point to the amended commit. This is done automatically when " +
-			pkg.name +
-			' is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend.'
+		`Amend the previous commit. This is done automatically when ${
+			pkg.name
+		} is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend. Also, if the previous commit is a valid npm-version commit, ${
+			pkg.name
+		} will update the Git tag pointing to this commit.`
 	)
 	.option(
 		"--skip-tag",
