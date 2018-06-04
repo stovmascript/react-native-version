@@ -95,7 +95,7 @@ $ RNV=android,ios npm version patch
 $ RNV=android,ios react-native-version
 ```
 
-When using the CLI, you can even combine both methods and make your teammates rage :smiling_imp: :suspect::
+When using the CLI, you can even combine both methods and make your teammates rage :smiling_imp: :suspect:
 
 ```bash
 $ RNV=android react-native-version --target ios
@@ -176,6 +176,12 @@ Custom type definition for Promises
 | result | <code>Error</code> | Rejection error object                                             |
 
 <!-- END api -->
+
+## Known issues
+
+### `SyntaxError: Expected """, "\'", "\"", "\n", or [^\"] but "\" found.`
+
+When running `react-native link` on Windows, native modules will be linked in your Xcode project with paths that include backslashes (`\`) instead of forward slashes (`/`). This will break `pbxproj-dom`, which we rely on to parse Xcode projects. To fix this issue, convert any `LIBRARY_SEARCH_PATHS` and `HEADER_SEARCH_PATHS` as shown in [this comment](https://github.com/stovmascript/react-native-version/issues/52#issuecomment-393343784). This step could be automated with a library like [normalize-path](https://www.npmjs.com/package/normalize-path) or [unixify](https://www.npmjs.com/package/unixify).
 
 ## See also
 
