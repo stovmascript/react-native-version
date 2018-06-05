@@ -77,6 +77,19 @@ function isExpoProject(projPath) {
 }
 
 /**
+ * Determines whether the project has a .git/ directory
+ * @param {string} projectPath Path to your project
+ * @return {Boolean} true if the project has a .git/ directory
+ */
+function isGitProject(projectPath) {
+	try {
+		return !!fs.statSync(path.join(projectPath, ".git"));
+	} catch (err) {}
+
+	return false;
+}
+
+/**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
  * @param {string} projectPath Path to your React Native project
@@ -505,6 +518,7 @@ function version(program, projectPath) {
 							.toString()
 							.trim()
 					) &&
+					isGitProject(projPath) &&
 					child
 						.execSync("git describe --exact-match HEAD", gitCmdOpts)
 						.toString()
