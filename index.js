@@ -177,7 +177,7 @@ function version(program, projectPath) {
 
 			if (!programOpts.incrementBuild && !isExpoApp) {
 				gradleFile = gradleFile.replace(
-					/versionName ("|')(.*)("|')/,
+					/versionName (["'])(.*)["']/,
 					'versionName $1' + appPkg.version + '$1'
 				);
 			}
