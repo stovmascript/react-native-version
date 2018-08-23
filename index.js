@@ -70,7 +70,8 @@ function isExpoProject(projPath) {
 	var isExpoApp;
 
 	try {
-		isExpoApp = resolveFrom(projPath, "expo");
+		var appInfo = require(`${projPath}/app.json`);
+		isExpoApp = appInfo.expo;
 	} catch (err) {}
 
 	return !!isExpoApp;
@@ -178,7 +179,7 @@ function version(program, projectPath) {
 			if (!programOpts.incrementBuild && !isExpoApp) {
 				gradleFile = gradleFile.replace(
 					/versionName (["'])(.*)["']/,
-					'versionName $1' + appPkg.version + '$1'
+					"versionName $1" + appPkg.version + "$1"
 				);
 			}
 
