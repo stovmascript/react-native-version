@@ -67,14 +67,14 @@ function getPlistFilenames(xcode) {
  * @return {Boolean} true if the project is an Expo app
  */
 function isExpoProject(projPath) {
-	var isExpoApp;
-
 	try {
-		var appInfo = require(`${projPath}/app.json`);
-		isExpoApp = appInfo.expo;
-	} catch (err) {}
+		let module = resolveFrom(projPath, "expo");
+		let appInfo = require(`${projPath}/app.json`);
 
-	return !!isExpoApp;
+		return !!(module && appInfo.expo);
+	} catch (err) {
+		return false;
+	}
 }
 
 /**
