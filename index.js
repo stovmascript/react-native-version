@@ -67,13 +67,14 @@ function getPlistFilenames(xcode) {
  * @return {Boolean} true if the project is an Expo app
  */
 function isExpoProject(projPath) {
-	var isExpoApp;
-
 	try {
-		isExpoApp = resolveFrom(projPath, "expo");
-	} catch (err) {}
+		let module = resolveFrom(projPath, "expo");
+		let appInfo = require(`${projPath}/app.json`);
 
-	return !!isExpoApp;
+		return !!(module && appInfo.expo);
+	} catch (err) {
+		return false;
+	}
 }
 
 /**
@@ -178,7 +179,7 @@ function version(program, projectPath) {
 			if (!programOpts.incrementBuild && !isExpoApp) {
 				gradleFile = gradleFile.replace(
 					/versionName (["'])(.*)["']/,
-					'versionName $1' + appPkg.version + '$1'
+					"versionName $1" + appPkg.version + "$1"
 				);
 			}
 
