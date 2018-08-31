@@ -498,7 +498,9 @@ function version(program, projectPath) {
 					!programOpts.neverAmend)
 			) {
 				const latestTag =
-					(programOpts.amend || process.env.npm_config_git_tag_version) &&
+					(programOpts.amend ||
+						process.env.npm_config_git_tag_version ||
+						process.env.npm_config_version_git_tag) &&
 					semver.valid(
 						child
 							.execSync("git log -1 --pretty=%s", gitCmdOpts)
