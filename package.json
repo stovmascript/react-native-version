@@ -1,7 +1,6 @@
 {
   "name": "react-native-version",
-  "description":
-    "Version your React Native or Expo app in a `npm version` fashion.",
+  "description": "Version your React Native or Expo app in a `npm version` fashion.",
   "license": "MIT",
   "author": "Martin Stovicek",
   "homepage": "https://github.com/stovmascript/react-native-version#readme",
@@ -12,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/stovmascript/react-native-version/issues"
   },
-  "version": "2.6.4",
+  "version": "2.6.5",
   "main": "index.js",
   "bin": {
     "react-native-version": "cli.js"
@@ -74,9 +73,21 @@
     "versionName"
   ],
   "lint-staged": {
-    "*.json": ["sort-json", "git add"],
-    "*.{js,json,md}": ["prettier --write", "git add"],
-    "*.{js}": ["import-sort --write", "git add"],
-    "*package.json": ["prettier-package-json --write", "git add"]
+    "*.json": [
+      "sort-json",
+      "git add"
+    ],
+    "*.{js,json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js}": [
+      "import-sort --write",
+      "git add"
+    ],
+    "*package.json": [
+      "prettier-package-json --write",
+      "git add"
+    ]
   }
 }
