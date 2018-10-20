@@ -533,7 +533,10 @@ function version(program, projectPath) {
 
 						if (!programOpts.skipTag && latestTag) {
 							log({ text: "Adjusting Git tag..." }, programOpts.quiet);
-							child.execSync(`git tag -f ${latestTag}`, gitCmdOpts);
+							child.execSync(
+								`git tag -af ${latestTag} -m ${latestTag}`,
+								gitCmdOpts
+							);
 						}
 				}
 			}
