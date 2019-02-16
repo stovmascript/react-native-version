@@ -41,7 +41,7 @@
     "ava": "^1.0.1",
     "fs-extra": "^7.0.1",
     "husky": "^1.2.1",
-    "import-sort-cli": "^5.2.0",
+    "import-sort-cli": "^6.0.0",
     "import-sort-parser-babylon": "^5.2.0",
     "import-sort-style-eslint": "^5.0.0",
     "injectmd": "^1.0.0",
