@@ -2210,10 +2210,10 @@ import-sort-parser@^5.0.0:
   resolved "https://registry.yarnpkg.com/import-sort-parser/-/import-sort-parser-5.0.0.tgz#9cbf02e4d672bd8056fe757ea81f86f6e1776a57"
   integrity sha1-nL8C5NZyvYBW/nV+qB+G9uF3alc=
 
-import-sort-style-eslint@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/import-sort-style-eslint/-/import-sort-style-eslint-5.0.0.tgz#0216cf026b36c02e03e43cbdc30ca4adbfd1be6d"
-  integrity sha1-AhbPAms2wC4D5Dy9wwykrb/Rvm0=
+import-sort-style-eslint@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/import-sort-style-eslint/-/import-sort-style-eslint-6.0.0.tgz#37d30104b4b984be5f0eca7b302fb2fe4d0ead35"
+  integrity sha512-L2SfLHtsvlQ1dCtQHHngmFBQebmhKSI3YRrPdgEKu/nI8eY35GQtkQ+Mf489q3BLdQSiFaKCxwJMVsKlRFSQBA==
   dependencies:
     eslint "^5.0.0"
     lodash "^4.17.10"
