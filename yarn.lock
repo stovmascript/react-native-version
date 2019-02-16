@@ -2195,11 +2195,12 @@ import-sort-config@^5.2.0:
     minimatch "^3.0.4"
     resolve-from "^4.0.0"
 
-import-sort-parser-babylon@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/import-sort-parser-babylon/-/import-sort-parser-babylon-5.2.0.tgz#273a51d9e14a9b2964af7052380383650dac5824"
-  integrity sha1-JzpR2eFKmylkr3BSOAODZQ2sWCQ=
+import-sort-parser-babylon@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/import-sort-parser-babylon/-/import-sort-parser-babylon-6.0.0.tgz#e1a4c28e0794ad7d9ff36cd045559d8ca8c38be7"
+  integrity sha512-NyShTiNhTh4Vy7kJUVe6CuvOaQAzzfSIT72wtp3CzGjz8bHjNj59DCAjncuviicmDOgVAgmLuSh1WMcLYAMWGg==
   dependencies:
+    "@babel/core" "^7.2.2"
     "@babel/parser" "^7.0.0-beta.54"
     "@babel/traverse" "^7.0.0-beta.54"
     "@babel/types" "^7.0.0-beta.54"
