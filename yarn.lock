@@ -2203,11 +2203,12 @@ import-sort-config@^6.0.0:
     minimatch "^3.0.4"
     resolve-from "^4.0.0"
 
-import-sort-parser-babylon@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/import-sort-parser-babylon/-/import-sort-parser-babylon-5.2.0.tgz#273a51d9e14a9b2964af7052380383650dac5824"
-  integrity sha1-JzpR2eFKmylkr3BSOAODZQ2sWCQ=
+import-sort-parser-babylon@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/import-sort-parser-babylon/-/import-sort-parser-babylon-6.0.0.tgz#e1a4c28e0794ad7d9ff36cd045559d8ca8c38be7"
+  integrity sha512-NyShTiNhTh4Vy7kJUVe6CuvOaQAzzfSIT72wtp3CzGjz8bHjNj59DCAjncuviicmDOgVAgmLuSh1WMcLYAMWGg==
   dependencies:
+    "@babel/core" "^7.2.2"
     "@babel/parser" "^7.0.0-beta.54"
     "@babel/traverse" "^7.0.0-beta.54"
     "@babel/types" "^7.0.0-beta.54"
@@ -2229,10 +2230,10 @@ import-sort-parser@^6.0.0:
   resolved "https://registry.yarnpkg.com/import-sort-parser/-/import-sort-parser-6.0.0.tgz#0d901f264d98ed7caaae71f66128a686f828f2f4"
   integrity sha512-H5L+d6HnqHvThB0GmAA3/43Sv74oCwL0iMk3/ixOv0LRJ69rCyHXeG/+UadMHrD2FefEmgPIWboEPAG7gsQrkA==
 
-import-sort-style-eslint@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/import-sort-style-eslint/-/import-sort-style-eslint-5.0.0.tgz#0216cf026b36c02e03e43cbdc30ca4adbfd1be6d"
-  integrity sha1-AhbPAms2wC4D5Dy9wwykrb/Rvm0=
+import-sort-style-eslint@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/import-sort-style-eslint/-/import-sort-style-eslint-6.0.0.tgz#37d30104b4b984be5f0eca7b302fb2fe4d0ead35"
+  integrity sha512-L2SfLHtsvlQ1dCtQHHngmFBQebmhKSI3YRrPdgEKu/nI8eY35GQtkQ+Mf489q3BLdQSiFaKCxwJMVsKlRFSQBA==
   dependencies:
     eslint "^5.0.0"
     lodash "^4.17.10"
