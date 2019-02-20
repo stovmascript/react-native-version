@@ -3699,10 +3699,10 @@ prepend-http@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
 
-prettier-package-json@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/prettier-package-json/-/prettier-package-json-2.0.1.tgz#73ac83a1b5ef5a40874d58279da91627b0676877"
-  integrity sha512-yfGOOpuQ0LsCLIquoAXqtsBMN3jPOcTVydIasBFf7b4txSP4mx3Xa6++AeJ7F3N57wRFsvUEiqyaTQG96I5CXg==
+prettier-package-json@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/prettier-package-json/-/prettier-package-json-2.1.0.tgz#12160af8d24518f74c1f310d950caa467ec530b6"
+  integrity sha512-0AV5tsBPkhljw0pDWQqCZhm+9+cre6QWQfMlOunjjZNN1cotSRQdyBn/koJijnO7VYP4aVEp9tA8RhlBLcOcLA==
   dependencies:
     commander "^2.18.0"
     fs-extra "^7.0.0"
