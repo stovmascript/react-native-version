@@ -48,7 +48,7 @@
     "jsdoc-to-markdown": "4.0.1",
     "lint-staged": "8.1.0",
     "prettier": "1.12.1",
-    "prettier-package-json": "2.0.1",
+    "prettier-package-json": "2.1.0",
     "sort-json": "2.0.0",
     "temp": "0.9.0"
   },
