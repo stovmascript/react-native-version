@@ -16,14 +16,12 @@ Hook into the "version" or "postversion" npm script in your app's package.json:
 
 ```diff
 {
-	"name": "AwesomeProject",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-+		"postversion": "react-native-version"
-	},
-	// ...
+  "name": "AwesomeProject",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
++   "postversion": "react-native-version"
+  }
 }
 ```
 
@@ -76,12 +74,10 @@ You can apply these options to the "version" or "postversion" script too. If for
 
 ```diff
 {
-	// ...
-	"scripts": {
--		"postversion": "react-native-version"
-+		"postversion": "react-native-version --never-amend"
-	},
-	// ...
+  "scripts": {
+-   "postversion": "react-native-version"
++   "postversion": "react-native-version --never-amend"
+  }
 }
 ```
 
@@ -109,24 +105,24 @@ $ RNV=android react-native-version --target ios
 import { version } from "react-native-version";
 
 async function doSomething() {
-	const versionResult = await version({
-		amend: true
-		// ...
-	});
+  const versionResult = await version({
+    amend: true
+    // ...
+  });
 }
 
 // or
 
 version({
-	amend: true
-	// ...
+  amend: true
+  // ...
 })
-	.then(commitHash => {
-		console.log(commitHash);
-	})
-	.catch(err => {
-		console.error(err);
-	});
+  .then(commitHash => {
+    console.log(commitHash);
+  })
+  .catch(err => {
+    console.error(err);
+  });
 ```
 
 <!-- START api -->
