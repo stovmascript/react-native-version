@@ -1,4 +1,4 @@
-# react-native-version [![Build Status](https://travis-ci.org/stovmascript/react-native-version.svg?branch=master)](https://travis-ci.org/stovmascript/react-native-version) [![npm](https://img.shields.io/npm/v/react-native-version.svg)](https://www.npmjs.com/package/react-native-version) [![npm](https://img.shields.io/npm/dm/react-native-version.svg)](https://www.npmjs.com/package/react-native-version)
+# react-native-version ![license](https://badgen.net/github/license/stovmascript/react-native-version) [![npm](https://badgen.net/npm/v/react-native-version)](https://www.npmjs.com/package/react-native-version) [![travis](https://badgen.net/travis/stovmascript/react-native-version)](https://travis-ci.org/stovmascript/react-native-version) ![david](https://badgen.net/david/dep/stovmascript/react-native-version)
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
@@ -185,7 +185,7 @@ When running `react-native link` on Windows, native modules will be linked in yo
 
 ## See also
 
-* [agvtool](https://developer.apple.com/library/content/qa/qa1827/_index.html)
-* [npm-version](https://docs.npmjs.com/cli/version)
-* [Semantic Versioning (semver)](http://semver.org/)
-* [ionic-version](https://github.com/stovmascript/ionic-version)
+- [agvtool](https://developer.apple.com/library/content/qa/qa1827/_index.html)
+- [npm-version](https://docs.npmjs.com/cli/version)
+- [Semantic Versioning (semver)](http://semver.org/)
+- [ionic-version](https://github.com/stovmascript/ionic-version)
