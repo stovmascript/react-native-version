@@ -1,0 +1,6 @@
+{
+  "*.json": ["sort-json", "git add"],
+  "*.{js,json,md}": ["prettier --write", "git add"],
+  "*.{js}": ["import-sort --write", "git add"],
+  "*package.json": ["prettier-package-json --write", "git add"]
+}
