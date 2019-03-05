@@ -1,4 +1,9 @@
-# react-native-version [![license](https://badgen.net/github/license/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/blob/master/LICENSE) [![npm](https://badgen.net/npm/v/react-native-version)](https://www.npmjs.com/package/react-native-version) [![travis](https://badgen.net/travis/stovmascript/react-native-version)](https://travis-ci.org/stovmascript/react-native-version) [![david](https://badgen.net/david/dep/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/network/dependencies)
+# react-native-version
+
+[![license](https://badgen.net/github/license/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/blob/master/LICENSE)
+[![npm](https://badgen.net/npm/v/react-native-version)](https://www.npmjs.com/package/react-native-version)
+[![travis](https://badgen.net/travis/stovmascript/react-native-version)](https://travis-ci.org/stovmascript/react-native-version)
+[![david](https://badgen.net/david/dep/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/network/dependencies)
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
 
