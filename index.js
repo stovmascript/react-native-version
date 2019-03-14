@@ -502,6 +502,7 @@ function version(program, projectPath) {
 					(programOpts.amend ||
 						process.env.npm_config_git_tag_version ||
 						process.env.npm_config_version_git_tag) &&
+					!programOpts.skipTag &&
 					semver.valid(
 						semver.coerce(
 							child
@@ -533,8 +534,9 @@ function version(program, projectPath) {
 					default:
 						child.execSync("git commit -a --amend --no-edit", gitCmdOpts);
 
-						if (!programOpts.skipTag && latestTag) {
+						if (latestTag) {
 							log({ text: "Adjusting Git tag..." }, programOpts.quiet);
+
 							child.execSync(
 								`git tag -af ${latestTag} -m ${latestTag}`,
 								gitCmdOpts

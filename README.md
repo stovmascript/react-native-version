@@ -106,7 +106,7 @@ $ RNV=android react-native-version --target ios
 
 ## Custom version commit message
 
-If you're running `npm version` with the `-m` or `--message` option, make sure your message includes `%s`, which will be replaced with the resulting version number. For example:
+When updating Git tags, RNV uses the version commit message to find the correct Git tag. If you're running `npm version` with the `-m` or `--message` option, make sure your message includes `%s`, which will be replaced with the resulting version number. For example:
 
 ```bash
 $ npm version patch -m "Upgrade to %s for reasons"
