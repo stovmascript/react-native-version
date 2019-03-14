@@ -193,8 +193,8 @@ function version(program, projectPath) {
 								versionCode: programOpts.setBuild
 									? programOpts.setBuild
 									: versionCode
-										? versionCode + 1
-										: 1
+									? versionCode + 1
+									: 1
 							})
 						})
 					});
@@ -237,8 +237,8 @@ function version(program, projectPath) {
 								buildNumber: programOpts.setBuild
 									? programOpts.setBuild.toString()
 									: buildNumber && !programOpts.resetBuild
-										? `${parseInt(buildNumber, 10) + 1}`
-										: "1"
+									? `${parseInt(buildNumber, 10) + 1}`
+									: "1"
 							})
 						})
 					});
@@ -503,10 +503,12 @@ function version(program, projectPath) {
 						process.env.npm_config_git_tag_version ||
 						process.env.npm_config_version_git_tag) &&
 					semver.valid(
-						child
-							.execSync("git log -1 --pretty=%s", gitCmdOpts)
-							.toString()
-							.trim()
+						semver.coerce(
+							child
+								.execSync("git log -1 --pretty=%s", gitCmdOpts)
+								.toString()
+								.trim()
+						)
 					) &&
 					child
 						.execSync("git describe --exact-match HEAD", gitCmdOpts)

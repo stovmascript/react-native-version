@@ -12,6 +12,6 @@ export default () => {
 		&& npm version major --ignore-scripts
 		&& npm version major --ignore-scripts
 		&& git checkout -q v2.0.0
-		&& npm version patch
+		&& npm version patch -m "chore(release): bump to version %s"
 		`);
 };
