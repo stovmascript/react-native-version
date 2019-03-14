@@ -104,6 +104,14 @@ $ RNV=android react-native-version --target ios
 
 :rage1: :speak_no_evil:
 
+## Custom version commit message
+
+If you're running `npm version` with the `-m` or `--message` option, make sure your message includes `%s`, which will be replaced with the resulting version number. For example:
+
+```bash
+$ npm version patch -m "Upgrade to %s for reasons"
+```
+
 ## API
 
 ```javascript
