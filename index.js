@@ -553,6 +553,10 @@ function version(program, projectPath) {
 				programOpts.quiet
 			);
 
+			if (programOpts.neverAmend) {
+				return true;
+			}
+
 			return child.execSync("git log -1 --pretty=%H", gitCmdOpts).toString();
 		})
 		.catch(function(err) {
