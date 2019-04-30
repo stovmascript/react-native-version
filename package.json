@@ -24,7 +24,7 @@
     "chalk": "^2.4.1",
     "commander": "^2.9.0",
     "common-tags": "^1.4.0",
-    "detect-indent": "^5.0.0",
+    "detect-indent": "^6.0.0",
     "dottie": "^2.0.0",
     "js-beautify": "^1.7.4",
     "lodash.flattendeep": "^4.4.0",
