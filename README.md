@@ -71,6 +71,7 @@ $ react-native-version
     -q, --quiet                  Be quiet, only report errors.
     -r, --reset-build            Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.
     -s, --set-build <number>     Set a build number. WARNING: Watch out when setting high values. This option follows Android's app versioning specifics - the value has to be an integer and cannot be greater than 2100000000. You cannot decrement this value after publishing to Google Play! More info at: https://developer.android.com/studio/publish/versioning.html#appversioning
+    --generate-build             Generate build number from the package version number. (e.g. build number for version 1.2.3 will be 1002003)
     -t, --target <platforms>     Only version specified platforms, eg. "--target android,ios".
 
 <!-- END cli -->
@@ -166,7 +167,7 @@ version({
 
 Versions your app
 
-**Kind**: global function  
+**Kind**: global function
 **Returns**: <code>Promise.&lt;(string\|Error)&gt;</code> - A promise which resolves with the last commit hash
 
 | Param       | Type                | Description                             |
@@ -180,7 +181,7 @@ Versions your app
 
 Custom type definition for Promises
 
-**Kind**: global typedef  
+**Kind**: global typedef
 **Properties**
 
 | Name   | Type               | Description                                                        |

@@ -61,6 +61,26 @@ function getPlistFilenames(xcode) {
 	);
 }
 
+function generateVersionCode(versionName) {
+	const major = semver.major(versionName);
+	const minor = semver.minor(versionName);
+	const patch = semver.patch(versionName);
+
+	return 10 ** 6 * major + 10 ** 3 * minor + patch;
+}
+
+function getNewVersionCode(programOpts, versionCode, versionName) {
+	if (programOpts.setBuild) {
+		return programOpts.setBuild;
+	}
+
+	if (programOpts.generateBuild) {
+		return generateVersionCode(versionName);
+	}
+
+	return versionCode ? versionCode + 1 : 1;
+}
+
 /**
  * Determines whether the project is an Expo app or a plain React Native app
  * @private
@@ -190,11 +210,11 @@ function version(program, projectPath) {
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
 							android: Object.assign({}, appJSON.expo.android, {
-								versionCode: programOpts.setBuild
-									? programOpts.setBuild
-									: versionCode
-									? versionCode + 1
-									: 1
+								versionCode: getNewVersionCode(
+									programOpts,
+									versionCode,
+									appPkg.version
+								)
 							})
 						})
 					});
@@ -203,9 +223,11 @@ function version(program, projectPath) {
 						match,
 						cg1
 					) {
-						const newVersionCodeNumber = programOpts.setBuild
-							? programOpts.setBuild
-							: parseInt(cg1, 10) + 1;
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
 
 						return "versionCode " + newVersionCodeNumber;
 					});
@@ -234,11 +256,13 @@ function version(program, projectPath) {
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
 							ios: Object.assign({}, appJSON.expo.ios, {
-								buildNumber: programOpts.setBuild
-									? programOpts.setBuild.toString()
-									: buildNumber && !programOpts.resetBuild
-									? `${parseInt(buildNumber, 10) + 1}`
-									: "1"
+								buildNumber: getNewVersionCode(
+									programOpts,
+									buildNumber && !programOpts.resetBuild
+										? parseInt(buildNumber, 10)
+										: 0,
+									appPkg.version
+								).toString()
 							})
 						})
 					});
@@ -313,6 +337,13 @@ function version(program, projectPath) {
 						child.execSync("agvtool new-version -all 1", agvtoolOpts);
 					} else {
 						child.execSync("agvtool next-version -all", agvtoolOpts);
+					}
+
+					if (programOpts.generateBuild) {
+						child.execSync(
+							`agvtool new-version -all ${generateVersionCode(appPkg.version)}`,
+							agvtoolOpts
+						);
 					}
 
 					if (programOpts.setBuild) {

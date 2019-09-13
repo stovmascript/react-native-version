@@ -13,11 +13,7 @@ program
 	.arguments("[projectPath]")
 	.option(
 		"-a, --amend",
-		`Amend the previous commit. This is done automatically when ${
-			pkg.name
-		} is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend. Also, if the previous commit is a valid npm-version commit, ${
-			pkg.name
-		} will update the Git tag pointing to this commit.`
+		`Amend the previous commit. This is done automatically when ${pkg.name} is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend. Also, if the previous commit is a valid npm-version commit, ${pkg.name} will update the Git tag pointing to this commit.`
 	)
 	.option(
 		"--skip-tag",
@@ -47,6 +43,10 @@ program
 		"-s, --set-build <number>",
 		"Set a build number. WARNING: Watch out when setting high values. This option follows Android's app versioning specifics - the value has to be an integer and cannot be greater than 2100000000. You cannot decrement this value after publishing to Google Play! More info at: https://developer.android.com/studio/publish/versioning.html#appversioning",
 		parseInt
+	)
+	.option(
+		"--generate-build",
+		"Generate build number from the package version number. (e.g. build number for version 1.2.3 will be 1002003)"
 	)
 	.option(
 		"-t, --target <platforms>",
