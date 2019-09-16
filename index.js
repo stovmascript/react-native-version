@@ -62,6 +62,40 @@ function getPlistFilenames(xcode) {
 }
 
 /**
+ * Returns numerical version code for a given version name
+ * @private
+ * @return {Number} e.g. returns 1002003 for given version 1.2.3
+ */
+function generateVersionCode(versionName) {
+	const major = semver.major(versionName);
+	const minor = semver.minor(versionName);
+	const patch = semver.patch(versionName);
+
+	return 10 ** 6 * major + 10 ** 3 * minor + patch;
+}
+
+/**
+ * Returns the new version code based on program options
+ * @private
+ * @return {Number} the new version code
+ */
+function getNewVersionCode(programOpts, versionCode, versionName, resetBuild) {
+	if (resetBuild) {
+		return 1;
+	}
+
+	if (programOpts.setBuild) {
+		return programOpts.setBuild;
+	}
+
+	if (programOpts.generateBuild) {
+		return generateVersionCode(versionName);
+	}
+
+	return versionCode ? versionCode + 1 : 1;
+}
+
+/**
  * Determines whether the project is an Expo app or a plain React Native app
  * @private
  * @return {Boolean} true if the project is an Expo app
@@ -190,11 +224,11 @@ function version(program, projectPath) {
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
 							android: Object.assign({}, appJSON.expo.android, {
-								versionCode: programOpts.setBuild
-									? programOpts.setBuild
-									: versionCode
-									? versionCode + 1
-									: 1
+								versionCode: getNewVersionCode(
+									programOpts,
+									versionCode,
+									appPkg.version
+								)
 							})
 						})
 					});
@@ -203,9 +237,11 @@ function version(program, projectPath) {
 						match,
 						cg1
 					) {
-						const newVersionCodeNumber = programOpts.setBuild
-							? programOpts.setBuild
-							: parseInt(cg1, 10) + 1;
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
 
 						return "versionCode " + newVersionCodeNumber;
 					});
@@ -234,11 +270,12 @@ function version(program, projectPath) {
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
 							ios: Object.assign({}, appJSON.expo.ios, {
-								buildNumber: programOpts.setBuild
-									? programOpts.setBuild.toString()
-									: buildNumber && !programOpts.resetBuild
-									? `${parseInt(buildNumber, 10) + 1}`
-									: "1"
+								buildNumber: getNewVersionCode(
+									programOpts,
+									parseInt(buildNumber, 10),
+									appPkg.version,
+									programOpts.resetBuild
+								).toString()
 							})
 						})
 					});
@@ -315,6 +352,13 @@ function version(program, projectPath) {
 						child.execSync("agvtool next-version -all", agvtoolOpts);
 					}
 
+					if (programOpts.generateBuild) {
+						child.execSync(
+							`agvtool new-version -all ${generateVersionCode(appPkg.version)}`,
+							agvtoolOpts
+						);
+					}
+
 					if (programOpts.setBuild) {
 						child.execSync(
 							`agvtool new-version -all ${program.setBuild}`,
@@ -342,21 +386,17 @@ function version(program, projectPath) {
 							target.buildConfigurationsList.buildConfigurations.forEach(
 								config => {
 									if (target.name === appPkg.name) {
-										var CURRENT_PROJECT_VERSION = 1;
-
-										if (!programOpts.resetBuild) {
-											CURRENT_PROJECT_VERSION =
-												parseInt(
-													config.ast.value
-														.get("buildSettings")
-														.get("CURRENT_PROJECT_VERSION").text,
-													10
-												) + 1;
-										}
-
-										if (programOpts.setBuild) {
-											CURRENT_PROJECT_VERSION = programOpts.setBuild;
-										}
+										const CURRENT_PROJECT_VERSION = getNewVersionCode(
+											programOpts,
+											parseInt(
+												config.ast.value
+													.get("buildSettings")
+													.get("CURRENT_PROJECT_VERSION").text,
+												10
+											),
+											appPkg.version,
+											programOpts.resetBuild
+										);
 
 										config.patch({
 											buildSettings: {
@@ -392,21 +432,14 @@ function version(program, projectPath) {
 										  }
 										: {},
 									!programOpts.neverIncrementBuild
-										? Object.assign(
-												{},
-												{
-													CFBundleVersion: `${
-														programOpts.resetBuild
-															? 1
-															: parseInt(json.CFBundleVersion, 10) + 1
-													}`
-												},
-												programOpts.setBuild
-													? {
-															CFBundleVersion: programOpts.setBuild.toString()
-													  }
-													: {}
-										  )
+										? {
+												CFBundleVersion: getNewVersionCode(
+													programOpts,
+													parseInt(json.CFBundleVersion, 10),
+													appPkg.version,
+													programOpts.resetBuild
+												).toString()
+										  }
 										: {}
 								)
 							)

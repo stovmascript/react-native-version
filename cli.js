@@ -13,11 +13,7 @@ program
 	.arguments("[projectPath]")
 	.option(
 		"-a, --amend",
-		`Amend the previous commit. This is done automatically when ${
-			pkg.name
-		} is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend. Also, if the previous commit is a valid npm-version commit, ${
-			pkg.name
-		} will update the Git tag pointing to this commit.`
+		`Amend the previous commit. This is done automatically when ${pkg.name} is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend. Also, if the previous commit is a valid npm-version commit, ${pkg.name} will update the Git tag pointing to this commit.`
 	)
 	.option(
 		"--skip-tag",
@@ -49,8 +45,12 @@ program
 		parseInt
 	)
 	.option(
+		"--generate-build",
+		"Generate build number from the package version number. (e.g. build number for version 1.22.3 will be 1022003)"
+	)
+	.option(
 		"-t, --target <platforms>",
-		'Only version specified platforms, eg. "--target android,ios".',
+		'Only version specified platforms, e.g. "--target android,ios".',
 		list
 	)
 	.parse(process.argv);
