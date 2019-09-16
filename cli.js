@@ -46,11 +46,11 @@ program
 	)
 	.option(
 		"--generate-build",
-		"Generate build number from the package version number. (e.g. build number for version 1.2.3 will be 1002003)"
+		"Generate build number from the package version number. (e.g. build number for version 1.22.3 will be 1022003)"
 	)
 	.option(
 		"-t, --target <platforms>",
-		'Only version specified platforms, eg. "--target android,ios".',
+		'Only version specified platforms, e.g. "--target android,ios".',
 		list
 	)
 	.parse(process.argv);
