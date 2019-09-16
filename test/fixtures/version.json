@@ -25,6 +25,32 @@
       "versionCode": 2
     }
   },
+  "generateBuild": {
+    "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "2000001",
+        "AwesomeProject-tvOS": "2000001",
+        "AwesomeProject-tvOSTests": "2000001",
+        "AwesomeProjectTests": "2000001"
+      },
+      "CURRENT_PROJECT_VERSION": "2000001",
+      "version": "2.0.1",
+      "versionCode": "2000001",
+      "versionName": "2.0.1"
+    },
+    "my-new-project": {
+      "appVersion": "2.0.1",
+      "buildNumber": "2000001",
+      "version": "2.0.1",
+      "versionCode": 2000001
+    }
+  },
   "incrementBuild": {
     "AwesomeProject": {
       "CFBundleShortVersionString": {
