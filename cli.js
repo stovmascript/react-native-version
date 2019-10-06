@@ -45,6 +45,10 @@ program
 		parseInt
 	)
 	.option(
+		"--ignore-expo",
+		"Treat the app as ejected/bare-workflow even if app.json indicates otherwise."
+	)
+	.option(
 		"--generate-build",
 		"Generate build number from the package version number. (e.g. build number for version 1.22.3 will be 1022003)"
 	)
