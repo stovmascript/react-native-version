@@ -1611,16 +1611,16 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dmd@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/dmd/-/dmd-4.0.2.tgz#c3f65cb5dfa8e25cbf71541a74b1fd4aac88dd1b"
-  integrity sha512-lXMH1onEQB9wBS23bcTWtMyrc5D1LRxLhGvLuvVR2RPCI9S7wiftU8nAtC4kexLjIro3tWnAPPvK4/rv73UWUQ==
+dmd@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/dmd/-/dmd-4.0.4.tgz#410cfbe9e140ad80b3bcee2ad39cf18304da3e6b"
+  integrity sha512-ZbHUPKUp5Tl8nVVMZw8rc/MQmFVKusvfR10X/lPAXjBUc/LRW7AaXnYrK2LnVIPfTGEw7T6OmsxkvNRX7GnjIQ==
   dependencies:
     array-back "^4.0.0"
     cache-point "^0.4.1"
     common-sequence "^1.0.2"
     file-set "^2.0.1"
-    handlebars "^4.1.2"
+    handlebars "^4.2.0"
     marked "^0.7.0"
     object-get "^2.1.0"
     reduce-flatten "^2.0.0"
@@ -2329,10 +2329,10 @@ graceful-fs@^4.2.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-handlebars@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.1.2.tgz#b6b37c1ced0306b221e094fc7aca3ec23b131b67"
-  integrity sha512-nvfrjqvt9xQ8Z/w0ijewdD/vvWDTOweBUm96NTr66Wfvo1mJenBLwcYmPs3TIBP5ruzYGD7Hx/DaM9RmhroGPw==
+handlebars@^4.2.0:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.4.3.tgz#180bae52c1d0e9ec0c15d7e82a4362d662762f6e"
+  integrity sha512-B0W4A2U1ww3q7VVthTKfh+epHx+q4mCt6iK+zEAzbMBpWQAwxCeKxEGpj/1oQTpzPXDNSOG7hmG14TsISH50yw==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -2951,15 +2951,15 @@ jsdoc-parse@^4.0.1:
     sort-array "^2.0.0"
     test-value "^3.0.0"
 
-jsdoc-to-markdown@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/jsdoc-to-markdown/-/jsdoc-to-markdown-5.0.1.tgz#3fcc32385c69d2ebb7174cc91ff7e8e27fe01f92"
-  integrity sha512-l+2sPeNM0V4iYHMS5IGhwKDtCTAW0sF4PAXX1AX9f7r6xfszTB8bqlqNR8ymvU85L9U2kEQ/Qemd5NrtX5DR0w==
+jsdoc-to-markdown@5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/jsdoc-to-markdown/-/jsdoc-to-markdown-5.0.2.tgz#a212ed3c3437ae177c290949989a07a36afab282"
+  integrity sha512-Rcs9/3+NO1odClVhLDk0lDNFe11RiYUHh/PnROT5QU2Fpad2zBESmJD+DcmeK7lg1jalFfGG1MKOGuJHs27jsA==
   dependencies:
     array-back "^4.0.0"
     command-line-tool "^0.8.0"
     config-master "^3.1.0"
-    dmd "^4.0.2"
+    dmd "^4.0.4"
     jsdoc-api "^5.0.3"
     jsdoc-parse "^4.0.1"
     walk-back "^3.0.1"
