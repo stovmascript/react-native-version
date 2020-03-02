@@ -96,6 +96,20 @@ function getNewVersionCode(programOpts, versionCode, versionName, resetBuild) {
 }
 
 /**
+ * CFBundleShortVersionString must be a string composed of three period-separated integers.
+ * @private
+ * @param {String} versionName The full version string
+ * @return {String} e.g. returns '1.2.3' for given '1.2.3-beta.1'. Returns `versionName` if no match is found.
+ */
+function getCFBundleShortVersionString(versionName) {
+	const match =
+		versionName && typeof versionName === "string"
+			? versionName.match(/\d*\.\d*.\d*/g)
+			: [];
+	return match && match[0] ? match[0] : versionName;
+}
+
+/**
  * Determines whether the project is an Expo app or a plain React Native app
  * @private
  * @return {Boolean} true if the project is an Expo app
@@ -428,7 +442,9 @@ function version(program, projectPath) {
 									json,
 									!programOpts.incrementBuild
 										? {
-												CFBundleShortVersionString: appPkg.version
+												CFBundleShortVersionString: getCFBundleShortVersionString(
+													appPkg.version
+												)
 										  }
 										: {},
 									!programOpts.neverIncrementBuild
@@ -607,6 +623,7 @@ function version(program, projectPath) {
 }
 
 module.exports = {
+	getCFBundleShortVersionString: getCFBundleShortVersionString,
 	getDefaults: getDefaults,
 	getPlistFilenames: getPlistFilenames,
 	isExpoProject: isExpoProject,
