@@ -3812,6 +3812,13 @@ p-limit@^2.2.0:
   dependencies:
     p-try "^2.0.0"
 
+p-limit@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.2.2.tgz#61279b67721f5287aa1c13a9a7fbbc48c9291b1e"
+  integrity sha512-WGR+xHecKTr7EbUEhyLSh5Dube9JtdiG78ufaeLxTgpudf/20KqyMioIUZJAezlTIi6evxuoUs9YXc11cU+yzQ==
+  dependencies:
+    p-try "^2.0.0"
+
 p-locate@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-2.0.0.tgz#20a0103b222a70c8fd39cc2e580680f3dde5ec43"
@@ -3837,18 +3844,18 @@ p-map@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-2.0.0.tgz#be18c5a5adeb8e156460651421aceca56c213a50"
   integrity sha512-GO107XdrSUmtHxVoi60qc9tUl/KkNKm+X2CF4P9amalpGxv5YqVPJNfSb0wcA+syCopkZvYYIzW8OVTQW59x/w==
 
-p-reflect@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/p-reflect/-/p-reflect-2.0.0.tgz#71768ac35af2cb055aeb1edf14bd4d6c4c450674"
-  integrity sha512-mCy5T0OSpOM6vjfBQVV4/F52aSnDiloslPGjRsp0WpZd9cbS+t+PGFezDdCovKj/Y9Lg3mG58xil+W9KTqbuUQ==
+p-reflect@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/p-reflect/-/p-reflect-2.1.0.tgz#5d67c7b3c577c4e780b9451fc9129675bd99fe67"
+  integrity sha512-paHV8NUz8zDHu5lhr/ngGWQiW067DK/+IbJ+RfZ4k+s8y4EKyYCz8pGYWjxCg35eHztpJAt+NUgvN4L+GCbPlg==
 
-p-settle@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/p-settle/-/p-settle-3.0.0.tgz#4e8b8c27a1db1fd94ad10292801766e331ce7db1"
-  integrity sha512-sKEKHiUcw/xMWDYHqfjSLKeoHm2w0hw00vmiXxD622uCcu0nS+tK7BjsRpgOXzcYw/FqmbpbjaCR8EH1J0iq3A==
+p-settle@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/p-settle/-/p-settle-4.0.0.tgz#07fb60aded04527eadd617c9fd6801364c4737b8"
+  integrity sha512-MK1FEHO70HHo4uCjM2DP/2gOpLGjEes8czFH7bP9RzJS6mAEp7dFINcUUuuQXa+ZFztzKTdF3zl0IiBH1BCkrQ==
   dependencies:
-    p-limit "^2.2.0"
-    p-reflect "^2.0.0"
+    p-limit "^2.2.2"
+    p-reflect "^2.1.0"
 
 p-try@^2.0.0:
   version "2.0.0"
