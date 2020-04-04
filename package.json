@@ -21,7 +21,7 @@
     "test": "./test.sh"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "commander": "^5.0.0",
     "common-tags": "^1.4.0",
     "detect-indent": "^6.0.0",
