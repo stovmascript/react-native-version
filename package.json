@@ -36,7 +36,7 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
-    "ava": "1.4.1",
+    "ava": "3.8.2",
     "fs-extra": "8.1.0",
     "husky": "4.2.3",
     "import-sort-cli": "6.0.0",
