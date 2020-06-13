@@ -2,7 +2,7 @@
 
 [![license](https://badgen.net/github/license/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/blob/master/LICENSE)
 [![npm](https://badgen.net/npm/v/react-native-version)](https://www.npmjs.com/package/react-native-version)
-[![tests](https://github.com/stovmascript/react-native-version/workflows/.github/workflows/main.yml/badge.svg)](https://github.com/stovmascript/react-native-version/actions)
+[![test](https://github.com/stovmascript/react-native-version/workflows/Test/badge.svg)](https://github.com/stovmascript/react-native-version/actions)
 [![david](https://badgen.net/david/dep/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/network/dependencies)
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
