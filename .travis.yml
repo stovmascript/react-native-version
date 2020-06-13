@@ -1,8 +1,0 @@
-os:
-  - linux
-  - osx
-language: node_js
-node_js:
-  - "lts/*"
-  - "lts/dubnium"
-  - "node"

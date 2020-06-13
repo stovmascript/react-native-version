@@ -1,6 +1,6 @@
 {
   "*.json": ["sort-json"],
-  "*.{js,json,md}": ["prettier --write"],
+  "*.{js,json,md,yml}": ["prettier --write"],
   "*.{js}": ["import-sort --write"],
   "*package.json": ["prettier-package-json --write"]
 }

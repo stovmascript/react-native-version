@@ -2,7 +2,7 @@
 
 [![license](https://badgen.net/github/license/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/blob/master/LICENSE)
 [![npm](https://badgen.net/npm/v/react-native-version)](https://www.npmjs.com/package/react-native-version)
-[![travis](https://badgen.net/travis/stovmascript/react-native-version)](https://travis-ci.org/stovmascript/react-native-version)
+[![tests](https://github.com/stovmascript/react-native-version/workflows/.github/workflows/main.yml/badge.svg)](https://github.com/stovmascript/react-native-version/actions)
 [![david](https://badgen.net/david/dep/stovmascript/react-native-version)](https://github.com/stovmascript/react-native-version/network/dependencies)
 
 Seamlessly shadows the behaviour of [`npm version`](https://docs.npmjs.com/cli/version).
@@ -124,7 +124,7 @@ import { version } from "react-native-version";
 
 async function doSomething() {
   const versionResult = await version({
-    amend: true
+    amend: true,
     // ...
   });
 }
@@ -132,13 +132,13 @@ async function doSomething() {
 // or
 
 version({
-  amend: true
+  amend: true,
   // ...
 })
-  .then(commitHash => {
+  .then((commitHash) => {
     console.log(commitHash);
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err);
   });
 ```
