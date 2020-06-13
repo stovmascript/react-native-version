@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$CI" != "true" || "$TRAVIS_OS_NAME" == "osx" ]]; then
+if [[ "$CI" != "true" || "$RUNNER_OS" == "macOS" ]]; then
 	ava $@
 else
 	ava --match="!*legacy*" $@
