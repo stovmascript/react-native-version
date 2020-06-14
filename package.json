@@ -44,7 +44,7 @@
     "import-sort-style-eslint": "6.0.0",
     "injectmd": "1.0.0",
     "jsdoc-to-markdown": "6.0.1",
-    "lint-staged": "10.0.8",
+    "lint-staged": "10.2.10",
     "prettier": "2.0.5",
     "prettier-package-json": "2.1.3",
     "sort-json": "2.0.0",
