@@ -232,34 +232,26 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.neverIncrementBuild) {
-				if (isExpoApp) {
-					const versionCode = dottie.get(appJSON, "expo.android.versionCode");
+				const versionCode = dottie.get(appJSON, "expo.android.versionCode");
 
-					appJSON = Object.assign({}, appJSON, {
-						expo: Object.assign({}, appJSON.expo, {
-							android: Object.assign({}, appJSON.expo.android, {
-								versionCode: getNewVersionCode(
-									programOpts,
-									versionCode,
-									appPkg.version
-								),
-							}),
+				appJSON = Object.assign({}, appJSON, {
+					expo: Object.assign({}, appJSON.expo, {
+						android: Object.assign({}, appJSON.expo.android, {
+							versionCode: getNewVersionCode(
+								programOpts,
+								versionCode,
+								appPkg.version
+							),
 						}),
-					});
-				} else {
-					gradleFile = gradleFile.replace(/versionCode (\d+)/, function (
-						match,
-						cg1
-					) {
-						const newVersionCodeNumber = getNewVersionCode(
-							programOpts,
-							parseInt(cg1, 10),
-							appPkg.version
-						);
+					}),
+				});
 
-						return "versionCode " + newVersionCodeNumber;
-					});
-				}
+				gradleFile = gradleFile.replace(/versionCode (\d+)/, function (
+					match,
+					cg1
+				) {
+					return "versionCode " + versionCode;
+				});
 			}
 
 			fs.writeFileSync(programOpts.android, gradleFile);
@@ -290,7 +282,7 @@ function version(program, projectPath) {
 							}),
 						}),
 					});
-					
+
 					if (appJSON.expo.hooks) {
 						appJSON = Object.assign({}, appJSON, {
 							expo: Object.assign({}, appJSON.expo, {
