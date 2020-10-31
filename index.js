@@ -232,16 +232,16 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.neverIncrementBuild) {
-				const versionCode = dottie.get(appJSON, "expo.android.versionCode");
-
+				const versionCode = parseInt(dottie.get(appJSON, "expo.android.versionCode"));
+				const newVersionCode = getNewVersionCode(
+					programOpts,
+					versionCode,
+					appPkg.version
+				);
 				appJSON = Object.assign({}, appJSON, {
 					expo: Object.assign({}, appJSON.expo, {
 						android: Object.assign({}, appJSON.expo.android, {
-							versionCode: getNewVersionCode(
-								programOpts,
-								versionCode,
-								appPkg.version
-							),
+							versionCode: newVersionCode
 						}),
 					}),
 				});
@@ -250,7 +250,7 @@ function version(program, projectPath) {
 					match,
 					cg1
 				) {
-					return "versionCode " + versionCode;
+					return "versionCode " + newVersionCode;
 				});
 			}
 
