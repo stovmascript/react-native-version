@@ -23,7 +23,7 @@ const Xcode = require("pbxproj-dom/xcode").Xcode;
  */
 
 const env = {
-	target: process.env.RNV && list(process.env.RNV),
+	target: process.env.RNV && list(process.env.RNV)
 };
 
 /**
@@ -34,7 +34,7 @@ const env = {
 function getDefaults() {
 	return {
 		android: "android/app/build.gradle",
-		ios: "ios",
+		ios: "ios"
 	};
 }
 
@@ -47,10 +47,10 @@ function getDefaults() {
 function getPlistFilenames(xcode) {
 	return unique(
 		flattenDeep(
-			xcode.document.projects.map((project) => {
-				return project.targets.filter(Boolean).map((target) => {
+			xcode.document.projects.map(project => {
+				return project.targets.filter(Boolean).map(target => {
 					return target.buildConfigurationsList.buildConfigurations.map(
-						(config) => {
+						config => {
 							return config.ast.value.get("buildSettings").get("INFOPLIST_FILE")
 								.text;
 						}
@@ -141,7 +141,7 @@ function version(program, projectPath) {
 
 	const programOpts = Object.assign({}, prog, {
 		android: path.join(projPath, prog.android),
-		ios: path.join(projPath, prog.ios),
+		ios: path.join(projPath, prog.ios)
 	});
 
 	const targets = [].concat(programOpts.target, env.target).filter(Boolean);
@@ -154,24 +154,24 @@ function version(program, projectPath) {
 		if (err.message === "Cannot find module 'react-native'") {
 			log({
 				style: "red",
-				text: `Is this the right folder? ${err.message} in ${projPath}`,
+				text: `Is this the right folder? ${err.message} in ${projPath}`
 			});
 		} else {
 			log({
 				style: "red",
-				text: err.message,
+				text: err.message
 			});
 
 			log({
 				style: "red",
 				text:
-					"Is this the right folder? Looks like there isn't a package.json here",
+					"Is this the right folder? Looks like there isn't a package.json here"
 			});
 		}
 
 		log({
 			style: "yellow",
-			text: "Pass the project path as an argument, see --help for usage",
+			text: "Pass the project path as an argument, see --help for usage"
 		});
 
 		if (program.outputHelp) {
@@ -193,8 +193,8 @@ function version(program, projectPath) {
 		if (isExpoApp && !programOpts.incrementBuild) {
 			appJSON = Object.assign({}, appJSON, {
 				expo: Object.assign({}, appJSON.expo, {
-					version: appPkg.version,
-				}),
+					version: appPkg.version
+				})
 			});
 		}
 	} catch (err) {}
@@ -203,7 +203,7 @@ function version(program, projectPath) {
 	var ios;
 
 	if (!targets.length || targets.indexOf("android") > -1) {
-		android = new Promise(function (resolve, reject) {
+		android = new Promise(function(resolve, reject) {
 			log({ text: "Versioning Android..." }, programOpts.quiet);
 
 			var gradleFile;
@@ -215,12 +215,12 @@ function version(program, projectPath) {
 					reject([
 						{
 							style: "red",
-							text: "No gradle file found at " + programOpts.android,
+							text: "No gradle file found at " + programOpts.android
 						},
 						{
 							style: "yellow",
-							text: 'Use the "--android" option to specify the path manually',
-						},
+							text: 'Use the "--android" option to specify the path manually'
+						}
 					]);
 			}
 
@@ -232,7 +232,9 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.neverIncrementBuild) {
-				const versionCode = parseInt(dottie.get(appJSON, "expo.android.versionCode"));
+				const versionCode = parseInt(
+					dottie.get(appJSON, "expo.android.versionCode")
+				);
 				const newVersionCode = getNewVersionCode(
 					programOpts,
 					versionCode,
@@ -242,11 +244,11 @@ function version(program, projectPath) {
 					expo: Object.assign({}, appJSON.expo, {
 						android: Object.assign({}, appJSON.expo.android, {
 							versionCode: newVersionCode
-						}),
-					}),
+						})
+					})
 				});
 
-				gradleFile = gradleFile.replace(/versionCode (\d+)/, function (
+				gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
 					match,
 					cg1
 				) {
@@ -262,7 +264,7 @@ function version(program, projectPath) {
 	}
 
 	if (!targets.length || targets.indexOf("ios") > -1) {
-		ios = new Promise(function (resolve, reject) {
+		ios = new Promise(function(resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
 			if (isExpoApp) {
@@ -278,18 +280,16 @@ function version(program, projectPath) {
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
 							ios: Object.assign({}, appJSON.expo.ios, {
-								buildNumber: newBuildVersion,
-							}),
-						}),
+								buildNumber: newBuildVersion
+							})
+						})
 					});
 
 					if (appJSON.expo.hooks) {
 						appJSON = Object.assign({}, appJSON, {
 							expo: Object.assign({}, appJSON.expo, {
 								hooks: Object.assign({}, appJSON.expo.hooks, {
-									postExport: appJSON.expo.hooks.postExport.map(function (
-										hook
-									) {
+									postExport: appJSON.expo.hooks.postExport.map(function(hook) {
 										if (hook.file === "sentry-expo/upload-sourcemaps") {
 											return {
 												file: "sentry-expo/upload-sourcemaps",
@@ -299,15 +299,15 @@ function version(program, projectPath) {
 														appPkg.version +
 														"+" +
 														newBuildVersion,
-													distribution: newBuildVersion,
-												}),
+													distribution: newBuildVersion
+												})
 											};
 										} else {
 											return hook;
 										}
-									}),
-								}),
-							}),
+									})
+								})
+							})
 						});
 					}
 				}
@@ -316,28 +316,28 @@ function version(program, projectPath) {
 			if (program.legacy) {
 				try {
 					child.execSync("xcode-select --print-path", {
-						stdio: ["ignore", "ignore", "pipe"],
+						stdio: ["ignore", "ignore", "pipe"]
 					});
 				} catch (err) {
 					reject([
 						{
 							style: "red",
-							text: err,
+							text: err
 						},
 						{
 							style: "yellow",
-							text: "Looks like Xcode Command Line Tools aren't installed",
+							text: "Looks like Xcode Command Line Tools aren't installed"
 						},
 						{
-							text: "\n  Install:\n\n    $ xcode-select --install\n",
-						},
+							text: "\n  Install:\n\n    $ xcode-select --install\n"
+						}
 					]);
 
 					return;
 				}
 
 				const agvtoolOpts = {
-					cwd: programOpts.ios,
+					cwd: programOpts.ios
 				};
 
 				try {
@@ -350,18 +350,18 @@ function version(program, projectPath) {
 							? [
 									{
 										style: "red",
-										text: "No project folder found at " + programOpts.ios,
+										text: "No project folder found at " + programOpts.ios
 									},
 									{
 										style: "yellow",
-										text: 'Use the "--ios" option to specify the path manually',
-									},
+										text: 'Use the "--ios" option to specify the path manually'
+									}
 							  ]
 							: [
 									{
 										style: "red",
-										text: stdout,
-									},
+										text: stdout
+									}
 							  ]
 					);
 
@@ -401,7 +401,7 @@ function version(program, projectPath) {
 				// Find any folder ending in .xcodeproj
 				const xcodeProjects = fs
 					.readdirSync(programOpts.ios)
-					.filter((file) => /\.xcodeproj$/i.test(file));
+					.filter(file => /\.xcodeproj$/i.test(file));
 
 				if (xcodeProjects.length < 1) {
 					throw new Error(`Xcode project not found in "${programOpts.ios}"`);
@@ -411,11 +411,11 @@ function version(program, projectPath) {
 				const xcode = Xcode.open(path.join(projectFolder, "project.pbxproj"));
 				const plistFilenames = getPlistFilenames(xcode);
 
-				xcode.document.projects.forEach((project) => {
+				xcode.document.projects.forEach(project => {
 					!programOpts.neverIncrementBuild &&
-						project.targets.filter(Boolean).forEach((target) => {
+						project.targets.filter(Boolean).forEach(target => {
 							target.buildConfigurationsList.buildConfigurations.forEach(
-								(config) => {
+								config => {
 									if (target.name === appPkg.name) {
 										console.log(target.name, appPkg.name);
 										const CURRENT_PROJECT_VERSION = getNewVersionCode(
@@ -432,22 +432,22 @@ function version(program, projectPath) {
 
 										config.patch({
 											buildSettings: {
-												CURRENT_PROJECT_VERSION,
-											},
+												CURRENT_PROJECT_VERSION
+											}
 										});
 									}
 								}
 							);
 						});
 
-					const plistFiles = plistFilenames.map((filename) => {
+					const plistFiles = plistFilenames.map(filename => {
 						return fs.readFileSync(
 							path.join(programOpts.ios, filename),
 							"utf8"
 						);
 					});
 
-					const parsedPlistFiles = plistFiles.map((file) => {
+					const parsedPlistFiles = plistFiles.map(file => {
 						return plist.parse(file);
 					});
 
@@ -462,7 +462,7 @@ function version(program, projectPath) {
 										? {
 												CFBundleShortVersionString: getCFBundleShortVersionString(
 													appPkg.version
-												),
+												)
 										  }
 										: {},
 									!programOpts.neverIncrementBuild
@@ -472,7 +472,7 @@ function version(program, projectPath) {
 													parseInt(json.CFBundleVersion, 10),
 													appPkg.version,
 													programOpts.resetBuild
-												).toString(),
+												).toString()
 										  }
 										: {}
 								)
@@ -517,21 +517,21 @@ function version(program, projectPath) {
 	}
 
 	return pSettle([android, ios].filter(Boolean))
-		.then(function (result) {
+		.then(function(result) {
 			const errs = result
-				.filter(function (item) {
+				.filter(function(item) {
 					return item.isRejected;
 				})
-				.map(function (item) {
+				.map(function(item) {
 					return item.reason;
 				});
 
 			if (errs.length) {
 				errs
-					.reduce(function (a, b) {
+					.reduce(function(a, b) {
 						return a.concat(b);
 					}, [])
-					.forEach(function (err) {
+					.forEach(function(err) {
 						if (program.outputHelp) {
 							log(
 								Object.assign({ style: "red", text: err.toString() }, err),
@@ -545,9 +545,9 @@ function version(program, projectPath) {
 				}
 
 				throw errs
-					.map(function (errGrp, index) {
+					.map(function(errGrp, index) {
 						return errGrp
-							.map(function (err) {
+							.map(function(err) {
 								return err.text;
 							})
 							.join(", ");
@@ -556,7 +556,7 @@ function version(program, projectPath) {
 			}
 
 			const gitCmdOpts = {
-				cwd: projPath,
+				cwd: projPath
 			};
 
 			if (
@@ -592,7 +592,7 @@ function version(program, projectPath) {
 							["add"].concat([
 								appJSONPath,
 								programOpts.android,
-								programOpts.ios,
+								programOpts.ios
 							]),
 							gitCmdOpts
 						);
@@ -617,7 +617,7 @@ function version(program, projectPath) {
 			log(
 				{
 					style: "green",
-					text: "Done",
+					text: "Done"
 				},
 				programOpts.quiet
 			);
@@ -628,14 +628,14 @@ function version(program, projectPath) {
 
 			return child.execSync("git log -1 --pretty=%H", gitCmdOpts).toString();
 		})
-		.catch(function (err) {
+		.catch(function(err) {
 			if (process.env.RNV_ENV === "ava") {
 				console.error(err);
 			}
 
 			log({
 				style: "red",
-				text: "Done, with errors.",
+				text: "Done, with errors."
 			});
 
 			process.exit(1);
@@ -647,5 +647,5 @@ module.exports = {
 	getDefaults: getDefaults,
 	getPlistFilenames: getPlistFilenames,
 	isExpoProject: isExpoProject,
-	version: version,
+	version: version
 };
