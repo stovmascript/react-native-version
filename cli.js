@@ -32,6 +32,8 @@ program
 		"-L, --legacy",
 		"Version iOS using agvtool (macOS only). Requires Xcode Command Line Tools."
 	)
+	.option("--is-bare-expo-workflow", "todo")
+	.option("--is-self-hosting-bundles", "todo")
 	.option("-q, --quiet", "Be quiet, only report errors.")
 	.option(
 		"-r, --reset-build",

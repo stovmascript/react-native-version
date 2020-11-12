@@ -183,7 +183,8 @@ function version(program, projectPath) {
 
 	var appJSON;
 	const appJSONPath = path.join(projPath, "app.json");
-	const isExpoApp = isExpoProject(projPath);
+	const isExpoApp = isExpoProject(projPath) || programOpts.isBareExpoWorkflow;
+	const isBareExpoWorkflow = programOpts.isBareExpoWorkflow;
 
 	isExpoApp && log({ text: "Expo detected" }, programOpts.quiet);
 
@@ -224,7 +225,7 @@ function version(program, projectPath) {
 					]);
 			}
 
-			if (!programOpts.incrementBuild && !isExpoApp) {
+			if ((!programOpts.incrementBuild && !isExpoApp) || isBareExpoWorkflow) {
 				gradleFile = gradleFile.replace(
 					/versionName (["'])(.*)["']/,
 					"versionName $1" + appPkg.version + "$1"
@@ -262,6 +263,34 @@ function version(program, projectPath) {
 				}
 			}
 
+			if (isBareExpoWorkflow) {
+			// if bare expo workflow, combine the two exclusive blocks above
+				const versionCode = parseInt(
+					dottie.get(appJSON, "expo.android.versionCode")
+				);
+				const newVersionCode = getNewVersionCode(
+					programOpts,
+					versionCode,
+					appPkg.version
+				);
+				appJSON = Object.assign({}, appJSON, {
+					expo: Object.assign({}, appJSON.expo, {
+						android: Object.assign({}, appJSON.expo.android, {
+							versionCode: newVersionCode
+						})
+					})
+				});
+
+				gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
+					match,
+					cg1
+				) {
+					return "versionCode " + newVersionCode;
+				});
+				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
+				fs.writeFileSync(programOpts.android, gradleFile);
+			}
+
 			if (isExpoApp) {
 				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
 			} else {
@@ -277,26 +306,55 @@ function version(program, projectPath) {
 		ios = new Promise(function(resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
-			if (isExpoApp) {
+			if (isExpoApp || isBareExpoWorkflow) {
 				if (!programOpts.neverIncrementBuild) {
 					const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
+					const newBuildVersion = getNewVersionCode(
+						programOpts,
+						parseInt(buildNumber, 10),
+						appPkg.version,
+						programOpts.resetBuild
+					).toString();
+
 
 					appJSON = Object.assign({}, appJSON, {
 						expo: Object.assign({}, appJSON.expo, {
 							ios: Object.assign({}, appJSON.expo.ios, {
-								buildNumber: getNewVersionCode(
-									programOpts,
-									parseInt(buildNumber, 10),
-									appPkg.version,
-									programOpts.resetBuild
-								).toString()
+								buildNumber: newBuildVersion
 							})
 						})
 					});
-				}
 
+					if (appJSON.expo.hooks) {
+						appJSON = Object.assign({}, appJSON, {
+							expo: Object.assign({}, appJSON.expo, {
+								hooks: Object.assign({}, appJSON.expo.hooks, {
+									// someone can add their own postPub
+									postExport: appJSON.expo.hooks.postExport.map(function(hook) {
+										if (hook.file === "sentry-expo/upload-sourcemaps") {
+											return {
+												file: "sentry-expo/upload-sourcemaps",
+												config: Object.assign({}, hook.config, {
+													release:
+														appJSON.expo.ios.bundleIdentifier +
+														appPkg.version +
+														"+" +
+														newBuildVersion,
+													distribution: newBuildVersion
+												})
+											};
+										} else {
+											return hook;
+										}
+									})
+								})
+							})
+						});
+					}
+				}
 				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
-			} else if (program.legacy) {
+			}  
+			if (program.legacy) {
 				try {
 					child.execSync("xcode-select --print-path", {
 						stdio: ["ignore", "ignore", "pipe"]
