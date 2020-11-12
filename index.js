@@ -183,7 +183,7 @@ function version(program, projectPath) {
 
 	var appJSON;
 	const appJSONPath = path.join(projPath, "app.json");
-	const isExpoApp = isExpoProject(projPath) || programOpts.isBareExpoWorkflow;
+	const isExpoApp = isExpoProject(projPath);
 	const isBareExpoWorkflow = programOpts.isBareExpoWorkflow;
 
 	isExpoApp && log({ text: "Expo detected" }, programOpts.quiet);
@@ -305,7 +305,7 @@ function version(program, projectPath) {
 		ios = new Promise(function (resolve, reject) {
 			log({ text: "Versioning iOS..." }, programOpts.quiet);
 
-			if (isExpoApp || isBareExpoWorkflow) {
+			if (isBareExpoWorkflow) {
 				if (!programOpts.neverIncrementBuild) {
 					const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
 					const newBuildVersion = getNewVersionCode(
@@ -354,7 +354,26 @@ function version(program, projectPath) {
 				}
 				fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
 			}
-			if (program.legacy) {
+			if (isExpoApp && !isBareExpoWorkflow) {
+				if (!programOpts.neverIncrementBuild) {
+					const buildNumber = dottie.get(appJSON, "expo.ios.buildNumber");
+					const newBuildVersion = getNewVersionCode(
+						programOpts,
+						parseInt(buildNumber, 10),
+						appPkg.version,
+						programOpts.resetBuild
+					).toString();
+
+					appJSON = Object.assign({}, appJSON, {
+						expo: Object.assign({}, appJSON.expo, {
+							ios: Object.assign({}, appJSON.expo.ios, {
+								buildNumber: newBuildVersion,
+							}),
+						}),
+					});
+					fs.writeFileSync(appJSONPath, JSON.stringify(appJSON, null, 2));
+				}
+			} else if (program.legacy) {
 				try {
 					child.execSync("xcode-select --print-path", {
 						stdio: ["ignore", "ignore", "pipe"],
