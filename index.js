@@ -223,7 +223,6 @@ function version(program, projectPath) {
 						}
 					]);
 			}
-
 			if ((!programOpts.incrementBuild && !isExpoApp) || isBareExpoWorkflow) {
 				gradleFile = gradleFile.replace(
 					/versionName (["'])(.*)["']/,
@@ -232,18 +231,18 @@ function version(program, projectPath) {
 			}
 
 			if (!programOpts.neverIncrementBuild) {
-				if (isExpoApp) {
-					const versionCode = dottie.get(appJSON, "expo.android.versionCode");
-
-					appJSON = Object.assign({}, appJSON, {
-						expo: Object.assign({}, appJSON.expo, {
-							android: Object.assign({}, appJSON.expo.android, {
-								versionCode: getNewVersionCode(
-									programOpts,
-									versionCode,
-									appPkg.version
-								)
-							})
+				const versionCode = parseInt(
+					dottie.get(appJSON, "expo.android.versionCode")
+				);
+				const newVersionCode = getNewVersionCode(
+					programOpts,
+					versionCode,
+					appPkg.version
+				);
+				appJSON = Object.assign({}, appJSON, {
+					expo: Object.assign({}, appJSON.expo, {
+						android: Object.assign({}, appJSON.expo.android, {
+							versionCode: newVersionCode
 						})
 					});
 				} else {
@@ -257,9 +256,12 @@ function version(program, projectPath) {
 							appPkg.version
 						);
 
-						return "versionCode " + newVersionCodeNumber;
-					});
-				}
+				gradleFile = gradleFile.replace(/versionCode (\d+)/, function(
+					match,
+					cg1
+				) {
+					return "versionCode " + newVersionCode;
+				});
 			}
 
 			if (isBareExpoWorkflow) {
@@ -477,6 +479,7 @@ function version(program, projectPath) {
 							target.buildConfigurationsList.buildConfigurations.forEach(
 								(config) => {
 									if (target.name === appPkg.name) {
+										console.log(target.name, appPkg.name);
 										const CURRENT_PROJECT_VERSION = getNewVersionCode(
 											programOpts,
 											parseInt(
@@ -648,9 +651,11 @@ function version(program, projectPath) {
 					case "version":
 						child.spawnSync(
 							"git",
-							["add"].concat(
-								isExpoApp ? appJSONPath : [programOpts.android, programOpts.ios]
-							),
+							["add"].concat([
+								appJSONPath,
+								programOpts.android,
+								programOpts.ios
+							]),
 							gitCmdOpts
 						);
 
