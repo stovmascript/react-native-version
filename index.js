@@ -126,6 +126,15 @@ function isExpoProject(projPath) {
 }
 
 /**
+ * Determine if the given property is managed by an enviromental variable
+ * @param {String} text
+ * @return {Boolean} true if the given property is managed by an enviromental variable
+ */
+function isManagedByEnvVariable(propertyText) {
+	return propertyText ? !!/\$\(\S+\)/g.exec(propertyText) : false;
+}
+
+/**
  * Versions your app
  * @param {Object} program commander/CLI-style options, camelCased
  * @param {string} projectPath Path to your React Native project
@@ -447,7 +456,8 @@ function version(program, projectPath) {
 												)
 										  }
 										: {},
-									!programOpts.neverIncrementBuild
+									!programOpts.neverIncrementBuild &&
+										!isManagedByEnvVariable(json.CFBundleVersion)
 										? {
 												CFBundleVersion: getNewVersionCode(
 													programOpts,

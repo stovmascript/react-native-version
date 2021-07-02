@@ -111,3 +111,12 @@ test(
 	expected.version.default,
 	expected.tree.notAmended
 );
+
+test(
+	"Managed by ENV variable",
+	apiMacro,
+	{},
+	"AwesomeProjectWithEnv",
+	expected.version.default,
+	expected.tree.notAmended
+);

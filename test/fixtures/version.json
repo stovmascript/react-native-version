@@ -18,6 +18,24 @@
       "versionCode": "2",
       "versionName": "2.0.1"
     },
+    "AwesomeProjectWithEnv": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOS": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOSTests": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProjectTests": "$(CURRENT_PROJECT_VERSION)"
+      },
+      "CURRENT_PROJECT_VERSION": "2",
+      "version": "2.0.1",
+      "versionCode": "2",
+      "versionName": "2.0.1"
+    },
     "my-new-project": {
       "appVersion": "2.0.1",
       "buildNumber": "2",
@@ -44,6 +62,24 @@
       "versionCode": "2000001",
       "versionName": "2.0.1"
     },
+    "AwesomeProjectWithEnv": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOS": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOSTests": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProjectTests": "$(CURRENT_PROJECT_VERSION)"
+      },
+      "CURRENT_PROJECT_VERSION": "2000001",
+      "version": "2.0.1",
+      "versionCode": "2000001",
+      "versionName": "2.0.1"
+    },
     "my-new-project": {
       "appVersion": "2.0.1",
       "buildNumber": "2000001",
@@ -53,6 +89,24 @@
   },
   "incrementBuild": {
     "AwesomeProject": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "1.0",
+        "AwesomeProject-tvOS": "1.0",
+        "AwesomeProject-tvOSTests": "1.0",
+        "AwesomeProjectTests": "1.0"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "2",
+        "AwesomeProject-tvOS": "2",
+        "AwesomeProject-tvOSTests": "2",
+        "AwesomeProjectTests": "2"
+      },
+      "CURRENT_PROJECT_VERSION": "2",
+      "version": "2.0.1",
+      "versionCode": "2",
+      "versionName": "1.0"
+    },
+    "AwesomeProjectWithEnv": {
       "CFBundleShortVersionString": {
         "AwesomeProject": "1.0",
         "AwesomeProject-tvOS": "1.0",
@@ -96,6 +150,24 @@
       "versionCode": "1",
       "versionName": "2.0.1"
     },
+    "AwesomeProjectWithEnv": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOS": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOSTests": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProjectTests": "$(CURRENT_PROJECT_VERSION)"
+      },
+      "CURRENT_PROJECT_VERSION": "1",
+      "version": "2.0.1",
+      "versionCode": "1",
+      "versionName": "2.0.1"
+    },
     "my-new-project": {
       "appVersion": "2.0.1",
       "buildNumber": "1",
@@ -122,6 +194,24 @@
       "versionCode": "2",
       "versionName": "2.0.1"
     },
+    "AwesomeProjectWithEnv": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOS": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOSTests": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProjectTests": "$(CURRENT_PROJECT_VERSION)"
+      },
+      "CURRENT_PROJECT_VERSION": "1",
+      "version": "2.0.1",
+      "versionCode": "2",
+      "versionName": "2.0.1"
+    },
     "my-new-project": {
       "appVersion": "2.0.1",
       "buildNumber": "1",
@@ -142,6 +232,24 @@
         "AwesomeProject-tvOS": "33",
         "AwesomeProject-tvOSTests": "33",
         "AwesomeProjectTests": "33"
+      },
+      "CURRENT_PROJECT_VERSION": "33",
+      "version": "2.0.1",
+      "versionCode": "33",
+      "versionName": "2.0.1"
+    },
+    "AwesomeProjectWithEnv": {
+      "CFBundleShortVersionString": {
+        "AwesomeProject": "2.0.1",
+        "AwesomeProject-tvOS": "2.0.1",
+        "AwesomeProject-tvOSTests": "2.0.1",
+        "AwesomeProjectTests": "2.0.1"
+      },
+      "CFBundleVersion": {
+        "AwesomeProject": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOS": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProject-tvOSTests": "$(CURRENT_PROJECT_VERSION)",
+        "AwesomeProjectTests": "$(CURRENT_PROJECT_VERSION)"
       },
       "CURRENT_PROJECT_VERSION": "33",
       "version": "2.0.1",
