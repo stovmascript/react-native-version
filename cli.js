@@ -32,6 +32,8 @@ program
 		"-L, --legacy",
 		"Version iOS using agvtool (macOS only). Requires Xcode Command Line Tools."
 	)
+	.option("--is-bare-expo-workflow", "Bare workflow expo apps want to update *everything*. This will update the app.json values and the /android and the /ios values.")
+	.option("--is-self-hosting-bundles", "This will increment the values in the postExport hook inside the app.json to what Sentry expects when uploading sourcemaps. This value auto-tracks your build version/build number.")
 	.option("-q, --quiet", "Be quiet, only report errors.")
 	.option(
 		"-r, --reset-build",
