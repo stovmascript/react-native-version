@@ -183,7 +183,7 @@ function version(program, projectPath) {
 
 	var appJSON;
 	const appJSONPath = path.join(projPath, "app.json");
-	const isExpoApp = isExpoProject(projPath);
+	const isExpoApp = isExpoProject(projPath) && !programOpts.ignoreExpo;
 
 	isExpoApp && log({ text: "Expo detected" }, programOpts.quiet);
 
