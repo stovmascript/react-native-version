@@ -1,0 +1,23 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: thursday
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: jsdoc-to-markdown
+    versions:
+    - 7.0.0
+  - dependency-name: commander
+    versions:
+    - 7.0.0
+    - 7.1.0
+  - dependency-name: js-beautify
+    versions:
+    - 1.13.5
+  - dependency-name: lint-staged
+    versions:
+    - 10.5.3
