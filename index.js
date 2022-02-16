@@ -58,7 +58,7 @@ function getPlistFilenames(xcode) {
 				});
 			})
 		)
-	);
+	).filter(Boolean);
 }
 
 /**
