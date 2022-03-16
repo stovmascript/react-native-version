@@ -99,9 +99,14 @@ function getNewVersionCode(programOpts, versionCode, versionName, resetBuild) {
  * CFBundleShortVersionString must be a string composed of three period-separated integers.
  * @private
  * @param {String} versionName The full version string
+ * @param {Boolean} allowInvalidShortVersionString Whether or not to allow short version strings like '1.2.3-beta.1'
  * @return {String} e.g. returns '1.2.3' for given '1.2.3-beta.1'. Returns `versionName` if no match is found.
  */
-function getCFBundleShortVersionString(versionName) {
+function getCFBundleShortVersionString(versionName, allowInvalidShortVersionString = false) {
+	if (allowInvalidShortVersionString) {
+		return versionName
+	}
+
 	const match =
 		versionName && typeof versionName === "string"
 			? versionName.match(/\d*\.\d*.\d*/g)
@@ -443,7 +448,8 @@ function version(program, projectPath) {
 									!programOpts.incrementBuild
 										? {
 												CFBundleShortVersionString: getCFBundleShortVersionString(
-													appPkg.version
+													appPkg.version,
+													programOpts.allowInvalidShortVersionString,
 												)
 										  }
 										: {},

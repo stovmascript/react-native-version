@@ -53,6 +53,7 @@ program
 		'Only version specified platforms, e.g. "--target android,ios".',
 		list
 	)
+	.option("--allow-invalid-short-version-string", "Allow invalid value for CFBundleShortVersionString. (e.g. 1.5.0-staging.1.")
 	.parse(process.argv);
 
 rnv.version(program);
