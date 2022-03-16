@@ -58,21 +58,64 @@ $ react-native-version
 
 <!-- START cli -->
 
-    -V, --version                output the version number
-    -a, --amend                  Amend the previous commit. This is done automatically when react-native-version is run from the "version" or "postversion" npm script. Use "--never-amend" if you never want to amend. Also, if the previous commit is a valid npm-version commit, react-native-version will update the Git tag pointing to this commit.
-    --skip-tag                   For use with "--amend", if you don't want to update Git tags. Use this option if you have git-tag-version set to false in your npm config or you use "--no-git-tag-version" during npm-version.
-    -A, --never-amend            Never amend the previous commit.
-    -b, --increment-build        Only increment build number.
-    -B, --never-increment-build  Never increment build number.
-    -d, --android [path]         Path to your "android/app/build.gradle" file. (default: "android/app/build.gradle")
-    -i, --ios [path]             Path to your "ios/" folder. (default: "ios")
-    -L, --legacy                 Version iOS using agvtool (macOS only). Requires Xcode Command Line Tools.
-    -q, --quiet                  Be quiet, only report errors.
-    -r, --reset-build            Reset build number back to "1" (iOS only). Unlike Android's "versionCode", iOS doesn't require you to bump the "CFBundleVersion", as long as "CFBundleShortVersionString" changes. To make it consistent across platforms, react-native-version bumps both by default. You can use this option if you prefer to keep the build number value at "1" after every version change. If you then need to push another build under the same version, you can use "-bt ios" to increment.
-    -s, --set-build <number>     Set a build number. WARNING: Watch out when setting high values. This option follows Android's app versioning specifics - the value has to be an integer and cannot be greater than 2100000000. You cannot decrement this value after publishing to Google Play! More info at: https://developer.android.com/studio/publish/versioning.html#appversioning
-    --generate-build             Generate build number from the package version number. (e.g. build number for version 1.22.3 will be 1022003)
-    -t, --target <platforms>     Only version specified platforms, e.g. "--target android,ios".
-    -h, --help                   output usage information
+    -V, --version                         output the version number
+    -a, --amend                           Amend the previous commit. This is done
+    automatically when react-native-version
+    is run from the "version" or
+    "postversion" npm script. Use
+    "--never-amend" if you never want to
+    amend. Also, if the previous commit is
+    a valid npm-version commit,
+    react-native-version will update the
+    Git tag pointing to this commit.
+    --skip-tag                            For use with "--amend", if you don't
+    want to update Git tags. Use this
+    option if you have git-tag-version set
+    to false in your npm config or you use
+    "--no-git-tag-version" during
+    npm-version.
+    -A, --never-amend                     Never amend the previous commit.
+    -b, --increment-build                 Only increment build number.
+    -B, --never-increment-build           Never increment build number.
+    -d, --android [path]                  Path to your "android/app/build.gradle"
+    file. (default:
+    "android/app/build.gradle")
+    -i, --ios [path]                      Path to your "ios/" folder. (default:
+    "ios")
+    -L, --legacy                          Version iOS using agvtool (macOS only).
+    Requires Xcode Command Line Tools.
+    -q, --quiet                           Be quiet, only report errors.
+    -r, --reset-build                     Reset build number back to "1" (iOS
+    only). Unlike Android's "versionCode",
+    iOS doesn't require you to bump the
+    "CFBundleVersion", as long as
+    "CFBundleShortVersionString" changes.
+    To make it consistent across platforms,
+    react-native-version bumps both by
+    default. You can use this option if you
+    prefer to keep the build number value
+    at "1" after every version change. If
+    you then need to push another build
+    under the same version, you can use
+    "-bt ios" to increment.
+    -s, --set-build <number>              Set a build number. WARNING: Watch out
+    when setting high values. This option
+    follows Android's app versioning
+    specifics - the value has to be an
+    integer and cannot be greater than
+    2100000000. You cannot decrement this
+    value after publishing to Google Play!
+    More info at:
+    https://developer.android.com/studio/publish/versioning.html#appversioning
+    --generate-build                      Generate build number from the package
+    version number. (e.g. build number for
+    version 1.22.3 will be 1022003)
+    -t, --target <platforms>              Only version specified platforms, e.g.
+    "--target android,ios".
+    --allow-invalid-short-version-string  Allow invalid value for
+    CFBundleShortVersionString. (e.g.
+    1.5.0-staging.1.
+    -h, --help                            display help for command
 
 <!-- END cli -->
 

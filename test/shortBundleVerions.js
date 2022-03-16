@@ -48,3 +48,19 @@ test(
 		t.is(v, 'garbage');
 	}
 );
+
+test(
+	"CFBundleShortVersionString allow invalid, with invalid",
+	t => {
+		const v = getCFBundleShortVersionString('1.2.3-staging.1', true);
+		t.is(v, '1.2.3-staging.1');
+	}
+);
+
+test(
+	"CFBundleShortVersionString allow invalid, with valid",
+	t => {
+		const v = getCFBundleShortVersionString('1.2.3', true);
+		t.is(v, '1.2.3');
+	}
+);
