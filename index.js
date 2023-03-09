@@ -6,6 +6,7 @@ const flattenDeep = require("lodash.flattendeep");
 const fs = require("fs");
 const list = require("./util").list;
 const log = require("./util").log;
+const localizations = require("./localizations");
 const path = require("path");
 const plist = require("plist");
 const pSettle = require("p-settle");
@@ -36,6 +37,39 @@ function getDefaults() {
 		android: "android/app/build.gradle",
 		ios: "ios"
 	};
+}
+
+/**
+ * Returns Localized Info.plist filenames
+ * @private
+ * @param {Xcode} xcode Opened Xcode project file
+ * @param {Object} programOpts Program options
+ * @return {Array} Plist filenames
+ */
+function getLocalizedPlistFilenames(xcode, programOpts) {
+	const finalFileNames = [];
+	const fileNames = getPlistFilenames(xcode);
+	const possiblyLocalizedOnes = [];
+	fileNames.forEach((fileName) => {
+		if(fs.existsSync(path.join(programOpts.ios, fileName))) {
+			finalFileNames.push(fileName);
+		} else {
+			possiblyLocalizedOnes.push(fileName);
+		}
+	});
+
+	possiblyLocalizedOnes.forEach((fileName) => {
+		const parsed = path.parse(fileName);
+		localizations.forEach((locale) => {
+			const filePath = path.join(parsed.dir, `${locale}.lproj`, parsed.base);
+			log({ text: `Looking for localized path: ${filePath}` }, programOpts.quiet)
+
+			if(fs.existsSync(path.join(programOpts.ios, filePath))) {
+				finalFileNames.push(filePath);
+			}
+		})
+	});
+	return finalFileNames;
 }
 
 /**
@@ -392,7 +426,7 @@ function version(program, projectPath) {
 
 				const projectFolder = path.join(programOpts.ios, xcodeProjects[0]);
 				const xcode = Xcode.open(path.join(projectFolder, "project.pbxproj"));
-				const plistFilenames = getPlistFilenames(xcode);
+				const plistFilenames = getLocalizedPlistFilenames(xcode, programOpts);
 
 				xcode.document.projects.forEach(project => {
 					!programOpts.neverIncrementBuild &&
@@ -626,6 +660,7 @@ module.exports = {
 	getCFBundleShortVersionString: getCFBundleShortVersionString,
 	getDefaults: getDefaults,
 	getPlistFilenames: getPlistFilenames,
+	getLocalizedPlistFilenames: getLocalizedPlistFilenames,
 	isExpoProject: isExpoProject,
 	version: version
 };
