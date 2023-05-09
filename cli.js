@@ -27,6 +27,7 @@ program
 		'Path to your "android/app/build.gradle" file.',
 		defaults.android
 	)
+	.option("-ignore-expo", "Ignore expo, do not update app.json.")
 	.option("-i, --ios [path]", 'Path to your "ios/" folder.', defaults.ios)
 	.option(
 		"-L, --legacy",
