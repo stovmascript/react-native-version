@@ -183,9 +183,13 @@ function version(program, projectPath) {
 
 	var appJSON;
 	const appJSONPath = path.join(projPath, "app.json");
-	const isExpoApp = isExpoProject(projPath);
-
+	let isExpoApp = isExpoProject(projPath);
+	
 	isExpoApp && log({ text: "Expo detected" }, programOpts.quiet);
+	if(programOpts.IgnoreExpo) {
+		isExpoApp && log({ text: "Expo ignored" }, programOpts.quiet);
+		isExpoApp = false;
+	}
 
 	try {
 		appJSON = require(appJSONPath);
