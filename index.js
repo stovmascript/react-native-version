@@ -392,7 +392,7 @@ function version(program, projectPath) {
 
 				const projectFolder = path.join(programOpts.ios, xcodeProjects[0]);
 				const xcode = Xcode.open(path.join(projectFolder, "project.pbxproj"));
-				const plistFilenames = getPlistFilenames(xcode);
+				const plistFilenames = programOpts.plist? [programOpts.plist] : getPlistFilenames(xcode);
 
 				xcode.document.projects.forEach(project => {
 					!programOpts.neverIncrementBuild &&

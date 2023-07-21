@@ -72,6 +72,7 @@ $ react-native-version
     -s, --set-build <number>     Set a build number. WARNING: Watch out when setting high values. This option follows Android's app versioning specifics - the value has to be an integer and cannot be greater than 2100000000. You cannot decrement this value after publishing to Google Play! More info at: https://developer.android.com/studio/publish/versioning.html#appversioning
     --generate-build             Generate build number from the package version number. (e.g. build number for version 1.22.3 will be 1022003)
     -t, --target <platforms>     Only version specified platforms, e.g. "--target android,ios".
+    -p, --plist [name]           Name of the iOS Info Plist file that should reflect the new version (optional)
     -h, --help                   output usage information
 
 <!-- END cli -->
