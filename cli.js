@@ -53,6 +53,7 @@ program
 		'Only version specified platforms, e.g. "--target android,ios".',
 		list
 	)
+	.option("-p, --plist [name]", 'Name of the iOS Info Plist file" folder.')
 	.parse(process.argv);
 
 rnv.version(program);
