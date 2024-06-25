@@ -47,18 +47,18 @@ function getDefaults() {
 function getPlistFilenames(xcode) {
 	return unique(
 		flattenDeep(
-			xcode.document.projects.map(project => {
-				return project.targets.filter(Boolean).map(target => {
-					return target.buildConfigurationsList.buildConfigurations.map(
-						config => {
+			xcode.document.projects.map((project) => {
+				return project.targets.filter(Boolean).map((target) => {
+					return target.buildConfigurationsList.buildConfigurations
+						.map((config) => {
 							return config.ast.value.get("buildSettings").get("INFOPLIST_FILE")
 								.text;
-						}
-					);
+						})
+						.filter(Boolean); // Filter out null or undefined values					);
 				});
 			})
 		)
-	);
+	).filter(Boolean); // Filter out null or undefined values;
 }
 
 /**
