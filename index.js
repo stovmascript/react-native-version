@@ -547,10 +547,11 @@ function version(program, projectPath) {
 					process.env.npm_lifecycle_event.indexOf("version") > -1 &&
 					!programOpts.neverAmend)
 			) {
-				const latestTag =
-					(programOpts.amend ||
-						process.env.npm_config_git_tag_version ||
-						process.env.npm_config_version_git_tag) &&
+			const latestTag =
+				(programOpts.amend ||
+					process.env.npm_config_git_tag_version ||
+					process.env.npm_config_version_git_tag ||
+					process.env.npm_lifecycle_event) &&
 					!programOpts.skipTag &&
 					semver.valid(
 						semver.coerce(
